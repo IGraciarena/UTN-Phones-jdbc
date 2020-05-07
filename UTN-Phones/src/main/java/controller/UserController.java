@@ -1,11 +1,10 @@
 package controller;
 
-import execptions.UserNotexistException;
 import execptions.UserAlreadyExistsExecption;
+import execptions.UserNotexistException;
+import execptions.ValidationExecption;
 import model.User;
 import service.UserService;
-import execptions.ValidationExecption;
-
 
 import java.util.List;
 

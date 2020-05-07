@@ -1,4 +1,5 @@
 package model;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,22 +13,14 @@ import java.util.Date;
 public class Invoice {
 
     private Integer id;
-
     private Integer callCount;
-
     private float priceCost;
-
     private float priceTotal;
-
     private Date dateEmission;
-
     private Date dateExpiration;
-
     private Status status;
-
-    private User user;
-
+    private User userId;
     private UserLine userLine;
 
-    
+
 }

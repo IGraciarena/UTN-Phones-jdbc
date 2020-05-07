@@ -1,33 +1,17 @@
 package model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class Province {
 
 
-    private Integer provinceId;
-    private String province;
-
-
-    public Province(Integer provinceId, String province) {
-        this.provinceId = provinceId;
-        this.province = province;
-    }
-
-    public Integer getProvinceId() {
-        return provinceId;
-    }
-
-    public void setProvinceId(Integer provinceId) {
-        this.provinceId = provinceId;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
+    private Integer id;
+    private String provinceName;
 
 
 }

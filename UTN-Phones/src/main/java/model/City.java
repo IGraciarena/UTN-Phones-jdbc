@@ -10,11 +10,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class City {
 
-    private Integer cityId;
+    private Integer id;
     private String name;
     private String prefix;
-    private Province province;
+    private Province provinceId;
 
-    public City(int id, String name, String prefix, Province province) {
-    }
 }

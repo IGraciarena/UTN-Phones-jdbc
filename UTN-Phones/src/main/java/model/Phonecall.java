@@ -1,4 +1,5 @@
 package model;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,23 +12,14 @@ import java.util.Date;
 public class Phonecall {
 
     private Integer id;
-
     private UserLine lineFrom;
-
     private UserLine lineTo;
-
-    private int duration;
-
+    private Integer duration;
     private Date callDate;
-
     private float pricePerMinute;
-
     private float totalPrice;
-
-    private Invoice invoice;
-
+    private Invoice invoiceId;
     private City cityFrom;
-
     private City cityTo;
 
 }

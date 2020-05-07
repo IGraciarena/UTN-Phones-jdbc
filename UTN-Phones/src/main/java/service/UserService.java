@@ -1,7 +1,6 @@
 package service;
 
 import dao.UserDao;
-import dao.mysql.UserMySQLDao;
 import execptions.UserAlreadyExistsExecption;
 import execptions.UserNotexistException;
 import model.User;
@@ -11,11 +10,13 @@ import java.util.Optional;
 public class UserService {
 
     UserDao dao;
+
     public UserService(UserDao dao) {
         this.dao = dao;
     }
+
     public User login(String userName, String password) throws UserNotexistException {
-        User user = dao.getByUserName(userName,password);
+        User user = dao.getByUserName(userName, password);
         return Optional.ofNullable(user).orElseThrow(() -> new UserNotexistException());
 
     }

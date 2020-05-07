@@ -10,13 +10,9 @@ import lombok.NoArgsConstructor;
 public class Fare {
 
     private Integer id;
-
     private float pricePerMinute;
-
     private float costPerMin;
-
     private City cityFrom;
-
     private City cityTo;
 
 }

@@ -17,5 +17,5 @@ public interface UserDao extends AbstractDao<User> {
 
     Integer update(User u);
 
-    User add(User u)throws UserAlreadyExistsExecption;
+    User add(User u) throws UserAlreadyExistsExecption;
 }
