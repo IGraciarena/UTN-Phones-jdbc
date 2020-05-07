@@ -21,7 +21,7 @@ public class UserMySQLDao implements UserDao {
     }
 
     @Override
-    public User getByUsername(String username, String password) {
+    public User getByUserName(String username, String password) {
         try {
             PreparedStatement ps = connection.prepareStatement(GET_BY_USERNAME_USER_QUERY);
             ps.setString(1, username);
@@ -40,9 +40,10 @@ public class UserMySQLDao implements UserDao {
     }
 
     private User createUser(ResultSet rs) throws SQLException {
-        User u = new User(rs.getInt("id"), rs.getString("name"), rs.getString("pwd"),
-                rs.getString("surname"), rs.getString("username"), new City(rs.getInt("id"),
-                rs.getString("name"), new Province(rs.getInt("id"), rs.getString("name"))));
+        User u = new User(rs.getInt("id"), rs.getString("name"), rs.getString("surname"),
+                    rs.getInt("dni"), rs.getDate("birthdate"),rs.getString("username"),rs.getString("password"),rs.getString("email"),
+                        new City(rs.getInt("id"), rs.getString("name"),rs.getString("prefix"),
+                          new Province(rs.getInt("id"), rs.getString("name"))));
         return u;
     }
 
