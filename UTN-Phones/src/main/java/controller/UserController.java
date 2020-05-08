@@ -1,8 +1,8 @@
 package controller;
 
-import execptions.UserAlreadyExistsExecption;
+import execptions.UserAlreadyExistsException;
 import execptions.UserNotexistException;
-import execptions.ValidationExecption;
+import execptions.ValidationException;
 import model.User;
 import service.UserService;
 
@@ -15,15 +15,15 @@ public class UserController {
         this.userService = userService;
     }
 
-    public User login(String username, String password) throws UserNotexistException, ValidationExecption {
+    public User login(String username, String password) throws UserNotexistException, ValidationException {
         if ((username != null) && (password != null)) {
             return userService.login(username, password);
         } else {
-            throw new ValidationExecption();
+            throw new ValidationException();
         }
     }
 
-    public User add(User user) throws UserAlreadyExistsExecption {
+    public User add(User user) throws UserAlreadyExistsException {
         return userService.add(user);
     }
 

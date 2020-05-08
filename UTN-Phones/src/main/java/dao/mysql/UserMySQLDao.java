@@ -4,6 +4,7 @@ import dao.UserDao;
 import model.City;
 import model.Province;
 import model.User;
+import model.enumerated.UserType;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -40,11 +41,12 @@ public class UserMySQLDao implements UserDao {
     }
 
     private User createUser(ResultSet rs) throws SQLException {
-//        User u = new User(rs.getInt("id"), rs.getString("name"), rs.getString("surname"),
-//                    rs.getInt("dni"), rs.getDate("birthdate"),rs.getString("username"),rs.getString("password"),rs.getString("email"),
-//                        new City(rs.getInt("id"), rs.getString("name"),rs.getString("prefix"),
-//                          new Province(rs.getInt("id"), rs.getString("name"))));
-        return null;
+        UserType userType = UserType.valueOf(rs.getString("user_type"));
+        User u = new User(rs.getInt("id"), rs.getString("first_name"), rs.getString("surname"),
+                    rs.getInt("dni"), rs.getDate("birthdate"),rs.getString("username"),rs.getString("pwd"),rs.getString("email"),
+                        new City(rs.getInt("id"), rs.getString("city_name"),rs.getString("prefix"),
+                          new Province(rs.getInt("id"), rs.getString("province_name"))),userType);
+        return u;
     }
 
     @Override
@@ -60,7 +62,7 @@ public class UserMySQLDao implements UserDao {
             ps.setString(2, value.getSurname());
             ps.setString(3, value.getUsername());
             ps.setString(4, value.getPassword());
-            ps.setInt(5, value.getCityId().getId());
+            ps.setInt(5, value.getCity().getId());
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if (rs != null && rs.next()) {
@@ -78,7 +80,7 @@ public class UserMySQLDao implements UserDao {
             PreparedStatement ps = connection.prepareStatement(UPDATE_USER_QUERY);
             ps.setString(1, value.getName());
             ps.setString(2, value.getSurname());
-            ps.setInt(3, value.getCityId().getId());
+            ps.setInt(3, value.getCity().getId());
             ps.setString(4, value.getPassword());
             Integer rowsAffected = ps.executeUpdate();
             return rowsAffected;

@@ -1,12 +1,12 @@
 package dao;
 
-import execptions.UserAlreadyExistsExecption;
+import execptions.UserAlreadyExistsException;
 
 import java.util.List;
 
 public interface AbstractDao<T> {
 
-    T add(T value) throws UserAlreadyExistsExecption;
+    T add(T value) throws UserAlreadyExistsException;
 
     Integer update(T value);
 

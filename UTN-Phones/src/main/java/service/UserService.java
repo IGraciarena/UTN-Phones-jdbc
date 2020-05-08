@@ -1,7 +1,7 @@
 package service;
 
 import dao.UserDao;
-import execptions.UserAlreadyExistsExecption;
+import execptions.UserAlreadyExistsException;
 import execptions.UserNotexistException;
 import model.User;
 
@@ -21,7 +21,7 @@ public class UserService {
 
     }
 
-    public User add(User value) throws UserAlreadyExistsExecption {
+    public User add(User value) throws UserAlreadyExistsException {
         return dao.add(value);
     }
 

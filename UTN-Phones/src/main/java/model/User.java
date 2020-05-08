@@ -20,7 +20,7 @@ public class User {
     private String username;
     private String password;
     private String email;
-    private City cityId;
+    private City city;
     private UserType userType;
 
 }
