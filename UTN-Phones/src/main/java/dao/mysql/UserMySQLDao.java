@@ -44,7 +44,7 @@ public class UserMySQLDao implements UserDao {
         UserType userType = UserType.valueOf(rs.getString("user_type"));
         User u = new User(rs.getInt("id"), rs.getString("first_name"), rs.getString("surname"),
                     rs.getInt("dni"), rs.getDate("birthdate"),rs.getString("username"),rs.getString("pwd"),rs.getString("email"),
-                        new City(rs.getInt("id"), rs.getString("city_name"),rs.getString("prefix"),
+                        new City(rs.getInt("id"), rs.getString("city_name"),rs.getInt("prefix"),
                           new Province(rs.getInt("id"), rs.getString("province_name"))),userType);
         return u;
     }
@@ -60,16 +60,20 @@ public class UserMySQLDao implements UserDao {
             PreparedStatement ps = connection.prepareStatement(INSERT_USER_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, value.getName());
             ps.setString(2, value.getSurname());
-            ps.setString(3, value.getUsername());
-            ps.setString(4, value.getPassword());
-            ps.setInt(5, value.getCity().getId());
+            ps.setInt(3, value.getDni());
+            ps.setDate(4,new Date(value.getBirthdate().getTime()));
+            ps.setString(5, value.getUsername());
+            ps.setString(6, value.getPassword());
+            ps.setString(7, value.getEmail());
+            ps.setString(8, String.valueOf(value.getUserType()));
+            ps.setInt(9, value.getCity().getId());
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if (rs != null && rs.next()) {
                 value.setId(rs.getInt(1));
             }
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
         return value;
     }

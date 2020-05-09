@@ -1,14 +1,19 @@
 import controller.UserController;
 import dao.UserDao;
 import dao.mysql.UserMySQLDao;
+import execptions.UserAlreadyExistsException;
 import execptions.UserNotexistException;
+import model.City;
+import model.Province;
 import model.User;
+import model.enumerated.UserType;
 import service.UserService;
 
 import execptions.ValidationException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Date;
 
 public class Main {
     public static void main(String[] args)throws SQLException {
@@ -31,14 +36,25 @@ public class Main {
         UserService userService = new UserService(userDao);
         UserController userController = new UserController(userService);
         try {
-            User u =userController.login("villordin","villoria");
+            System.out.println("-----------------Login----------------");
+             User u =userController.login("villordin","villoria");
             System.out.println(u);
-            //u.mostrar();
+            System.out.println("-----------------ById----------------");
+            u = userController.getById(1);
+            System.out.println(u);
+            System.out.println("-----------------Insert----------------");
+            UserType userType = UserType.CLIENT;
+            Date udt = new Date();
+            User newUser = new User(null,"carlitos","bala",343434344,udt,"carlox","asd132","asd@asd",new City(1,"Mar del Plata",0223,new Province(1,"Buenos Aires")),userType);
+            u = userController.add(newUser);
+            System.out.println(u);
         } catch (UserNotexistException e) {
             e.printStackTrace();
         } catch (ValidationException e) {
             e.printStackTrace();
-        }finally {
+        } catch (UserAlreadyExistsException e) {
+            e.printStackTrace();
+        } finally {
             con.close();
         }
     }

@@ -33,4 +33,8 @@ public class UserService {
         dao.remove(u);
     }
 
+    public User getById(Integer id){
+        return dao.getById(id);
+    }
+
 }
