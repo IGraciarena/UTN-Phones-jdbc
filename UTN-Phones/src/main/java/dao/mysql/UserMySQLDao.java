@@ -5,6 +5,8 @@ import model.City;
 import model.Province;
 import model.User;
 import model.enumerated.UserType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,11 +14,11 @@ import java.util.List;
 
 import static dao.mysql.MySQLUtils.*;
 
-
+@Repository
 public class UserMySQLDao implements UserDao {
 
     Connection connection;
-
+    @Autowired
     public UserMySQLDao(Connection connection) {
         this.connection = connection;
     }

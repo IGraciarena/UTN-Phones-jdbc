@@ -4,13 +4,15 @@ import execptions.UserAlreadyExistsException;
 import execptions.UserNotexistException;
 import execptions.ValidationException;
 import model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import service.UserService;
 
 import java.util.List;
-
+@Controller
 public class UserController {
     UserService userService;
-
+    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }

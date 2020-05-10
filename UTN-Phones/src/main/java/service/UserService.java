@@ -4,13 +4,15 @@ import dao.UserDao;
 import execptions.UserAlreadyExistsException;
 import execptions.UserNotexistException;
 import model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
+@Service
 public class UserService {
 
     UserDao dao;
-
+    @Autowired
     public UserService(UserDao dao) {
         this.dao = dao;
     }
