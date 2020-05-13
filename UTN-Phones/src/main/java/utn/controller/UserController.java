@@ -1,8 +1,8 @@
 package utn.controller;
 
-import utn.execptions.UserAlreadyExistsException;
-import utn.execptions.UserNotexistException;
-import utn.execptions.ValidationException;
+import utn.exceptions.UserAlreadyExistsException;
+import utn.exceptions.UserNotexistException;
+import utn.exceptions.ValidationException;
 import utn.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

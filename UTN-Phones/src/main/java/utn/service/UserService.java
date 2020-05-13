@@ -1,8 +1,8 @@
 package utn.service;
 
 import utn.dao.UserDao;
-import utn.execptions.UserAlreadyExistsException;
-import utn.execptions.UserNotexistException;
+import utn.exceptions.UserAlreadyExistsException;
+import utn.exceptions.UserNotexistException;
 import utn.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

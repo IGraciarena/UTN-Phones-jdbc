@@ -1,7 +1,7 @@
 package utn.dao;
 
 
-import utn.execptions.UserAlreadyExistsException;
+import utn.exceptions.UserAlreadyExistsException;
 import utn.model.City;
 import utn.model.User;
 

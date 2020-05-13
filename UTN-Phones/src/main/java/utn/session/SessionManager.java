@@ -1,6 +1,7 @@
 package utn.session;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import utn.model.User;
 
 import java.util.*;
@@ -10,7 +11,7 @@ public class SessionManager {
 
     Map<String, Session> sessionMap = new Hashtable<>();
 
-    int sesionExpiration = 60;
+    int sesionExpiration = 3000;
 
     public String createSession(User user) {
         String token = UUID.randomUUID().toString();
@@ -19,6 +20,7 @@ public class SessionManager {
     }
 
     public Session getSession(String token) {
+        if(StringUtils.isEmpty(token)) return null;
         Session session = sessionMap.get(token);
         if (session!=null) {
             session.setLastAction(new Date(System.currentTimeMillis()));

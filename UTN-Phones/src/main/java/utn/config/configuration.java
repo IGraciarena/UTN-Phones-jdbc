@@ -1,8 +1,11 @@
 package utn.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
+import utn.session.SessionFilter;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,6 +15,8 @@ import java.sql.SQLException;
 @PropertySource("app.properties")
 public class configuration {
 
+    @Autowired
+    SessionFilter sessionFilter;
     @Value("${db.driver}")
     String driver;
     @Value("${db.name}")
@@ -30,5 +35,13 @@ public class configuration {
         Class.forName(driver).newInstance();
         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/"+db,username,password);
         return con;
+    }
+
+    @Bean
+    public FilterRegistrationBean myFilter() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(sessionFilter);
+        registration.addUrlPatterns("/api/*");
+        return registration;
     }
 }
