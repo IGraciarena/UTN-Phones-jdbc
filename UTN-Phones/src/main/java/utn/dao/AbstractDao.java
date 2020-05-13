@@ -8,11 +8,9 @@ public interface AbstractDao<T> {
 
     T add(T value) throws UserAlreadyExistsException;
 
-    Integer update(T value);
+    void update(T value);
 
-    Integer remove(Integer id);
-
-    Integer remove(T value);
+    void remove(Integer id);
 
     T getById(Integer id);
 

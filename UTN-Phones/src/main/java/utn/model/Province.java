@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class Province {
 
-
     private Integer id;
     private String provinceName;
 

@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    UserDao dao;
+    private UserDao dao;
     @Autowired
     public UserService(UserDao dao) {
         this.dao = dao;
@@ -27,12 +27,16 @@ public class UserService {
         return dao.add(value);
     }
 
-    public void updateUser(User user) {
+    public void updateUser(User user) throws UserNotexistException {
+        User byId = dao.getById(user.getId());
+        Optional.ofNullable(byId).orElseThrow(UserNotexistException::new);
         dao.update(user);
     }
 
-    public void removeUser(User u) {
-        dao.remove(u);
+    public void removeUser(Integer idUser) throws UserNotexistException {
+        User user = dao.getById(idUser);
+        Optional.ofNullable(user).orElseThrow(UserNotexistException::new);
+        dao.remove(idUser);
     }
 
     public User getById(Integer id){

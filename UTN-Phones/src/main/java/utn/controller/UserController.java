@@ -31,15 +31,10 @@ public class UserController {
         return userService.add(user);
     }
 
-    public void removeUser(User user) throws UserNotexistException {
-        userService.removeUser(user);
+    public void removeUser(Integer idUser) throws UserNotexistException {
+        userService.removeUser(idUser);
     }
 
-    public void removeUsers(List<User> userList) throws UserNotexistException {
-        for (User u : userList) {
-            userService.removeUser(u);
-        }
-    }
 
     public void updateUser(User user) throws UserNotexistException {
         userService.updateUser(user);

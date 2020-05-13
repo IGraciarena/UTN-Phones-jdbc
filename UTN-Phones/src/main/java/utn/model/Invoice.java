@@ -3,7 +3,7 @@ package utn.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import utn.model.enumerated.Status;
+import utn.model.enumerated.InvoiceStatus;
 
 import java.util.Date;
 
@@ -18,9 +18,7 @@ public class Invoice {
     private float priceTotal;
     private Date dateEmission;
     private Date dateExpiration;
-    private Status status;
-    private User userId;
+    private InvoiceStatus invoiceStatus;
     private UserLine userLine;
-
 
 }

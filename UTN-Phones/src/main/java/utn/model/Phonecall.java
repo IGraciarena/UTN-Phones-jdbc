@@ -12,14 +12,16 @@ import java.util.Date;
 public class Phonecall {
 
     private Integer id;
-    private UserLine lineFrom;
-    private UserLine lineTo;
+    private UserLine idLineNumberFrom;
+    private UserLine idLineNumberTo;
+    private City idCityFrom;
+    private City idCityTo;
     private Integer duration;
     private Date callDate;
-    private float pricePerMinute;
+    private float costPerMin;
+    private float pricePerMin;
     private float totalPrice;
-    private Invoice invoiceId;
-    private City cityFrom;
-    private City cityTo;
+    private float totalCost;
+    private Invoice invoice;
 
 }

@@ -15,7 +15,7 @@ public interface UserDao extends AbstractDao<User> {
 
     List<User> getByCity(City city);
 
-    Integer update(User u);
+    void update(User u);
 
     User add(User u) throws UserAlreadyExistsException;
 }

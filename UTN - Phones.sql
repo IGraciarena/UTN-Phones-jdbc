@@ -1,6 +1,8 @@
 create database utnphones;
 use utnphones;
-drop database utnphones;
+-- drop database utnphones;
+-- SET GLOBAL time_zone =  '-3:00';
+select * from users;
 
 create table provinces(
 	id int auto_increment primary key,
@@ -69,10 +71,10 @@ create table phonecalls(
 	id_city_to int,
 	duration int,
 	call_date datetime,
--- 	cost_per_min decimal (12,2),
--- 	price_per_min decimal (12,2),
--- 	total_price decimal (12,2),
--- 	total_cost decimal(12,2),
+	cost_per_min decimal (12,2),
+	price_per_min decimal (12,2),
+	total_price decimal (12,2),
+	total_cost decimal(12,2),
 	id_invoice int,
 	constraint fk_id_invoice foreign key (id_invoice) references invoices(id),
     constraint fk_id_city_from foreign key (id_city_from) references cities(id),
@@ -211,3 +213,7 @@ end
 
 call sp_phonecalls_betweendates(1, '2020-02-01','2020-05-20');
 call sp_user_top10(1);
+
+select * from users;
+update users set user_status=2 where id=15;
+insert into users(first_name,surname,dni,birthdate,username,pwd,email,user_type,user_status,id_city) values("juan","choto","37989322",'1995-01-11',"juanchoto","123","juanchoto@hotmail.com",2,1,1);

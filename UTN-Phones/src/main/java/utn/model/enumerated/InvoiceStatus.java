@@ -1,6 +1,6 @@
 package utn.model.enumerated;
 
-public enum Status {
+public enum InvoiceStatus {
     PAY,
     NOTPAY
 }

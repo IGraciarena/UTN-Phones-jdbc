@@ -4,6 +4,7 @@ import utn.dao.UserDao;
 import utn.model.City;
 import utn.model.Province;
 import utn.model.User;
+import utn.model.enumerated.UserStatus;
 import utn.model.enumerated.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -44,10 +45,19 @@ public class UserMySQLDao implements UserDao {
 
     private User createUser(ResultSet rs) throws SQLException {
         UserType userType = UserType.valueOf(rs.getString("user_type"));
-        User u = new User(rs.getInt("id"), rs.getString("first_name"), rs.getString("surname"),
-                    rs.getInt("dni"), rs.getDate("birthdate"),rs.getString("username"),rs.getString("pwd"),rs.getString("email"),
-                        new City(rs.getInt("id"), rs.getString("city_name"),rs.getInt("prefix"),
-                          new Province(rs.getInt("id"), rs.getString("province_name"))),userType);
+        UserStatus userStatus = UserStatus.valueOf(rs.getString("user_status"));
+        User u = new User(rs.getInt("id"),
+                    rs.getString("first_name"),
+                    rs.getString("surname"),
+                    rs.getInt("dni"),
+                    rs.getDate("birthdate"),
+                    rs.getString("username"),
+                    rs.getString("pwd"),
+                    rs.getString("email"),
+                    userType,
+                    userStatus,
+                    new City(rs.getInt("id"), rs.getString("city_name"),rs.getInt("prefix"),
+                    new Province(rs.getInt("id"), rs.getString("province_name"))));
         return u;
     }
 
@@ -60,15 +70,16 @@ public class UserMySQLDao implements UserDao {
     public User add(User value) {
         try {
             PreparedStatement ps = connection.prepareStatement(INSERT_USER_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setString(1, value.getName());
+            ps.setString(1, value.getFirstname());
             ps.setString(2, value.getSurname());
             ps.setInt(3, value.getDni());
             ps.setDate(4,new Date(value.getBirthdate().getTime()));
             ps.setString(5, value.getUsername());
-            ps.setString(6, value.getPassword());
+            ps.setString(6, value.getPwd());
             ps.setString(7, value.getEmail());
             ps.setString(8, String.valueOf(value.getUserType()));
-            ps.setInt(9, value.getCity().getId());
+            ps.setString(9,String.valueOf(value.getUserStatus()));
+            ps.setInt(10, value.getCity().getId());
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if (rs != null && rs.next()) {
@@ -81,15 +92,21 @@ public class UserMySQLDao implements UserDao {
     }
 
     @Override
-    public Integer update(User value) {
+    public void update(User value) {
         try {
             PreparedStatement ps = connection.prepareStatement(UPDATE_USER_QUERY);
-            ps.setString(1, value.getName());
+            ps.setString(1, value.getFirstname());
             ps.setString(2, value.getSurname());
-            ps.setInt(3, value.getCity().getId());
-            ps.setString(4, value.getPassword());
-            Integer rowsAffected = ps.executeUpdate();
-            return rowsAffected;
+            ps.setInt(3,value.getDni());
+            ps.setDate(4,new Date(value.getBirthdate().getTime()));
+            ps.setString(5,value.getUsername());
+            ps.setString(6,value.getPwd());
+            ps.setString(7, value.getEmail());
+            ps.setString(8, String.valueOf(value.getUserType()));
+            ps.setString(9,String.valueOf(value.getUserStatus()));
+            ps.setInt(10, value.getCity().getId());
+            ps.setInt(11,value.getId());
+            ps.executeUpdate();
         } catch (SQLException sqlException) {
             throw new RuntimeException("Error al modificar usuario", sqlException);
         }
@@ -97,21 +114,16 @@ public class UserMySQLDao implements UserDao {
     }
 
     @Override
-    public Integer remove(Integer id) {
+    public void remove(Integer id) {
         try {
-            PreparedStatement ps = connection.prepareStatement(REMOVE_USER_QUERY);
+            PreparedStatement ps = connection.prepareStatement(UPDATE_USER_STATUS_QUERY);
             ps.setInt(1, id);
-            Integer rowsAffected = ps.executeUpdate();
-            return rowsAffected;
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error al eliminar usuario", e);
         }
     }
 
-    @Override
-    public Integer remove(User value) {
-        return remove(value.getId());
-    }
 
     @Override
     public User getById(Integer id) {

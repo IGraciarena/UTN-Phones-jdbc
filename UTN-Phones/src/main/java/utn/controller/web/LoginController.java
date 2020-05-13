@@ -30,7 +30,7 @@ public class LoginController {
     public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto) throws InvalidLoginException, ValidationException {
         ResponseEntity response;
         try {
-            User u = userController.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+            User u = userController.login(loginRequestDto.getUsername(), loginRequestDto.getPwd());
             String token = sessionManager.createSession(u);
             response = ResponseEntity.ok().headers(createHeaders(token)).build();
         } catch (UserNotexistException e) {

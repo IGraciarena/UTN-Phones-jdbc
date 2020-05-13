@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 public class City {
 
     private Integer id;
-    private String name;
-    private int prefix;
-    private Province provinceId;
+    private String cityName;
+    private Integer prefix;
+    private Province province;
 
 }
