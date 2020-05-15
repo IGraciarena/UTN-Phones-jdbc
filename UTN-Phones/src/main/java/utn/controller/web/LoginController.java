@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import utn.controller.UserController;
 import utn.dto.LoginRequestDto;
 import utn.exceptions.InvalidLoginException;
-import utn.exceptions.UserNotexistException;
+import utn.exceptions.UserNotExistsException;
 import utn.exceptions.ValidationException;
 import utn.model.User;
 import utn.session.SessionManager;
@@ -33,7 +33,7 @@ public class LoginController {
             User u = userController.login(loginRequestDto.getUsername(), loginRequestDto.getPwd());
             String token = sessionManager.createSession(u);
             response = ResponseEntity.ok().headers(createHeaders(token)).build();
-        } catch (UserNotexistException e) {
+        } catch (UserNotExistsException e) {
             throw new InvalidLoginException(e,"El usuario ingresado no existe.");
         }
         return response;

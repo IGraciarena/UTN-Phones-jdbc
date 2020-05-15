@@ -44,8 +44,6 @@ public class UserMySQLDao implements UserDao {
     }
 
     private User createUser(ResultSet rs) throws SQLException {
-        UserType userType = UserType.valueOf(rs.getString("user_type"));
-        UserStatus userStatus = UserStatus.valueOf(rs.getString("user_status"));
         User u = new User(rs.getInt("id"),
                     rs.getString("first_name"),
                     rs.getString("surname"),
@@ -54,8 +52,8 @@ public class UserMySQLDao implements UserDao {
                     rs.getString("username"),
                     rs.getString("pwd"),
                     rs.getString("email"),
-                    userType,
-                    userStatus,
+                    UserType.valueOf(rs.getString("user_type")),
+                    UserStatus.valueOf(rs.getString("user_status")),
                     new City(rs.getInt("id"), rs.getString("city_name"),rs.getInt("prefix"),
                     new Province(rs.getInt("id"), rs.getString("province_name"))));
         return u;

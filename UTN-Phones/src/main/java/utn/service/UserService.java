@@ -2,7 +2,7 @@ package utn.service;
 
 import utn.dao.UserDao;
 import utn.exceptions.UserAlreadyExistsException;
-import utn.exceptions.UserNotexistException;
+import utn.exceptions.UserNotExistsException;
 import utn.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +17,9 @@ public class UserService {
         this.dao = dao;
     }
 
-    public User login(String userName, String password) throws UserNotexistException {
+    public User login(String userName, String password) throws UserNotExistsException {
         User user = dao.getByUserName(userName, password);
-        return Optional.ofNullable(user).orElseThrow(() -> new UserNotexistException());
+        return Optional.ofNullable(user).orElseThrow(() -> new UserNotExistsException());
 
     }
 
@@ -27,15 +27,15 @@ public class UserService {
         return dao.add(value);
     }
 
-    public void updateUser(User user) throws UserNotexistException {
+    public void updateUser(User user) throws UserNotExistsException {
         User byId = dao.getById(user.getId());
-        Optional.ofNullable(byId).orElseThrow(UserNotexistException::new);
+        Optional.ofNullable(byId).orElseThrow(UserNotExistsException::new);
         dao.update(user);
     }
 
-    public void removeUser(Integer idUser) throws UserNotexistException {
+    public void removeUser(Integer idUser) throws UserNotExistsException {
         User user = dao.getById(idUser);
-        Optional.ofNullable(user).orElseThrow(UserNotexistException::new);
+        Optional.ofNullable(user).orElseThrow(UserNotExistsException::new);
         dao.remove(idUser);
     }
 

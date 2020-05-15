@@ -1,14 +1,13 @@
 package utn.controller;
 
 import utn.exceptions.UserAlreadyExistsException;
-import utn.exceptions.UserNotexistException;
+import utn.exceptions.UserNotExistsException;
 import utn.exceptions.ValidationException;
 import utn.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import utn.service.UserService;
 
-import java.util.List;
 @Controller
 public class UserController {
 
@@ -19,7 +18,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    public User login(String username, String password) throws UserNotexistException, ValidationException {
+    public User login(String username, String password) throws UserNotExistsException, ValidationException {
         if ((username != null) && (password != null)) {
             return userService.login(username, password);
         } else {
@@ -31,12 +30,12 @@ public class UserController {
         return userService.add(user);
     }
 
-    public void removeUser(Integer idUser) throws UserNotexistException {
+    public void removeUser(Integer idUser) throws UserNotExistsException {
         userService.removeUser(idUser);
     }
 
 
-    public void updateUser(User user) throws UserNotexistException {
+    public void updateUser(User user) throws UserNotExistsException {
         userService.updateUser(user);
     }
     public User getById(Integer id){

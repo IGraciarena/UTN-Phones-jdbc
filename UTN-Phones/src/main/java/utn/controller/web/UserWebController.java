@@ -6,8 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utn.controller.UserController;
 import utn.exceptions.UserAlreadyExistsException;
-import utn.exceptions.UserNotAuthorizedException;
-import utn.exceptions.UserNotexistException;
+import utn.exceptions.UserNotExistsException;
 import utn.model.User;
 import utn.model.enumerated.UserType;
 import utn.session.SessionManager;
@@ -35,7 +34,7 @@ public class UserWebController {
     }
 
     @DeleteMapping("/{idUser}")
-    public ResponseEntity removeUser(@PathVariable Integer idUser,@RequestHeader("Authorization") String token) throws UserNotexistException {
+    public ResponseEntity removeUser(@PathVariable Integer idUser,@RequestHeader("Authorization") String token) throws UserNotExistsException {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)){
             userController.removeUser(idUser);
@@ -45,7 +44,7 @@ public class UserWebController {
     }
 
     @PutMapping
-    public ResponseEntity<Object> update(@RequestBody User user, @RequestHeader("Authorization")String token) throws UserNotexistException {
+    public ResponseEntity<Object> update(@RequestBody User user, @RequestHeader("Authorization")String token) throws UserNotExistsException {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)){
             userController.updateUser(user);
