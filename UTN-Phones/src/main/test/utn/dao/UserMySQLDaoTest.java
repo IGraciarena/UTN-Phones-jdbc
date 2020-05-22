@@ -47,13 +47,12 @@ public class UserMySQLDaoTest {
         when(rs.getInt("id_city")).thenReturn(2);
         when(rs.getInt("id_province")).thenReturn(3);
 
-        //when(rs.getString("user_type")).thenReturn(String.valueOf(UserType.CLIENT));
+        when(rs.getString("user_type")).thenReturn("CLIENT");
+        when(rs.getString("user_status")).thenReturn("ACTIVE");
         when(rs.getString("username")).thenReturn("username");
         when(rs.getString("pwd")).thenReturn("pwd");
         UserType userType = UserType.CLIENT;
         UserStatus userStatus = UserStatus.ACTIVE;
-        when(UserType.valueOf(rs.getString("user_type"))).thenReturn(userType);
-        when(UserStatus.valueOf(rs.getString("user_status"))).thenReturn(userStatus); //no se bro
 
         doNothing().when(ps).close();
         doNothing().when(rs).close();
