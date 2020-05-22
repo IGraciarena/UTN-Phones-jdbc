@@ -1,5 +1,6 @@
 package utn.controller;
 
+import utn.dto.UserMostCalledNumberDto;
 import utn.exceptions.UserAlreadyExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.exceptions.ValidationException;
@@ -40,5 +41,9 @@ public class UserController {
     }
     public User getById(Integer id){
         return userService.getById(id);
+    }
+
+    public UserMostCalledNumberDto getMostCalledNumber(String lineNumber) {
+        return userService.getMostCalledNumber(lineNumber);
     }
 }

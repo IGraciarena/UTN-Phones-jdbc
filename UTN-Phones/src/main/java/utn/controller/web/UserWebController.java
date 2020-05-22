@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utn.controller.UserController;
+import utn.dto.UserMostCalledNumberDto;
 import utn.exceptions.UserAlreadyExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.model.User;
@@ -49,6 +50,15 @@ public class UserWebController {
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)){
             userController.updateUser(user);
             return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @GetMapping("/mostCalled/{lineNumber}")
+    public ResponseEntity getMostCalledNumber(@RequestHeader("Authorization")String token,@PathVariable String lineNumber){
+        User currentUser = sessionManager.getCurrentUser(token);
+        if (currentUser.getUserType().equals(UserType.CLIENT)){
+            return ResponseEntity.status(HttpStatus.OK).body(userController.getMostCalledNumber(lineNumber));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }

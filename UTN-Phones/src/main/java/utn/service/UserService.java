@@ -1,6 +1,7 @@
 package utn.service;
 
 import utn.dao.UserDao;
+import utn.dto.UserMostCalledNumberDto;
 import utn.exceptions.UserAlreadyExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.model.User;
@@ -25,6 +26,10 @@ public class UserService {
 
     public User add(User value) throws UserAlreadyExistsException {
         return dao.add(value);
+    }
+
+    public UserMostCalledNumberDto getMostCalledNumber(String lineNumber){
+        return dao.getMostCalledNumber(lineNumber);
     }
 
     public void updateUser(User user) throws UserNotExistsException {

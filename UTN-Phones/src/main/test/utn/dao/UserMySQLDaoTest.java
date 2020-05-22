@@ -43,9 +43,9 @@ public class UserMySQLDaoTest {
 
         when(ps.executeQuery()).thenReturn(rs);
         when(rs.next()).thenReturn(true);
-        when(rs.getInt("id")).thenReturn(1);
-        when(rs.getInt("id")).thenReturn(2);
-        when(rs.getInt("id")).thenReturn(3);
+        when(rs.getInt("id_user")).thenReturn(1);
+        when(rs.getInt("id_city")).thenReturn(2);
+        when(rs.getInt("id_province")).thenReturn(3);
 
         //when(rs.getString("user_type")).thenReturn(String.valueOf(UserType.CLIENT));
         when(rs.getString("username")).thenReturn("username");

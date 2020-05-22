@@ -1,6 +1,7 @@
 package utn.dao.mysql;
 
 import utn.dao.UserDao;
+import utn.dto.UserMostCalledNumberDto;
 import utn.model.City;
 import utn.model.Province;
 import utn.model.User;
@@ -44,7 +45,7 @@ public class UserMySQLDao implements UserDao {
     }
 
     private User createUser(ResultSet rs) throws SQLException {
-        User u = new User(rs.getInt("id"),
+        User u = new User(rs.getInt("id_user"),
                     rs.getString("first_name"),
                     rs.getString("surname"),
                     rs.getInt("dni"),
@@ -54,8 +55,8 @@ public class UserMySQLDao implements UserDao {
                     rs.getString("email"),
                     UserType.valueOf(rs.getString("user_type")),
                     UserStatus.valueOf(rs.getString("user_status")),
-                    new City(rs.getInt("id"), rs.getString("city_name"),rs.getInt("prefix"),
-                    new Province(rs.getInt("id"), rs.getString("province_name"))));
+                    new City(rs.getInt("id_city"), rs.getString("city_name"),rs.getInt("prefix"),
+                    new Province(rs.getInt("id_province"), rs.getString("province_name"))));
         return u;
     }
 
@@ -87,6 +88,22 @@ public class UserMySQLDao implements UserDao {
             e.printStackTrace();
         }
         return value;
+    }
+
+    @Override
+    public UserMostCalledNumberDto getMostCalledNumber(String lineNumber) {
+        UserMostCalledNumberDto aux = null;
+        try {
+            PreparedStatement ps = connection.prepareStatement(GET_MOST_CALLED_NUMBER);
+            ps.setString(1,lineNumber);
+            ResultSet rs = ps.executeQuery();
+            if(rs != null && rs.next()){
+                aux = new UserMostCalledNumberDto(rs.getString("line_number_to"),rs.getString("first_name"),rs.getString("surname"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return aux;
     }
 
     @Override

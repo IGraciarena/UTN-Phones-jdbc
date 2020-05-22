@@ -12,6 +12,8 @@ import java.util.Date;
 public class Phonecall {
 
     private Integer id;
+    private String lineNumberFrom;
+    private String lineNumberTo;
     private UserLine idLineNumberFrom;
     private UserLine idLineNumberTo;
     private City idCityFrom;
