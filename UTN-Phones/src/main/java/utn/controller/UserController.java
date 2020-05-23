@@ -1,6 +1,7 @@
 package utn.controller;
 
 import utn.dto.UserMostCalledNumberDto;
+import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.UserAlreadyExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.exceptions.ValidationException;
@@ -27,7 +28,7 @@ public class UserController {
         }
     }
 
-    public User add(User user) throws UserAlreadyExistsException {
+    public User add(User user) throws AlreadyExistsException {
         return userService.add(user);
     }
 

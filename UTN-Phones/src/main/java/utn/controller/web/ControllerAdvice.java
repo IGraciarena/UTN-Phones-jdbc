@@ -6,9 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import utn.dto.ErrorResponseDto;
-import utn.exceptions.InvalidLoginException;
-import utn.exceptions.UserNotExistsException;
-import utn.exceptions.ValidationException;
+import utn.exceptions.*;
 
 @RestControllerAdvice
 public class ControllerAdvice extends ResponseEntityExceptionHandler {
@@ -31,5 +29,16 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
         return new ErrorResponseDto(3, "User not exists");
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NoExistsException.class)
+    public ErrorResponseDto handleNotExists() {
+        return new ErrorResponseDto(3, "Not exists.");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ErrorResponseDto handleAlreadyExists() {
+        return new ErrorResponseDto(3, "Already exists.");
+    }
 
 }

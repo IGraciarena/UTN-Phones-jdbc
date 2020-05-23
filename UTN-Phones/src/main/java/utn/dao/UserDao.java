@@ -2,6 +2,7 @@ package utn.dao;
 
 
 import utn.dto.UserMostCalledNumberDto;
+import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.UserAlreadyExistsException;
 import utn.model.City;
 import utn.model.User;
@@ -18,7 +19,7 @@ public interface UserDao extends AbstractDao<User> {
 
     void update(User u);
 
-    User add(User u) throws UserAlreadyExistsException;
+    User add(User u) throws AlreadyExistsException;
 
     UserMostCalledNumberDto getMostCalledNumber(String lineNumber);
 }

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utn.controller.UserController;
 import utn.dto.UserMostCalledNumberDto;
+import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.UserAlreadyExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.model.User;
@@ -26,7 +27,7 @@ public class UserWebController {
     }
 
     @PostMapping
-    public ResponseEntity add(@RequestBody User user,@RequestHeader("Authorization") String token) throws UserAlreadyExistsException {
+    public ResponseEntity add(@RequestBody User user,@RequestHeader("Authorization") String token) throws AlreadyExistsException {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)){
             return ResponseEntity.status(HttpStatus.CREATED).body(userController.add(user));

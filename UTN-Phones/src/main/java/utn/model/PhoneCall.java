@@ -9,7 +9,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Phonecall {
+public class PhoneCall {
 
     private Integer id;
     private String lineNumberFrom;

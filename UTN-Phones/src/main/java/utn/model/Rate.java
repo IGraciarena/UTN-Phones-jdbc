@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Fare {
+public class Rate {
 
     private Integer id;
     private float pricePerMin;
