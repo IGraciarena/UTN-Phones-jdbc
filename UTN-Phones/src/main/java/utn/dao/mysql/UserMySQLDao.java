@@ -84,6 +84,8 @@ public class UserMySQLDao implements UserDao {
             if (rs != null && rs.next()) {
                 value.setId(rs.getInt(1));
             }
+            ps.close();
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -100,6 +102,8 @@ public class UserMySQLDao implements UserDao {
             if(rs != null && rs.next()){
                 aux = new UserMostCalledNumberDto(rs.getString("line_number_to"),rs.getString("first_name"),rs.getString("surname"));
             }
+            ps.close();
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -122,6 +126,7 @@ public class UserMySQLDao implements UserDao {
             ps.setInt(10, value.getCity().getId());
             ps.setInt(11,value.getId());
             ps.executeUpdate();
+            ps.close();
         } catch (SQLException sqlException) {
             throw new RuntimeException("Error al modificar usuario", sqlException);
         }
@@ -134,6 +139,7 @@ public class UserMySQLDao implements UserDao {
             PreparedStatement ps = connection.prepareStatement(UPDATE_USER_STATUS_QUERY);
             ps.setInt(1, id);
             ps.executeUpdate();
+            ps.close();
         } catch (SQLException e) {
             throw new RuntimeException("Error al eliminar usuario", e);
         }
@@ -188,6 +194,8 @@ public class UserMySQLDao implements UserDao {
             while (rs.next()) {
                 userList.add(createUser(rs));
             }
+            st.close();
+            rs.close();
             return userList;
         } catch (SQLException e) {
             throw new RuntimeException("Error al obtener la lista de usuarios", e);
