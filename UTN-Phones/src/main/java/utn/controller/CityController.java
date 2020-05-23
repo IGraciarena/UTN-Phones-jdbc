@@ -2,6 +2,7 @@ package utn.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import utn.exceptions.AlreadyExistsException;
 import utn.model.City;
 import utn.service.CityService;
 
@@ -13,7 +14,7 @@ public class CityController {
     public CityController(CityService cityService){
         this.cityService = cityService;
     }
-    public City add(City city){
+    public City add(City city) throws AlreadyExistsException {
         return cityService.add(city);
     }
     public void remove(Integer id){

@@ -8,7 +8,7 @@ import utn.model.City;
 
 @Service
 public class CityService {
-    CityDao dao;
+    private CityDao dao;
 
     @Autowired
     public CityService(CityDao dao){

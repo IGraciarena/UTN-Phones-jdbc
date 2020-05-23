@@ -161,6 +161,24 @@ public class UserMySQLDao implements UserDao {
 
     }
 
+    public boolean getByUsername(String username) {
+        boolean aswr = false;
+        try {
+            PreparedStatement ps = connection.prepareStatement(GET_BY_USERNAME);
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+               aswr = true;
+            }
+            rs.close();
+            ps.close();
+            return aswr;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener datos de usuario", e);
+        }
+    }
+
     @Override
     public List<User> getAll() {
         try {

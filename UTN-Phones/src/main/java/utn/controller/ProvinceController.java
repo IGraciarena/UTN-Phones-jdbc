@@ -21,9 +21,11 @@ public class ProvinceController {
     public void remove(Integer id){
         provinceService.remove(id);
     }
+
     public void update(Province province){
         provinceService.update(province);
     }
+
     public Province getById(Integer id){
         return provinceService.getById(id);
     }

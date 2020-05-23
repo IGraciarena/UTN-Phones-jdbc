@@ -20,9 +20,11 @@ public class UserLineController {
     public void remove(Integer id){
         userLineService.remove(id);
     }
+
     public void update(UserLine userLine){
         userLineService.update(userLine);
     }
+
     public UserLine getById(Integer id){
         return userLineService.getById(id);
     }

@@ -22,4 +22,6 @@ public interface UserDao extends AbstractDao<User> {
     User add(User u) throws AlreadyExistsException;
 
     UserMostCalledNumberDto getMostCalledNumber(String lineNumber);
+
+    boolean getByUsername(String username);
 }
