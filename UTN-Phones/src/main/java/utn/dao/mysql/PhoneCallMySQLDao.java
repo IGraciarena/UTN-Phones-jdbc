@@ -19,8 +19,8 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
     }
 
     @Override
-    public PhoneCall add(PhoneCall value) throws AlreadyExistsException {
-        return null;
+    public void add(PhoneCall value) throws AlreadyExistsException {
+
     }
 
     @Override

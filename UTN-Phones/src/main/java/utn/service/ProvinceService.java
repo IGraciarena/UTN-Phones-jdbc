@@ -16,8 +16,8 @@ public class ProvinceService {
         return dao.getById(id);
     }
 
-    public Province add(Province province) throws AlreadyExistsException {
-        return dao.add(province);
+    public void add(Province province) throws AlreadyExistsException {
+         dao.add(province);
     }
 
     public void remove(Integer id) {

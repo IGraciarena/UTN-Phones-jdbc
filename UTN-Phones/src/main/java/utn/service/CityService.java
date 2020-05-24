@@ -19,8 +19,8 @@ public class CityService {
         return dao.getById(id);
     }
 
-    public City add(City city) throws AlreadyExistsException {
-        return dao.add(city);
+    public void add(City city) throws AlreadyExistsException {
+        dao.add(city);
     }
 
     public void remove(Integer id) {

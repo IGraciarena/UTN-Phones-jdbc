@@ -19,8 +19,8 @@ public class InvoiceService {
         return dao.getById(id);
     }
 
-    public Invoice add(Invoice invoice) throws AlreadyExistsException {
-        return dao.add(invoice);
+    public void add(Invoice invoice) throws AlreadyExistsException {
+        dao.add(invoice);
     }
 
     public void remove(Integer id) {

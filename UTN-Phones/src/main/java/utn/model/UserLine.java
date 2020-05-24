@@ -12,7 +12,7 @@ import utn.model.enumerated.TypeLine;
 public class UserLine {
 
     private Integer id;
-    private Integer lineNumber;
+    private String lineNumber;
     private TypeLine typeLine;
     private LineStatus lineStatus;
     private User user;

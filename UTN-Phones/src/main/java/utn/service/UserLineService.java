@@ -16,8 +16,8 @@ public class UserLineService {
         this.dao = userLineDao;
     }
 
-    public UserLine add(UserLine userLine) throws AlreadyExistsException {
-       return dao.add(userLine);
+    public void add(UserLine userLine) throws AlreadyExistsException {
+        dao.add(userLine);
     }
 
     public void remove(Integer id) {

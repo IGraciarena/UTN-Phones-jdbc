@@ -19,8 +19,8 @@ public class PhoneCallService {
        return dao.getById(id);
     }
 
-    public PhoneCall add(PhoneCall phoneCall) throws AlreadyExistsException {
-        return dao.add(phoneCall);
+    public void add(PhoneCall phoneCall) throws AlreadyExistsException {
+         dao.add(phoneCall);
     }
 
     public void remove(Integer id) {

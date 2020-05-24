@@ -24,7 +24,7 @@ public class MySQLUtils {
     public static final String BASE_CITY_QUERY = "select * from cities c inner join provinces p on p.id_province=c.id_province_fk"; //getAll
     public static final String GET_CITY_BY_PREFIX = BASE_CITY_QUERY + " where prefix = ?";
     public static final String INSERT_CITY_QUERY = "insert into cities (city_name,prefix,id_province_fk) values(?,?,?)";
-    public static final String UPDATE_CITY_QUERY = "update cities set city_name=?, prefix=?, id_province_fk where id_city=?";
+    public static final String UPDATE_CITY_QUERY = "update cities set city_name=?, prefix=?, id_province_fk=? where id_city=?";
     public static final String REMOVE_CITY_QUERY = "delete from cities where id_city=?";
     public static final String GETBYID_CITY_QUERY = BASE_CITY_QUERY +" where id_city=?";
     //-------------------PROVIENCES--------------------

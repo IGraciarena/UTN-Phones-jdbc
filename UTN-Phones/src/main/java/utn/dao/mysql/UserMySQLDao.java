@@ -66,7 +66,7 @@ public class UserMySQLDao implements UserDao {
     }
 
     @Override
-    public User add(User value) {
+    public void add(User value) {
         try {
             PreparedStatement ps = connection.prepareStatement(INSERT_USER_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, value.getFirstname());
@@ -89,7 +89,6 @@ public class UserMySQLDao implements UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return value;
     }
 
     @Override
@@ -130,7 +129,6 @@ public class UserMySQLDao implements UserDao {
         } catch (SQLException sqlException) {
             throw new RuntimeException("Error al modificar usuario", sqlException);
         }
-
     }
 
     @Override

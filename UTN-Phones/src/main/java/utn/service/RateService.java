@@ -14,8 +14,8 @@ public class RateService {
     public RateService(RateDao rateDao){
         this.dao = rateDao;
     }
-    public Rate add(Rate rate) throws AlreadyExistsException {
-        return dao.add(rate);
+    public void add(Rate rate) throws AlreadyExistsException {
+         dao.add(rate);
     }
     public Rate getById(Integer id) {
         return dao.getById(id);

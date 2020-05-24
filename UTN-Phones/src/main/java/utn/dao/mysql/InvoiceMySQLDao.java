@@ -3,6 +3,7 @@ package utn.dao.mysql;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import utn.dao.InvoiceDao;
+import utn.dto.InvoiceDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.model.Invoice;
 
@@ -19,8 +20,8 @@ public class InvoiceMySQLDao implements InvoiceDao {
     }
 
     @Override
-    public Invoice add(Invoice value) throws AlreadyExistsException {
-        return null;
+    public void add(Invoice value) throws AlreadyExistsException {
+
     }
 
     @Override
@@ -34,12 +35,12 @@ public class InvoiceMySQLDao implements InvoiceDao {
     }
 
     @Override
-    public Invoice getById(Integer id) {
+    public InvoiceDto getById(Integer id) {
         return null;
     }
 
     @Override
-    public List<Invoice> getAll() {
+    public List<InvoiceDto> getAll() {
         return null;
     }
 }

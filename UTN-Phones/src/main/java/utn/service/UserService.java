@@ -25,11 +25,11 @@ public class UserService {
 
     }
 
-    public User add(User value) throws AlreadyExistsException {
+    public void add(User value) throws AlreadyExistsException {
         if(dao.getByUsername(value.getUsername())){
             throw new AlreadyExistsException();
         }
-        return dao.add(value);
+         dao.add(value);
     }
 
     public UserMostCalledNumberDto getMostCalledNumber(String lineNumber){

@@ -64,7 +64,7 @@ public class CityMySQLDao implements CityDao {
     }
 
     @Override
-    public City add(City value) {
+    public void add(City value) {
         try {
             PreparedStatement ps = con.prepareStatement(INSERT_CITY_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setInt(1,value.getId());
@@ -76,7 +76,6 @@ public class CityMySQLDao implements CityDao {
         } catch (SQLException e) {
             throw new RuntimeException("Error al insertar city",e);
         }
-        return value;
     }
 
     @Override
@@ -103,6 +102,22 @@ public class CityMySQLDao implements CityDao {
             ps.close();
         } catch (SQLException e) {
             throw new RuntimeException("Error al modificar ciudad", e);
+        }
+    }
+
+    public String getCityName(Integer id){
+        String aux = "";
+        try {
+            PreparedStatement ps = con.prepareStatement("select city_name from cities where id_city=?");
+            ps.setInt(1,id);
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.next()){
+                aux = resultSet.getString("city_name");
+            }
+            ps.close();
+            return  aux;
+        } catch (SQLException e) {
+           throw new RuntimeException("Error en traer el nombre de la ciudad",e);
         }
     }
 }
