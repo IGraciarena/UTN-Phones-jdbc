@@ -3,6 +3,7 @@ package utn.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import utn.dao.RateDao;
+import utn.dto.RateDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.model.Rate;
 
@@ -11,13 +12,15 @@ public class RateService {
     RateDao dao;
 
     @Autowired
-    public RateService(RateDao rateDao){
+    public RateService(RateDao rateDao) {
         this.dao = rateDao;
     }
+
     public void add(Rate rate) throws AlreadyExistsException {
-         dao.add(rate);
+        dao.add(rate);
     }
-    public Rate getById(Integer id) {
+
+    public RateDto getById(Integer id) {
         return dao.getById(id);
     }
 

@@ -114,6 +114,7 @@ public class CityMySQLDao implements CityDao {
             if (resultSet.next()){
                 aux = resultSet.getString("city_name");
             }
+            resultSet.close();
             ps.close();
             return  aux;
         } catch (SQLException e) {

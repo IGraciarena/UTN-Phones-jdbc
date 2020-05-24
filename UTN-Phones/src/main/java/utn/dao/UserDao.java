@@ -26,4 +26,6 @@ public interface UserDao extends AbstractDao<User> {
     boolean getByUsername(String username);
 
     List<User> getAll();
+
+    User getById(Integer id);
 }

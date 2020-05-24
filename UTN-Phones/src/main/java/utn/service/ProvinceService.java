@@ -9,15 +9,16 @@ import utn.model.Province;
 public class ProvinceService {
     ProvinceDao dao;
 
-    public ProvinceService(ProvinceDao provinceDao){
+    public ProvinceService(ProvinceDao provinceDao) {
         this.dao = provinceDao;
     }
+
     public Province getById(Integer id) {
         return dao.getById(id);
     }
 
     public void add(Province province) throws AlreadyExistsException {
-         dao.add(province);
+        dao.add(province);
     }
 
     public void remove(Integer id) {

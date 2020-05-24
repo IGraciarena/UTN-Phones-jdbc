@@ -3,6 +3,7 @@ package utn.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import utn.dao.InvoiceDao;
+import utn.dto.InvoiceDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.model.Invoice;
 
@@ -11,11 +12,11 @@ public class InvoiceService {
     InvoiceDao dao;
 
     @Autowired
-    public InvoiceService(InvoiceDao invoiceDao){
+    public InvoiceService(InvoiceDao invoiceDao) {
         this.dao = invoiceDao;
     }
 
-    public Invoice getById(Integer id) {
+    public InvoiceDto getById(Integer id) {
         return dao.getById(id);
     }
 

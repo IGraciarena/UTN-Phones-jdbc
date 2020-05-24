@@ -3,6 +3,7 @@ package utn.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import utn.dao.PhoneCallDao;
+import utn.dto.PhoneCallDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.model.PhoneCall;
 
@@ -15,7 +16,7 @@ public class PhoneCallService {
         this.dao = dao;
     }
 
-    public PhoneCall getById(Integer id) {
+    public PhoneCallDto getById(Integer id) {
        return dao.getById(id);
     }
 

@@ -93,6 +93,22 @@ public class UserLineMySQLDao implements UserLineDao {
         }
     }
 
+    public String getLineNumber(Integer id){
+        String aux="";
+        try {
+            PreparedStatement ps = con.prepareStatement("select line_number from user_lines where id=?");
+            ps.setInt(1,id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                aux = rs.getString("line_number");
+            }
+            ps.close();
+            rs.close();
+            return aux;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al traer el numbero de la linea",e);
+        }
+    }
     private UserLineDto createUserLine(ResultSet rs) throws SQLException {
         UserLineDto ul = new UserLineDto(rs.getInt("line_number"),
                 TypeLine.valueOf(rs.getString("type_line")),

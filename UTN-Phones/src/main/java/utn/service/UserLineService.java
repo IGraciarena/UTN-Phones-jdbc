@@ -3,7 +3,7 @@ package utn.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import utn.dao.UserLineDao;
-import utn.dao.mysql.UserLineMySQLDao;
+import utn.dto.UserLineDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.model.UserLine;
 
@@ -12,7 +12,7 @@ public class UserLineService {
     UserLineDao dao;
 
     @Autowired
-    public UserLineService(UserLineDao userLineDao){
+    public UserLineService(UserLineDao userLineDao) {
         this.dao = userLineDao;
     }
 
@@ -28,7 +28,7 @@ public class UserLineService {
         dao.update(userLine);
     }
 
-    public UserLine getById(Integer id) {
+    public UserLineDto getById(Integer id) {
         return dao.getById(id);
     }
 

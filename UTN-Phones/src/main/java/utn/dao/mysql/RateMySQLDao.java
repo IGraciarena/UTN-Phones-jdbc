@@ -94,8 +94,10 @@ public class RateMySQLDao implements RateDao {
     }
 
     private RateDto createRate(ResultSet rs) throws SQLException {
-        RateDto rateDto = new RateDto(rs.getFloat("price_per_min"),
-                rs.getFloat("cost_per_min"),cityMySQLDao.getCityName(rs.getInt("id_city_from_fk")),
+        RateDto rateDto = new RateDto(
+                rs.getFloat("price_per_min"),
+                rs.getFloat("cost_per_min"),
+                cityMySQLDao.getCityName(rs.getInt("id_city_from_fk")),
                 cityMySQLDao.getCityName(rs.getInt("id_city_to_fk")));
         return rateDto;
     }

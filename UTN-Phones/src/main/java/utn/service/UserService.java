@@ -1,19 +1,20 @@
 package utn.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import utn.dao.UserDao;
 import utn.dto.UserMostCalledNumberDto;
 import utn.exceptions.AlreadyExistsException;
-import utn.exceptions.UserAlreadyExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
 @Service
 public class UserService {
 
     private UserDao dao;
+
     @Autowired
     public UserService(UserDao dao) {
         this.dao = dao;
@@ -26,13 +27,13 @@ public class UserService {
     }
 
     public void add(User value) throws AlreadyExistsException {
-        if(dao.getByUsername(value.getUsername())){
+        if (dao.getByUsername(value.getUsername())) {
             throw new AlreadyExistsException();
         }
-         dao.add(value);
+        dao.add(value);
     }
 
-    public UserMostCalledNumberDto getMostCalledNumber(String lineNumber){
+    public UserMostCalledNumberDto getMostCalledNumber(String lineNumber) {
         return dao.getMostCalledNumber(lineNumber);
     }
 
@@ -48,7 +49,7 @@ public class UserService {
         dao.remove(idUser);
     }
 
-    public User getById(Integer id){
+    public User getById(Integer id) {
         return dao.getById(id);
     }
 
