@@ -5,7 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utn.controller.*;
+import utn.dto.InvoiceDto;
 import utn.dto.RateDto;
+import utn.dto.ReturnedPhoneCallDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.model.User;
@@ -66,7 +68,7 @@ public class EmployeeWebController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers(@RequestHeader("Authorization") String token){
+    public ResponseEntity<List<User>> getAllUsers(@RequestHeader("Authorization") String token) {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
             List<User> userList = userController.getAll();
@@ -75,8 +77,9 @@ public class EmployeeWebController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
     ////////////////////////////////////////////RATE///////////////////////////////////////////////////////
-    @GetMapping("/rate")
+    @GetMapping("/rate/")
     public ResponseEntity<List<RateDto>> getAllRates(@RequestHeader("Authorization") String token) {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
@@ -95,7 +98,8 @@ public class EmployeeWebController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
-////////////////////////////////////////////USER LINES///////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////USER LINES///////////////////////////////////////////////////////
     @PostMapping
     public ResponseEntity addUserLine(@RequestBody UserLine userLine, @RequestHeader("Authorization") String token) throws AlreadyExistsException {
         User currentUser = sessionManager.getCurrentUser(token);
@@ -125,12 +129,36 @@ public class EmployeeWebController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
-////////////////////////////////////////////INVOICE////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////INVOICE////////////////////////////////////////////////////////
     @GetMapping("/invoice/{invoiceId}")
-    public ResponseEntity getByIdInvoice(@RequestHeader("Authorization") String token, @PathVariable Integer invoiceId){
+    public ResponseEntity getByIdInvoice(@RequestHeader("Authorization") String token, @PathVariable Integer invoiceId) {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
             return ResponseEntity.status(HttpStatus.OK).body(invoiceController.getById(invoiceId));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @GetMapping("/invoice/")
+    public ResponseEntity<List<InvoiceDto>> getAllInvoices(@RequestHeader("Authorization") String token) {
+        User currentUser = sessionManager.getCurrentUser(token);
+        if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
+            List<InvoiceDto> invoiceDtos = invoiceController.getAll();
+            return (invoiceDtos.size() > 0) ?
+                    ResponseEntity.ok(invoiceDtos) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    ////////////////////////////////////////////PHONECALLS////////////////////////////////////////////////////////
+    @GetMapping("/phonecalls/{userId}")
+    public ResponseEntity<List<ReturnedPhoneCallDto>> getAllPhoneCallsFromUserId(@RequestHeader("Authorization") String token, @PathVariable Integer userId) {
+        User currentUser = sessionManager.getCurrentUser(token);
+        if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
+            List<ReturnedPhoneCallDto> returnedPhoneCallDtoList = phoneCallController.getAllPhoneCallsFromUserId(userId);
+            return (returnedPhoneCallDtoList.size() > 0) ?
+                    ResponseEntity.ok(returnedPhoneCallDtoList) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }

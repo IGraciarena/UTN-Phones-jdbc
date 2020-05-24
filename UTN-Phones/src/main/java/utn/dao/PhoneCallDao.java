@@ -2,7 +2,6 @@ package utn.dao;
 
 import utn.dto.PhoneCallDto;
 import utn.dto.ReturnedPhoneCallDto;
-import utn.exceptions.AlreadyExistsException;
 import utn.model.PhoneCall;
 
 import java.util.List;
@@ -13,4 +12,6 @@ public interface PhoneCallDao extends AbstractDao<PhoneCall> {
     void addPhoneCall(PhoneCallDto value);
 
     List<ReturnedPhoneCallDto> getAll();
+
+    List<ReturnedPhoneCallDto> getAllPhoneCallsFromUserId(Integer userId);
 }

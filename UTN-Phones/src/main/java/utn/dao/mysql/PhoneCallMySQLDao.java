@@ -18,6 +18,7 @@ import static utn.dao.mysql.MySQLUtils.*;
 public class PhoneCallMySQLDao implements PhoneCallDao {
     Connection con;
     CityMySQLDao cityMySQLDao;
+
     @Autowired
     public PhoneCallMySQLDao(Connection con) {
         this.con = con;
@@ -56,11 +57,11 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
     public void remove(Integer id) {
         try {
             PreparedStatement ps = con.prepareStatement(REMOVE_PHONECALLS_QUERY);
-            ps.setInt(1,id);
+            ps.setInt(1, id);
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
-            throw new RuntimeException("Error al eliminar la llamada",e);
+            throw new RuntimeException("Error al eliminar la llamada", e);
         }
     }
 
@@ -69,21 +70,21 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
         ReturnedPhoneCallDto returnedPhoneCallDto = null;
         try {
             PreparedStatement ps = con.prepareStatement(GETBYID_PHONECALLS_QUERY);
-            ps.setInt(1,id);
+            ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 returnedPhoneCallDto = createPhoneCall(rs);
             }
             rs.close();
             ps.close();
             return returnedPhoneCallDto;
         } catch (SQLException e) {
-            throw new RuntimeException("Error al obtener datos de la llamada",e);
+            throw new RuntimeException("Error al obtener datos de la llamada", e);
         }
     }
 
     @Override
-    public void addPhoneCall(PhoneCallDto value) throws AlreadyExistsException {
+    public void addPhoneCall(PhoneCallDto value) {
 
     }
 
@@ -100,21 +101,39 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
     }
 
 
-
     @Override
     public List<ReturnedPhoneCallDto> getAll() {
         try {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(BASE_PHONECALLS_QUERY);
-            List<ReturnedPhoneCallDto>phoneCallDtos = new ArrayList<>();
-            while (rs.next()){
+            List<ReturnedPhoneCallDto> phoneCallDtos = new ArrayList<>();
+            while (rs.next()) {
                 phoneCallDtos.add(createPhoneCall(rs));
             }
             rs.close();
             st.close();
             return phoneCallDtos;
         } catch (SQLException e) {
-            throw  new RuntimeException("Error al obtener la lista de llamadas",e);
+            throw new RuntimeException("Error al obtener la lista de llamadas", e);
+        }
+    }
+
+    @Override
+    public List<ReturnedPhoneCallDto> getAllPhoneCallsFromUserId(Integer userId) {
+        try {
+            PreparedStatement ps = con.prepareStatement(GETBYID_USERPHONECALLS_QUERY);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            List<ReturnedPhoneCallDto> returnedPhoneCallDtoList = new ArrayList<>();
+            while (rs.next()) {
+                returnedPhoneCallDtoList.add(createPhoneCall(rs));
+            }
+            rs.close();
+            ps.close();
+            return returnedPhoneCallDtoList;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener la lista de llamadas por usuario", e);
         }
     }
 }

@@ -7,9 +7,7 @@ import utn.dto.PhoneCallDto;
 import utn.dto.ReturnedPhoneCallDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.NoExistsException;
-import utn.exceptions.UserNotExistsException;
 import utn.model.PhoneCall;
-import utn.model.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +17,7 @@ public class PhoneCallService {
     PhoneCallDao dao;
 
     @Autowired
-    public PhoneCallService(PhoneCallDao dao){
+    public PhoneCallService(PhoneCallDao dao) {
         this.dao = dao;
     }
 
@@ -30,7 +28,7 @@ public class PhoneCallService {
     }
 
     public void add(PhoneCall phoneCall) throws AlreadyExistsException {
-         dao.add(phoneCall);
+        dao.add(phoneCall);
     }
 
     public void remove(Integer id) throws NoExistsException {
@@ -45,11 +43,15 @@ public class PhoneCallService {
         dao.update(value);
     }
 
-    public void addPhoneCall(PhoneCallDto phoneCall){
+    public void addPhoneCall(PhoneCallDto phoneCall) {
         dao.addPhoneCall(phoneCall);
     }
 
     public List<ReturnedPhoneCallDto> getAll() {
         return dao.getAll();
+    }
+
+    public List<ReturnedPhoneCallDto> getAllPhoneCallsFromUserId(Integer userId) {
+        return dao.getAllPhoneCallsFromUserId(userId);
     }
 }

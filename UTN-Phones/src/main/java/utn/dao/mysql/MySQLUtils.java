@@ -57,5 +57,12 @@ public class MySQLUtils {
     public static final String REMOVE_PHONECALLS_QUERY = "delete from phonecalls where id_phonecall=?";
     public static final String UPDATE_PHONECALLS_QUERY = "update phonecalls set line_number_from=?, line_number_to=?, id_line_number_from_fk=?, id_line_number_to_fk=?, id_city_from_fk=?, id_city_to_fk=?, duration=?, call_date=?, id_invoice_fk=? where id_phonecall=?";
     public static final String GETBYID_PHONECALLS_QUERY = BASE_PHONECALLS_QUERY + " where id_phonecall=?";
+    public static final String GETBYID_USERPHONECALLS_QUERY="select p.line_number_from,p.line_number_to,p.id_city_from_fk,p.id_city_to_fk,p.duration,p.call_date,p.total_price\n" +
+                                                            "from phonecalls as p\n" +
+                                                            "join user_lines as ul\n" +
+                                                            "on p.id_line_number_from_fk=ul.id_user_line\n" +
+                                                            "join users as u\n" +
+                                                            "on ul.id_client_fk=u.id_user\n" +
+                                                            "where u.id_user=?";
 
 }

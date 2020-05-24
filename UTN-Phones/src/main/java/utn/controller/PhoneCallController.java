@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import utn.dto.PhoneCallDto;
 import utn.dto.ReturnedPhoneCallDto;
-import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.NoExistsException;
 import utn.model.PhoneCall;
 import utn.service.PhoneCallService;
@@ -16,13 +15,14 @@ public class PhoneCallController {
     PhoneCallService phoneCallService;
 
     @Autowired
-    public PhoneCallController(PhoneCallService phoneCallService){
+    public PhoneCallController(PhoneCallService phoneCallService) {
         this.phoneCallService = phoneCallService;
     }
 
     public void addPhoneCall(PhoneCallDto phoneCall) {
         phoneCallService.addPhoneCall(phoneCall);
     }
+
     public void remove(Integer id) throws NoExistsException {
         phoneCallService.remove(id);
     }
@@ -37,5 +37,9 @@ public class PhoneCallController {
 
     public List<ReturnedPhoneCallDto> getAll() {
         return phoneCallService.getAll();
+    }
+
+    public List<ReturnedPhoneCallDto> getAllPhoneCallsFromUserId(Integer userId){
+        return phoneCallService.getAllPhoneCallsFromUserId(userId);
     }
 }

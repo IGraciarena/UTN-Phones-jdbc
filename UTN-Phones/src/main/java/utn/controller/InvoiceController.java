@@ -7,6 +7,8 @@ import utn.exceptions.AlreadyExistsException;
 import utn.model.Invoice;
 import utn.service.InvoiceService;
 
+import java.util.List;
+
 @Controller
 public class InvoiceController {
     InvoiceService invoiceService;
@@ -30,5 +32,9 @@ public class InvoiceController {
 
     public InvoiceDto getById(Integer id) {
         return invoiceService.getById(id);
+    }
+
+    public List<InvoiceDto> getAll() {
+        return invoiceService.getAll();
     }
 }

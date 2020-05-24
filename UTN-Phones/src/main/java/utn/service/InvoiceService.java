@@ -7,6 +7,8 @@ import utn.dto.InvoiceDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.model.Invoice;
 
+import java.util.List;
+
 @Service
 public class InvoiceService {
     InvoiceDao dao;
@@ -30,5 +32,9 @@ public class InvoiceService {
 
     public void update(Invoice invoice) {
         dao.update(invoice);
+    }
+
+    public List<InvoiceDto> getAll() {
+        return dao.getAll();
     }
 }
