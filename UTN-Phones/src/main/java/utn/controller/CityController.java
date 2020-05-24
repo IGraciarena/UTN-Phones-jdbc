@@ -11,19 +11,23 @@ public class CityController {
     CityService cityService;
 
     @Autowired
-    public CityController(CityService cityService){
+    public CityController(CityService cityService) {
         this.cityService = cityService;
     }
-    public City add(City city) throws AlreadyExistsException {
-        return cityService.add(city);
+
+    public void add(City city) throws AlreadyExistsException {
+        cityService.add(city);
     }
-    public void remove(Integer id){
+
+    public void remove(Integer id) {
         cityService.remove(id);
     }
-    public void update(City city){
+
+    public void update(City city) {
         cityService.update(city);
     }
-    public City getById(Integer id){
+
+    public City getById(Integer id) {
         return cityService.getById(id);
     }
 }

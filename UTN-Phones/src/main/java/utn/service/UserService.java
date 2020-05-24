@@ -8,6 +8,7 @@ import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.model.User;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -53,4 +54,7 @@ public class UserService {
         return dao.getById(id);
     }
 
+    public List<User> getAll() {
+        return dao.getAll();
+    }
 }

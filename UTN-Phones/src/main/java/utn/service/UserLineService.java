@@ -7,6 +7,8 @@ import utn.dto.UserLineDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.model.UserLine;
 
+import java.util.List;
+
 @Service
 public class UserLineService {
     UserLineDao dao;
@@ -32,4 +34,7 @@ public class UserLineService {
         return dao.getById(id);
     }
 
+    public List<UserLineDto> getAll() {
+        return dao.getAll();
+    }
 }

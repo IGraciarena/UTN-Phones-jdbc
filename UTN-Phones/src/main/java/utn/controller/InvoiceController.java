@@ -2,6 +2,7 @@ package utn.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import utn.dto.InvoiceDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.model.Invoice;
 import utn.service.InvoiceService;
@@ -11,20 +12,23 @@ public class InvoiceController {
     InvoiceService invoiceService;
 
     @Autowired
-    public InvoiceController(InvoiceService invoiceService){
+    public InvoiceController(InvoiceService invoiceService) {
         this.invoiceService = invoiceService;
     }
 
-    public Invoice add(Invoice invoice) throws AlreadyExistsException {
-        return invoiceService.add(invoice);
+    public void add(Invoice invoice) throws AlreadyExistsException {
+        invoiceService.add(invoice);
     }
-    public void remove(Integer id){
+
+    public void remove(Integer id) {
         invoiceService.remove(id);
     }
-    public void update(Invoice invoice){
+
+    public void update(Invoice invoice) {
         invoiceService.update(invoice);
     }
-    public Invoice getById(Integer id){
+
+    public InvoiceDto getById(Integer id) {
         return invoiceService.getById(id);
     }
 }

@@ -1,14 +1,15 @@
 package utn.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import utn.dto.UserMostCalledNumberDto;
 import utn.exceptions.AlreadyExistsException;
-import utn.exceptions.UserAlreadyExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.exceptions.ValidationException;
 import utn.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import utn.service.UserService;
+
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -28,8 +29,8 @@ public class UserController {
         }
     }
 
-    public User add(User user) throws AlreadyExistsException {
-        return userService.add(user);
+    public void add(User user) throws AlreadyExistsException {
+        userService.add(user);
     }
 
     public void removeUser(Integer idUser) throws UserNotExistsException {
@@ -40,11 +41,16 @@ public class UserController {
     public void updateUser(User user) throws UserNotExistsException {
         userService.updateUser(user);
     }
-    public User getById(Integer id){
+
+    public User getById(Integer id) {
         return userService.getById(id);
     }
 
     public UserMostCalledNumberDto getMostCalledNumber(String lineNumber) {
         return userService.getMostCalledNumber(lineNumber);
+    }
+
+    public List<User> getAll() {
+        return userService.getAll();
     }
 }

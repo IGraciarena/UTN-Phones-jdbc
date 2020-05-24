@@ -36,7 +36,7 @@ public class MySQLUtils {
     //--------------------USER_LINES-------------------
     public static final String BASE_USERLINE_QUERY = "select * from user_lines ul inner join users u on u.id_user=ul.id_client_fk"; //getAll
     public static final String INSERT_USERLINE_QUERY = "insert into user_lines(line_number,type_line,line_status,id_client_fk) values(?,?,?,?)";
-    public static final String REMOVE_USERLINE_QUERY = "delete from user_lines where id_user_line=?";
+    public static final String REMOVE_USERLINE_QUERY = "update user_lines set line_status=3 where id_user_line=?";
     public static final String UPDATE_USERLINE_QUERY = "update user_lines set line_number=?, type_line=?, line_satus=?, id_client_fk=? where id_user_line=?";
     public static final String GETBYID_USERLINE_QUERY = BASE_USERLINE_QUERY + " where id_user_line=?";
     //---------------------RATES----------------------

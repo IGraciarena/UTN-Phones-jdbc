@@ -11,22 +11,23 @@ public class ProvinceController {
     ProvinceService provinceService;
 
     @Autowired
-    public ProvinceController(ProvinceService provinceService){
+    public ProvinceController(ProvinceService provinceService) {
         this.provinceService = provinceService;
     }
 
-    public Province add(Province province) throws AlreadyExistsException {
-       return provinceService.add(province);
+    public void add(Province province) throws AlreadyExistsException {
+        provinceService.add(province);
     }
-    public void remove(Integer id){
+
+    public void remove(Integer id) {
         provinceService.remove(id);
     }
 
-    public void update(Province province){
+    public void update(Province province) {
         provinceService.update(province);
     }
 
-    public Province getById(Integer id){
+    public Province getById(Integer id) {
         return provinceService.getById(id);
     }
 

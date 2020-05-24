@@ -96,7 +96,7 @@ public class UserLineMySQLDao implements UserLineDao {
     public String getLineNumber(Integer id){
         String aux="";
         try {
-            PreparedStatement ps = con.prepareStatement("select line_number from user_lines where id=?");
+            PreparedStatement ps = con.prepareStatement("select line_number from user_lines where id_user_line=?");
             ps.setInt(1,id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()){

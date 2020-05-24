@@ -7,6 +7,8 @@ import utn.dto.RateDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.model.Rate;
 
+import java.util.List;
+
 @Service
 public class RateService {
     RateDao dao;
@@ -30,5 +32,9 @@ public class RateService {
 
     public void update(Rate rate) {
         dao.update(rate);
+    }
+
+    public List<RateDto> getAll() {
+        return dao.getAll();
     }
 }
