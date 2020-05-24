@@ -25,30 +25,7 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
 
     @Override
     public void add(PhoneCall value) throws AlreadyExistsException {
-        try {
-            PreparedStatement ps = con.prepareStatement(INSERT_PHONECALLS_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setString(1, value.getLineNumberFrom());
-            ps.setString(2, value.getLineNumberTo());
-            ps.setInt(3, value.getIdLineNumberFrom().getId());
-            ps.setInt(4, value.getIdLineNumberTo().getId());
-            ps.setInt(5, value.getIdCityFrom().getId());
-            ps.setInt(6, value.getIdCityTo().getId());
-            ps.setInt(7, value.getDuration());
-            ps.setDate(8, new Date(value.getCallDate().getTime()));
-            ps.setFloat(9, value.getCostPerMin());
-            ps.setFloat(10, value.getPricePerMin());
-            ps.setFloat(11, value.getTotalPrice());
-            ps.setFloat(12, value.getTotalCost());
-            ps.execute();
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs != null && rs.next()){
-                value.setId(rs.getInt(1));
-            }
-            ps.close();
-            rs.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
@@ -103,6 +80,11 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
         } catch (SQLException e) {
             throw new RuntimeException("Error al obtener datos de la llamada",e);
         }
+    }
+
+    @Override
+    public void addPhoneCall(PhoneCallDto value) throws AlreadyExistsException {
+
     }
 
     private ReturnedPhoneCallDto createPhoneCall(ResultSet rs) throws SQLException {
