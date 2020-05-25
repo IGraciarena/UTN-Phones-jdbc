@@ -3,6 +3,7 @@ package utn.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import utn.dto.RateDto;
+import utn.exceptions.NoExistsException;
 import utn.model.Rate;
 import utn.service.RateService;
 
@@ -21,15 +22,15 @@ public class RateController {
 
     }
 
-    public void remove(Integer id) {
+    public void remove(Integer id) throws NoExistsException {
         rateService.remove(id);
     }
 
-    public void update(Rate rate) {
+    public void update(Rate rate) throws NoExistsException {
         rateService.update(rate);
     }
 
-    public RateDto getById(Integer id) {
+    public RateDto getById(Integer id) throws NoExistsException {
         return rateService.getById(id);
     }
 

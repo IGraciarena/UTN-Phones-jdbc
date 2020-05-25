@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import utn.dao.CityDao;
 import utn.model.City;
 import utn.model.Province;
-import utn.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ public class CityMySQLDao implements CityDao {
     Connection con;
 
     @Autowired
-    public CityMySQLDao(Connection con){
+    public CityMySQLDao(Connection con) {
         this.con = con;
     }
 
@@ -27,10 +26,10 @@ public class CityMySQLDao implements CityDao {
         City c = null;
         try {
             PreparedStatement ps = con.prepareStatement(GETBYID_CITY_QUERY);
-            ps.setInt(1,id);
+            ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                 c = createCity(rs);
+                c = createCity(rs);
             }
             rs.close();
             ps.close();
@@ -41,8 +40,8 @@ public class CityMySQLDao implements CityDao {
     }
 
     private City createCity(ResultSet rs) throws SQLException {
-        City c = new City(rs.getInt("id_city"),rs.getString("city_name"),rs.getInt("prefix"),
-                new Province(rs.getInt("id_province"),rs.getString("province_name")));
+        City c = new City(rs.getInt("id_city"), rs.getString("city_name"), rs.getInt("prefix"),
+                new Province(rs.getInt("id_province"), rs.getString("province_name")));
         return c;
     }
 
@@ -67,14 +66,14 @@ public class CityMySQLDao implements CityDao {
     public void add(City value) {
         try {
             PreparedStatement ps = con.prepareStatement(INSERT_CITY_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setInt(1,value.getId());
+            ps.setInt(1, value.getId());
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if (rs != null && rs.next()) {
                 value.setId(rs.getInt(1));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error al insertar city",e);
+            throw new RuntimeException("Error al insertar city", e);
         }
     }
 
@@ -82,7 +81,7 @@ public class CityMySQLDao implements CityDao {
     public void remove(Integer id) {
         try {
             PreparedStatement ps = con.prepareStatement(REMOVE_CITY_QUERY);
-            ps.setInt(1,id);
+            ps.setInt(1, id);
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
@@ -94,10 +93,10 @@ public class CityMySQLDao implements CityDao {
     public void update(City value) {
         try {
             PreparedStatement ps = con.prepareStatement(UPDATE_CITY_QUERY);
-            ps.setString(1,value.getCityName());
-            ps.setInt(2,value.getPrefix());
-            ps.setInt(3,value.getProvince().getId());
-            ps.setInt(2,value.getId());
+            ps.setString(1, value.getCityName());
+            ps.setInt(2, value.getPrefix());
+            ps.setInt(3, value.getProvince().getId());
+            ps.setInt(2, value.getId());
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
@@ -105,20 +104,20 @@ public class CityMySQLDao implements CityDao {
         }
     }
 
-    public String getCityName(Integer id){
+    public String getCityName(Integer id) {
         String aux = "";
         try {
             PreparedStatement ps = con.prepareStatement("select city_name from cities where id_city=?");
-            ps.setInt(1,id);
+            ps.setInt(1, id);
             ResultSet resultSet = ps.executeQuery();
-            if (resultSet.next()){
+            if (resultSet.next()) {
                 aux = resultSet.getString("city_name");
             }
             resultSet.close();
             ps.close();
-            return  aux;
+            return aux;
         } catch (SQLException e) {
-           throw new RuntimeException("Error en traer el nombre de la ciudad",e);
+            throw new RuntimeException("Error en traer el nombre de la ciudad", e);
         }
     }
 }

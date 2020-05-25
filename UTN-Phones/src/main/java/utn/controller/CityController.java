@@ -3,6 +3,7 @@ package utn.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import utn.exceptions.AlreadyExistsException;
+import utn.exceptions.NoExistsException;
 import utn.model.City;
 import utn.service.CityService;
 
@@ -19,15 +20,15 @@ public class CityController {
         cityService.add(city);
     }
 
-    public void remove(Integer id) {
+    public void remove(Integer id) throws NoExistsException {
         cityService.remove(id);
     }
 
-    public void update(City city) {
+    public void update(City city) throws NoExistsException {
         cityService.update(city);
     }
 
-    public City getById(Integer id) {
+    public City getById(Integer id) throws NoExistsException {
         return cityService.getById(id);
     }
 }

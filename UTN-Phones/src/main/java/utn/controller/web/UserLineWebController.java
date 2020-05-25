@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import utn.controller.UserLineController;
 import utn.dto.UserLineDto;
 import utn.exceptions.AlreadyExistsException;
+import utn.exceptions.NoExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.model.User;
 import utn.model.UserLine;
@@ -38,7 +39,7 @@ public class UserLineWebController {
     }
 
     @PutMapping
-    public ResponseEntity update(@RequestBody UserLine userLine, @RequestHeader("Authorization") String token) throws UserNotExistsException {
+    public ResponseEntity update(@RequestBody UserLine userLine, @RequestHeader("Authorization") String token) throws NoExistsException {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
             userLineController.update(userLine);
@@ -48,7 +49,7 @@ public class UserLineWebController {
     }
 
     @GetMapping("/{userLineId}")
-    public ResponseEntity getById(@RequestHeader("Authorization") String token, @PathVariable Integer userLineId) {
+    public ResponseEntity getById(@RequestHeader("Authorization") String token, @PathVariable Integer userLineId) throws NoExistsException {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
             return ResponseEntity.status(HttpStatus.OK).body(userLineController.getById(userLineId));
@@ -68,7 +69,7 @@ public class UserLineWebController {
     }
 
     @DeleteMapping("/{userLineId")
-    public ResponseEntity remove(@RequestHeader("Authorization") String token, @PathVariable Integer userLineId) {
+    public ResponseEntity remove(@RequestHeader("Authorization") String token, @PathVariable Integer userLineId) throws NoExistsException {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
             userLineController.remove(userLineId);

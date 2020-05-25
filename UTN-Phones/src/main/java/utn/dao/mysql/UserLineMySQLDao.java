@@ -20,7 +20,7 @@ public class UserLineMySQLDao implements UserLineDao {
     Connection con;
 
     @Autowired
-    public UserLineMySQLDao(Connection con){
+    public UserLineMySQLDao(Connection con) {
         this.con = con;
     }
 
@@ -28,11 +28,11 @@ public class UserLineMySQLDao implements UserLineDao {
     @Override
     public void add(UserLine userLine) throws AlreadyExistsException {
         try {
-            PreparedStatement preparedStatement = con.prepareStatement(INSERT_USERLINE_QUERY,PreparedStatement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1,userLine.getLineNumber());
+            PreparedStatement preparedStatement = con.prepareStatement(INSERT_USERLINE_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, userLine.getLineNumber());
             preparedStatement.setString(2, String.valueOf(userLine.getTypeLine()));
             preparedStatement.setString(3, String.valueOf(userLine.getLineStatus()));
-            preparedStatement.setString(4,String.valueOf(userLine.getUser()));
+            preparedStatement.setString(4, String.valueOf(userLine.getUser()));
             preparedStatement.execute();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet != null && resultSet.next()) {
@@ -51,10 +51,10 @@ public class UserLineMySQLDao implements UserLineDao {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = con.prepareStatement(UPDATE_USERLINE_QUERY);
-            preparedStatement.setString(1,userLine.getLineNumber());
+            preparedStatement.setString(1, userLine.getLineNumber());
             preparedStatement.setString(2, String.valueOf(userLine.getTypeLine()));
             preparedStatement.setString(3, String.valueOf(userLine.getLineStatus()));
-            preparedStatement.setString(4,String.valueOf(userLine.getUser()));
+            preparedStatement.setString(4, String.valueOf(userLine.getUser()));
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -78,44 +78,45 @@ public class UserLineMySQLDao implements UserLineDao {
     @Override
     public UserLineDto getById(Integer id) {
         UserLineDto ul = null;
-        try{
+        try {
             PreparedStatement ps = con.prepareStatement(GETBYID_USERLINE_QUERY);
-            ps.setInt(1,id);
+            ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 ul = createUserLine(rs);
             }
             rs.close();
             ps.close();
             return ul;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException("Error al obtener datos de la linea del usuario", e);
         }
     }
 
-    public String getLineNumber(Integer id){
-        String aux="";
+    public String getLineNumber(Integer id) {
+        String aux = "";
         try {
             PreparedStatement ps = con.prepareStatement("select line_number from user_lines where id_user_line=?");
-            ps.setInt(1,id);
+            ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 aux = rs.getString("line_number");
             }
             ps.close();
             rs.close();
             return aux;
         } catch (SQLException e) {
-            throw new RuntimeException("Error al traer el numbero de la linea",e);
+            throw new RuntimeException("Error al traer el numbero de la linea", e);
         }
     }
+
     private UserLineDto createUserLine(ResultSet rs) throws SQLException {
         UserLineDto ul = new UserLineDto(rs.getInt("line_number"),
                 TypeLine.valueOf(rs.getString("type_line")),
                 LineStatus.valueOf(rs.getString("line_status")),
-                        rs.getString("first_name"),
-                        rs.getString("surname"),
-                        rs.getInt("dni"));
+                rs.getString("first_name"),
+                rs.getString("surname"),
+                rs.getInt("dni"));
         return ul;
     }
 
@@ -133,6 +134,26 @@ public class UserLineMySQLDao implements UserLineDao {
             return userLineList;
         } catch (SQLException e) {
             throw new RuntimeException("Error al obtener la lista de lineas de usuario", e);
+        }
+    }
+
+
+    @Override
+    public boolean getUserLineByNumber(String lineNumber) {
+        PreparedStatement ps = null;
+        boolean answer = false;
+        try {
+            ps = con.prepareStatement(GET_USERLINE_BYNUMBER_QUERY);
+            ps.setString(1, lineNumber);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                answer = true;
+            }
+            ps.close();
+            rs.close();
+            return answer;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener linea de usuario", e);
         }
     }
 }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import utn.dto.InvoiceDto;
 import utn.exceptions.AlreadyExistsException;
+import utn.exceptions.NoExistsException;
 import utn.model.Invoice;
 import utn.service.InvoiceService;
 
@@ -22,15 +23,15 @@ public class InvoiceController {
         invoiceService.add(invoice);
     }
 
-    public void remove(Integer id) {
+    public void remove(Integer id) throws NoExistsException {
         invoiceService.remove(id);
     }
 
-    public void update(Invoice invoice) {
+    public void update(Invoice invoice) throws NoExistsException {
         invoiceService.update(invoice);
     }
 
-    public InvoiceDto getById(Integer id) {
+    public InvoiceDto getById(Integer id) throws NoExistsException {
         return invoiceService.getById(id);
     }
 
