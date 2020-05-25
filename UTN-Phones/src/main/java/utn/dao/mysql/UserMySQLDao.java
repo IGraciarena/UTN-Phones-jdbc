@@ -1,5 +1,7 @@
 package utn.dao.mysql;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import utn.dao.UserDao;
 import utn.dto.UserMostCalledNumberDto;
 import utn.model.City;
@@ -7,8 +9,6 @@ import utn.model.Province;
 import utn.model.User;
 import utn.model.enumerated.UserStatus;
 import utn.model.enumerated.UserType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,6 +20,7 @@ import static utn.dao.mysql.MySQLUtils.*;
 public class UserMySQLDao implements UserDao {
 
     Connection connection;
+
     @Autowired
     public UserMySQLDao(Connection connection) {
         this.connection = connection;
@@ -46,17 +47,17 @@ public class UserMySQLDao implements UserDao {
 
     private User createUser(ResultSet rs) throws SQLException {
         User u = new User(rs.getInt("id_user"),
-                    rs.getString("first_name"),
-                    rs.getString("surname"),
-                    rs.getInt("dni"),
-                    rs.getDate("birthdate"),
-                    rs.getString("username"),
-                    rs.getString("pwd"),
-                    rs.getString("email"),
-                    UserType.valueOf(rs.getString("user_type")),
-                    UserStatus.valueOf(rs.getString("user_status")),
-                    new City(rs.getInt("id_city"), rs.getString("city_name"),rs.getInt("prefix"),
-                    new Province(rs.getInt("id_province"), rs.getString("province_name"))));
+                rs.getString("first_name"),
+                rs.getString("surname"),
+                rs.getInt("dni"),
+                rs.getDate("birthdate"),
+                rs.getString("username"),
+                rs.getString("pwd"),
+                rs.getString("email"),
+                UserType.valueOf(rs.getString("user_type")),
+                UserStatus.valueOf(rs.getString("user_status")),
+                new City(rs.getInt("id_city"), rs.getString("city_name"), rs.getInt("prefix"),
+                        new Province(rs.getInt("id_province"), rs.getString("province_name"))));
         return u;
     }
 
@@ -72,12 +73,12 @@ public class UserMySQLDao implements UserDao {
             ps.setString(1, value.getFirstname());
             ps.setString(2, value.getSurname());
             ps.setInt(3, value.getDni());
-            ps.setDate(4,new Date(value.getBirthdate().getTime()));
+            ps.setDate(4, new Date(value.getBirthdate().getTime()));
             ps.setString(5, value.getUsername());
             ps.setString(6, value.getPwd());
             ps.setString(7, value.getEmail());
             ps.setString(8, String.valueOf(value.getUserType()));
-            ps.setString(9,String.valueOf(value.getUserStatus()));
+            ps.setString(9, String.valueOf(value.getUserStatus()));
             ps.setInt(10, value.getCity().getId());
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
@@ -96,10 +97,10 @@ public class UserMySQLDao implements UserDao {
         UserMostCalledNumberDto aux = null;
         try {
             PreparedStatement ps = connection.prepareStatement(GET_MOST_CALLED_NUMBER);
-            ps.setString(1,lineNumber);
+            ps.setString(1, lineNumber);
             ResultSet rs = ps.executeQuery();
-            if(rs != null && rs.next()){
-                aux = new UserMostCalledNumberDto(rs.getString("line_number_to"),rs.getString("first_name"),rs.getString("surname"));
+            if (rs != null && rs.next()) {
+                aux = new UserMostCalledNumberDto(rs.getString("line_number_to"), rs.getString("first_name"), rs.getString("surname"));
             }
             ps.close();
             rs.close();
@@ -115,15 +116,15 @@ public class UserMySQLDao implements UserDao {
             PreparedStatement ps = connection.prepareStatement(UPDATE_USER_QUERY);
             ps.setString(1, value.getFirstname());
             ps.setString(2, value.getSurname());
-            ps.setInt(3,value.getDni());
-            ps.setDate(4,new Date(value.getBirthdate().getTime()));
-            ps.setString(5,value.getUsername());
-            ps.setString(6,value.getPwd());
+            ps.setInt(3, value.getDni());
+            ps.setDate(4, new Date(value.getBirthdate().getTime()));
+            ps.setString(5, value.getUsername());
+            ps.setString(6, value.getPwd());
             ps.setString(7, value.getEmail());
             ps.setString(8, String.valueOf(value.getUserType()));
-            ps.setString(9,String.valueOf(value.getUserStatus()));
+            ps.setString(9, String.valueOf(value.getUserStatus()));
             ps.setInt(10, value.getCity().getId());
-            ps.setInt(11,value.getId());
+            ps.setInt(11, value.getId());
             ps.executeUpdate();
             ps.close();
         } catch (SQLException sqlException) {
@@ -173,7 +174,7 @@ public class UserMySQLDao implements UserDao {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-               aswr = true;
+                aswr = true;
             }
             rs.close();
             ps.close();

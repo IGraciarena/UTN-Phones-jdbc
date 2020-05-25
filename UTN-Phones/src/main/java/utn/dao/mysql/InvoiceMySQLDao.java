@@ -74,15 +74,15 @@ public class InvoiceMySQLDao implements InvoiceDao {
         try {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(BASE_INVOICES_QUERY);
-            List<InvoiceDto> invoiceDtos=new ArrayList<>();
-            while (rs.next()){
+            List<InvoiceDto> invoiceDtos = new ArrayList<>();
+            while (rs.next()) {
                 invoiceDtos.add(createInvoice(rs));
             }
             rs.close();
             st.close();
             return invoiceDtos;
         } catch (SQLException e) {
-            throw new RuntimeException("Error al obtener la lista de facturas",e);
+            throw new RuntimeException("Error al obtener la lista de facturas", e);
         }
     }
 }

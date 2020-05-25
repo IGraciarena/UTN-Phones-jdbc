@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utn.controller.RateController;
 import utn.dto.RateDto;
+import utn.exceptions.NoExistsException;
 import utn.model.Rate;
 import utn.model.User;
 import utn.model.enumerated.UserType;
@@ -36,7 +37,7 @@ public class RateWebController {
     }
 
     @DeleteMapping("{rateId}")
-    public ResponseEntity remove(@RequestHeader("Authorization") String token, @PathVariable Integer rateId) {
+    public ResponseEntity remove(@RequestHeader("Authorization") String token, @PathVariable Integer rateId) throws NoExistsException {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
             rateController.remove(rateId);
@@ -57,7 +58,7 @@ public class RateWebController {
     }
 
     @GetMapping("/{rateId}")
-    public ResponseEntity<RateDto> getById(@RequestHeader("Authorization") String token, @PathVariable Integer rateId) {
+    public ResponseEntity<RateDto> getById(@RequestHeader("Authorization") String token, @PathVariable Integer rateId) throws NoExistsException {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
             return ResponseEntity.status(HttpStatus.OK).body(rateController.getById(rateId));
@@ -66,7 +67,7 @@ public class RateWebController {
     }
 
     @PutMapping
-    public ResponseEntity update(@RequestBody Rate rate, @RequestHeader("Authorization") String token) {
+    public ResponseEntity update(@RequestBody Rate rate, @RequestHeader("Authorization") String token) throws NoExistsException {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
             rateController.update(rate);

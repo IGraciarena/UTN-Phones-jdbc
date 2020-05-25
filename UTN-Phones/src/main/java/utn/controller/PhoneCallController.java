@@ -39,7 +39,7 @@ public class PhoneCallController {
         return phoneCallService.getAll();
     }
 
-    public List<ReturnedPhoneCallDto> getAllPhoneCallsFromUserId(Integer userId){
+    public List<ReturnedPhoneCallDto> getAllPhoneCallsFromUserId(Integer userId) {
         return phoneCallService.getAllPhoneCallsFromUserId(userId);
     }
 }

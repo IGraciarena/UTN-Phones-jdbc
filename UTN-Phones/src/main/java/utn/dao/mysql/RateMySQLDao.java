@@ -2,11 +2,9 @@ package utn.dao.mysql;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import utn.dao.CityDao;
 import utn.dao.RateDao;
 import utn.dto.RateDto;
 import utn.exceptions.AlreadyExistsException;
-import utn.model.City;
 import utn.model.Rate;
 
 import java.sql.*;
@@ -22,21 +20,21 @@ public class RateMySQLDao implements RateDao {
     CityMySQLDao cityMySQLDao;
 
     @Autowired
-    public RateMySQLDao(Connection con){
+    public RateMySQLDao(Connection con) {
         this.con = con;
     }
 
     @Override
     public void add(Rate value) throws AlreadyExistsException {
         try {
-            PreparedStatement ps = con.prepareStatement(INSERT_USERLINE_QUERY,PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setFloat(1,value.getPricePerMin());
-            ps.setFloat(2,value.getCostPerMin());
-            ps.setInt(3,value.getCityFrom().getId());
-            ps.setInt(4,value.getCityTo().getId());
+            PreparedStatement ps = con.prepareStatement(INSERT_USERLINE_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setFloat(1, value.getPricePerMin());
+            ps.setFloat(2, value.getCostPerMin());
+            ps.setInt(3, value.getCityFrom().getId());
+            ps.setInt(4, value.getCityTo().getId());
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
-            if (rs != null && rs.next()){
+            if (rs != null && rs.next()) {
                 value.setId(rs.getInt(1));
             }
             ps.close();
@@ -57,7 +55,7 @@ public class RateMySQLDao implements RateDao {
             ps.setInt(4, value.getCityTo().getId());
             ps.executeUpdate();
             ps.close();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException("Error al modificar la tarifa", e);
         }
     }
@@ -66,11 +64,11 @@ public class RateMySQLDao implements RateDao {
     public void remove(Integer id) {
         try {
             PreparedStatement ps = con.prepareStatement(REMOVE_RATES_QUERY);
-            ps.setInt(1,id);
+            ps.setInt(1, id);
             ps.executeUpdate();
             ps.close();
-        }catch (SQLException e){
-            throw  new RuntimeException("Error al eliminar tarifa",e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar tarifa", e);
         }
     }
 
@@ -79,16 +77,16 @@ public class RateMySQLDao implements RateDao {
         RateDto rateDto = null;
         try {
             PreparedStatement ps = con.prepareStatement(GETBYID_RATES_QUERY);
-            ps.setInt(1,id);
+            ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 rateDto = createRate(rs);
             }
             rs.close();
             ps.close();
             return rateDto;
         } catch (SQLException e) {
-            throw new RuntimeException("Error al obtener datos de la tarifa",e);
+            throw new RuntimeException("Error al obtener datos de la tarifa", e);
         }
 
     }

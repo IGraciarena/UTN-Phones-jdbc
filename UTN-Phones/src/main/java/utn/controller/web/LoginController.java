@@ -34,7 +34,7 @@ public class LoginController {
             String token = sessionManager.createSession(u);
             response = ResponseEntity.ok().headers(createHeaders(token)).build();
         } catch (UserNotExistsException e) {
-            throw new InvalidLoginException(e,"El usuario ingresado no existe.");
+            throw new InvalidLoginException(e, "El usuario ingresado no existe.");
         }
         return response;
     }

@@ -3,6 +3,7 @@ package utn.controller;
 import org.springframework.stereotype.Controller;
 import utn.dto.UserLineDto;
 import utn.exceptions.AlreadyExistsException;
+import utn.exceptions.NoExistsException;
 import utn.model.UserLine;
 import utn.service.UserLineService;
 
@@ -21,15 +22,15 @@ public class UserLineController {
         userLineService.add(userLine);
     }
 
-    public void remove(Integer id) {
+    public void remove(Integer id) throws NoExistsException {
         userLineService.remove(id);
     }
 
-    public void update(UserLine userLine) {
+    public void update(UserLine userLine) throws NoExistsException {
         userLineService.update(userLine);
     }
 
-    public UserLineDto getById(Integer id) {
+    public UserLineDto getById(Integer id) throws NoExistsException {
         return userLineService.getById(id);
     }
 

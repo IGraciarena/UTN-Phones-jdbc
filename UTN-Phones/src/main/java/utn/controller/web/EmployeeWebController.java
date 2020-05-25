@@ -9,6 +9,7 @@ import utn.dto.InvoiceDto;
 import utn.dto.RateDto;
 import utn.dto.ReturnedPhoneCallDto;
 import utn.exceptions.AlreadyExistsException;
+import utn.exceptions.NoExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.model.User;
 import utn.model.UserLine;
@@ -91,7 +92,7 @@ public class EmployeeWebController {
     }
 
     @GetMapping("/rate/{rateId}")
-    public ResponseEntity<RateDto> getByIdRate(@RequestHeader("Authorization") String token, @PathVariable Integer rateId) {
+    public ResponseEntity<RateDto> getByIdRate(@RequestHeader("Authorization") String token, @PathVariable Integer rateId) throws NoExistsException {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
             return ResponseEntity.status(HttpStatus.OK).body(rateController.getById(rateId));
@@ -111,7 +112,7 @@ public class EmployeeWebController {
     }
 
     @PutMapping
-    public ResponseEntity updateUserLine(@RequestBody UserLine userLine, @RequestHeader("Authorization") String token) throws UserNotExistsException {
+    public ResponseEntity updateUserLine(@RequestBody UserLine userLine, @RequestHeader("Authorization") String token) throws UserNotExistsException, NoExistsException {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
             userLineController.update(userLine);
@@ -121,7 +122,7 @@ public class EmployeeWebController {
     }
 
     @DeleteMapping("/userLine/{userLineId")
-    public ResponseEntity removeUserLine(@RequestHeader("Authorization") String token, @PathVariable Integer userLineId) {
+    public ResponseEntity removeUserLine(@RequestHeader("Authorization") String token, @PathVariable Integer userLineId) throws NoExistsException {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
             userLineController.remove(userLineId);
@@ -132,7 +133,7 @@ public class EmployeeWebController {
 
     ////////////////////////////////////////////INVOICE////////////////////////////////////////////////////////
     @GetMapping("/invoice/{invoiceId}")
-    public ResponseEntity getByIdInvoice(@RequestHeader("Authorization") String token, @PathVariable Integer invoiceId) {
+    public ResponseEntity getByIdInvoice(@RequestHeader("Authorization") String token, @PathVariable Integer invoiceId) throws NoExistsException {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
             return ResponseEntity.status(HttpStatus.OK).body(invoiceController.getById(invoiceId));
