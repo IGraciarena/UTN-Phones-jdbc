@@ -1,9 +1,6 @@
 package utn.dao;
 
 import utn.exceptions.AlreadyExistsException;
-import utn.exceptions.UserAlreadyExistsException;
-
-import java.util.List;
 
 public interface AbstractDao<T> {
 

@@ -2,6 +2,7 @@ package utn.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import utn.dto.UserDto;
 import utn.dto.UserMostCalledNumberDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.UserNotExistsException;
@@ -42,7 +43,7 @@ public class UserController {
         userService.updateUser(user);
     }
 
-    public User getById(Integer id) {
+    public UserDto getById(Integer id) {
         return userService.getById(id);
     }
 
@@ -50,7 +51,7 @@ public class UserController {
         return userService.getMostCalledNumber(lineNumber);
     }
 
-    public List<User> getAll() {
+    public List<UserDto> getAll() {
         return userService.getAll();
     }
 }

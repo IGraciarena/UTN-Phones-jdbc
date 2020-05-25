@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utn.controller.UserController;
+import utn.dto.UserDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.model.User;
@@ -66,10 +67,10 @@ public class UserWebController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAll(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<UserDto>> getAll(@RequestHeader("Authorization") String token) {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
-            List<User> userList = userController.getAll();
+            List<UserDto> userList = userController.getAll();
             return (userList.size() > 0) ?
                     ResponseEntity.ok(userList) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }

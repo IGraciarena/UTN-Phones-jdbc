@@ -20,7 +20,8 @@ public class RateMySQLDao implements RateDao {
     CityMySQLDao cityMySQLDao;
 
     @Autowired
-    public RateMySQLDao(Connection con) {
+    public RateMySQLDao(Connection con, CityMySQLDao cityMySQLDao) {
+        this.cityMySQLDao = cityMySQLDao;
         this.con = con;
     }
 

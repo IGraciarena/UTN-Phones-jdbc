@@ -8,6 +8,7 @@ import utn.controller.*;
 import utn.dto.InvoiceDto;
 import utn.dto.RateDto;
 import utn.dto.ReturnedPhoneCallDto;
+import utn.dto.UserDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.NoExistsException;
 import utn.exceptions.UserNotExistsException;
@@ -38,7 +39,7 @@ public class EmployeeWebController {
         this.sessionManager = sessionManager;
     }
 
-    @PostMapping
+    @PostMapping("/user")
     public ResponseEntity addUser(@RequestBody User user, @RequestHeader("Authorization") String token) throws AlreadyExistsException {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
@@ -69,10 +70,10 @@ public class EmployeeWebController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<UserDto>> getAllUsers(@RequestHeader("Authorization") String token) {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
-            List<User> userList = userController.getAll();
+            List<UserDto> userList = userController.getAll();
             return (userList.size() > 0) ?
                     ResponseEntity.ok(userList) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
@@ -101,7 +102,7 @@ public class EmployeeWebController {
     }
 
     ////////////////////////////////////////////USER LINES///////////////////////////////////////////////////////
-    @PostMapping
+    @PostMapping("/userline")
     public ResponseEntity addUserLine(@RequestBody UserLine userLine, @RequestHeader("Authorization") String token) throws AlreadyExistsException {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {
@@ -111,7 +112,7 @@ public class EmployeeWebController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    @PutMapping
+    @PutMapping("/userline")
     public ResponseEntity updateUserLine(@RequestBody UserLine userLine, @RequestHeader("Authorization") String token) throws UserNotExistsException, NoExistsException {
         User currentUser = sessionManager.getCurrentUser(token);
         if (currentUser.getUserType().equals(UserType.EMPLOYEE)) {

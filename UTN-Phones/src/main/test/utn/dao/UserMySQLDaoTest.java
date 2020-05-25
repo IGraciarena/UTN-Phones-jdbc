@@ -3,6 +3,7 @@ package utn.dao;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import utn.dao.mysql.CityMySQLDao;
 import utn.dao.mysql.UserMySQLDao;
 import utn.model.User;
 import utn.model.enumerated.UserStatus;
@@ -27,11 +28,14 @@ public class UserMySQLDaoTest {
     PreparedStatement ps;
     @Mock
     ResultSet rs;
+    @Mock
+    CityMySQLDao cmd;
+
 
     @Before
     public void setUp() {
         initMocks(this);
-        dao = new UserMySQLDao(con);
+        dao = new UserMySQLDao(con, cmd);
     }
 
     @Test

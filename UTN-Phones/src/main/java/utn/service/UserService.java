@@ -3,6 +3,7 @@ package utn.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import utn.dao.UserDao;
+import utn.dto.UserDto;
 import utn.dto.UserMostCalledNumberDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.UserNotExistsException;
@@ -23,7 +24,7 @@ public class UserService {
 
     public User login(String userName, String password) throws UserNotExistsException {
         User user = dao.getByUserName(userName, password);
-        return Optional.ofNullable(user).orElseThrow(() -> new UserNotExistsException());
+        return Optional.ofNullable(user).orElseThrow(UserNotExistsException::new);
 
     }
 
@@ -39,22 +40,22 @@ public class UserService {
     }
 
     public void updateUser(User user) throws UserNotExistsException {
-        User byId = dao.getById(user.getId());
+        UserDto byId = dao.getById(user.getId());
         Optional.ofNullable(byId).orElseThrow(UserNotExistsException::new);
         dao.update(user);
     }
 
     public void removeUser(Integer idUser) throws UserNotExistsException {
-        User user = dao.getById(idUser);
+        UserDto user = dao.getById(idUser);
         Optional.ofNullable(user).orElseThrow(UserNotExistsException::new);
         dao.remove(idUser);
     }
 
-    public User getById(Integer id) {
+    public UserDto getById(Integer id) {
         return dao.getById(id);
     }
 
-    public List<User> getAll() {
+    public List<UserDto> getAll() {
         return dao.getAll();
     }
 }

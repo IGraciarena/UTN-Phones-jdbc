@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface UserLineDao extends AbstractDao<UserLine> {
     void add(UserLine userLine) throws AlreadyExistsException;
+
     UserLineDto getById(Integer id);
+
     List<UserLineDto> getAll();
 
     boolean getUserLineByNumber(String lineNumber);

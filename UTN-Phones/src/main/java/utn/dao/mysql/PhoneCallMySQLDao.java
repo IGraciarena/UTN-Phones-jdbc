@@ -20,7 +20,8 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
     CityMySQLDao cityMySQLDao;
 
     @Autowired
-    public PhoneCallMySQLDao(Connection con) {
+    public PhoneCallMySQLDao(Connection con, CityMySQLDao cityMySQLDao) {
+        this.cityMySQLDao = cityMySQLDao;
         this.con = con;
     }
 

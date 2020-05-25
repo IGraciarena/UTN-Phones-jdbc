@@ -3,6 +3,7 @@ package utn.dao.mysql;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import utn.dao.UserDao;
+import utn.dto.UserDto;
 import utn.dto.UserMostCalledNumberDto;
 import utn.model.City;
 import utn.model.Province;
@@ -20,10 +21,12 @@ import static utn.dao.mysql.MySQLUtils.*;
 public class UserMySQLDao implements UserDao {
 
     Connection connection;
+    CityMySQLDao cityMySQLDao;
 
     @Autowired
-    public UserMySQLDao(Connection connection) {
+    public UserMySQLDao(Connection connection, CityMySQLDao cityMySQLDao) {
         this.connection = connection;
+        this.cityMySQLDao = cityMySQLDao;
     }
 
     @Override
@@ -44,7 +47,6 @@ public class UserMySQLDao implements UserDao {
             throw new RuntimeException("Error al obtener datos de usuario", e);
         }
     }
-
     private User createUser(ResultSet rs) throws SQLException {
         User u = new User(rs.getInt("id_user"),
                 rs.getString("first_name"),
@@ -61,8 +63,19 @@ public class UserMySQLDao implements UserDao {
         return u;
     }
 
+    private UserDto createUserDto(ResultSet rs) throws SQLException {
+        UserDto u = new UserDto(rs.getString("first_name"),
+                rs.getString("surname"),
+                rs.getInt("dni"),
+                rs.getString("username"),
+                rs.getString("email"),
+                cityMySQLDao.getCityName(rs.getInt("id_city_fk"))
+        );
+        return u;
+    }
+
     @Override
-    public List<User> getByCity(City city) {
+    public List<UserDto> getByCity(City city) {
         return null;
     }
 
@@ -146,8 +159,8 @@ public class UserMySQLDao implements UserDao {
 
 
     @Override
-    public User getById(Integer id) {
-        User user = null;
+    public UserDto getById(Integer id) {
+        UserDto user = null;
 
         try {
             PreparedStatement ps = connection.prepareStatement(GET_BY_ID_USER_QUERY);
@@ -155,7 +168,7 @@ public class UserMySQLDao implements UserDao {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                user = createUser(rs);
+                user = createUserDto(rs);
             }
             rs.close();
             ps.close();
@@ -185,13 +198,13 @@ public class UserMySQLDao implements UserDao {
     }
 
     @Override
-    public List<User> getAll() {
+    public List<UserDto> getAll() {
         try {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(BASE_USER_QUERY);
-            List<User> userList = new ArrayList<>();
+            List<UserDto> userList = new ArrayList<>();
             while (rs.next()) {
-                userList.add(createUser(rs));
+                userList.add(createUserDto(rs));
             }
             st.close();
             rs.close();

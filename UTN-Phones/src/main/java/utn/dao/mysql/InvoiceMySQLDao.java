@@ -21,7 +21,8 @@ public class InvoiceMySQLDao implements InvoiceDao {
     UserLineMySQLDao userLineMySQLDao;
 
     @Autowired
-    public InvoiceMySQLDao(Connection con) {
+    public InvoiceMySQLDao(Connection con, UserLineMySQLDao userLineMySQLDao) {
+        this.userLineMySQLDao = userLineMySQLDao;
         this.con = con;
     }
 

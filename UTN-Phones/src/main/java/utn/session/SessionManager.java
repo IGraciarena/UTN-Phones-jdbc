@@ -2,6 +2,7 @@ package utn.session;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import utn.dto.UserDto;
 import utn.model.User;
 
 import java.util.*;

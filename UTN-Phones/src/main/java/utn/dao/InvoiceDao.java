@@ -11,5 +11,4 @@ public interface InvoiceDao extends AbstractDao<Invoice> {
     List<InvoiceDto> getAll();
 
 
-
 }

@@ -8,7 +8,6 @@ import utn.controller.UserLineController;
 import utn.dto.UserLineDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.NoExistsException;
-import utn.exceptions.UserNotExistsException;
 import utn.model.User;
 import utn.model.UserLine;
 import utn.model.enumerated.UserType;
@@ -17,7 +16,7 @@ import utn.session.SessionManager;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/userline")
+@RequestMapping("/api/userlines")
 public class UserLineWebController {
     UserLineController userLineController;
     SessionManager sessionManager;

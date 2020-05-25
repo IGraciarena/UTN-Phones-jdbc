@@ -237,4 +237,15 @@ select * from user_lines;
 insert into phonecalls(line_number_from,line_number_to,id_line_number_from_fk,id_line_number_to_fk,id_city_from_fk,id_city_to_fk,duration,call_date,id_invoice_fk)values
 ("2235765132","3834918309",1,4,1,2,20,'2020-04-03',1),("2235765132","3834918309",1,4,1,2,20,'2020-04-03',1),("2235765132","3834918309",1,4,1,2,20,'2020-04-03',1),("2235765132","3834918309",1,4,1,2,20,'2020-04-03',1)
 
+
 select * from users
+
+update users set user_type="EMPLOYEE" WHERE id_user = 1;
+
+select p.line_number_from,p.line_number_to,p.id_city_from_fk,p.id_city_to_fk,p.duration,p.call_date,p.total_price
+from phonecalls as p
+join user_lines as ul
+on p.id_line_number_from_fk=ul.id_user_line
+join users as u
+on ul.id_client_fk=u.id_user
+where u.id_user=1
