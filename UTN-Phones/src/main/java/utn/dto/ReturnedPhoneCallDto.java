@@ -8,6 +8,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Data
 public class ReturnedPhoneCallDto {
+    private Integer id;
     private String lineNumberFrom;
     private String lineNumberTo;
     private String cityFrom;

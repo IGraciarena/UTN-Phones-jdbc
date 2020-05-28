@@ -7,6 +7,7 @@ import utn.dto.PhoneCallDto;
 import utn.dto.ReturnedPhoneCallDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.model.PhoneCall;
+import utn.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -26,8 +27,8 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
     }
 
     @Override
-    public void add(PhoneCall value) throws AlreadyExistsException {
-
+    public Object add(PhoneCall value) throws AlreadyExistsException {
+        return null;
     }
 
     @Override
@@ -85,12 +86,19 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
     }
 
     @Override
-    public void addPhoneCall(PhoneCallDto value) {
+    public PhoneCallDto add(PhoneCallDto value) {
+        return null;
+    }
 
+
+    @Override
+    public ReturnedPhoneCallDto addPhoneCall(PhoneCallDto value) {
+        ReturnedPhoneCallDto returnedPhoneCallDto =null;
+        return returnedPhoneCallDto;
     }
 
     private ReturnedPhoneCallDto createPhoneCall(ResultSet rs) throws SQLException {
-        ReturnedPhoneCallDto returnedPhoneCallDto = new ReturnedPhoneCallDto(
+        ReturnedPhoneCallDto returnedPhoneCallDto = new ReturnedPhoneCallDto(rs.getInt("id_phonecall"),
                 rs.getString("line_number_from"),
                 rs.getString("line_number_to"),
                 cityMySQLDao.getCityName(rs.getInt("id_city_from_fk")),

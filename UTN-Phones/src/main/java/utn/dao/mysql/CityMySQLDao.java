@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import utn.dao.CityDao;
 import utn.model.City;
 import utn.model.Province;
+import utn.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class CityMySQLDao implements CityDao {
     }
 
     @Override
-    public void add(City value) {
+    public User add(City value) {
         try {
             PreparedStatement ps = con.prepareStatement(INSERT_CITY_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setInt(1, value.getId());
@@ -75,6 +76,7 @@ public class CityMySQLDao implements CityDao {
         } catch (SQLException e) {
             throw new RuntimeException("Error al insertar city", e);
         }
+        return null;
     }
 
     @Override

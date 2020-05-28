@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import utn.dao.ProvinceDao;
 import utn.exceptions.AlreadyExistsException;
 import utn.model.Province;
+import utn.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class ProvinceMySQLDao implements ProvinceDao {
 
 
     @Override
-    public void add(Province value) throws AlreadyExistsException {
+    public User add(Province value) throws AlreadyExistsException {
         try {
             PreparedStatement ps = con.prepareStatement(INSERT_PROVINCE_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, value.getProvinceName());
@@ -35,6 +36,7 @@ public class ProvinceMySQLDao implements ProvinceDao {
         } catch (SQLException e) {
             throw new RuntimeException("Error al insertar provincia", e);
         }
+        return null;
     }
 
     @Override

@@ -2,12 +2,13 @@ package utn.dao;
 
 import utn.dto.UserLineDto;
 import utn.exceptions.AlreadyExistsException;
+import utn.model.User;
 import utn.model.UserLine;
 
 import java.util.List;
 
 public interface UserLineDao extends AbstractDao<UserLine> {
-    void add(UserLine userLine) throws AlreadyExistsException;
+    UserLine add(UserLine userLine) throws AlreadyExistsException;
 
     UserLineDto getById(Integer id);
 

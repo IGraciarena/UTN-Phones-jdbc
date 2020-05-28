@@ -80,7 +80,7 @@ public class UserMySQLDao implements UserDao {
     }
 
     @Override
-    public void add(User value) {
+    public User add(User value) {
         try {
             PreparedStatement ps = connection.prepareStatement(INSERT_USER_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, value.getFirstname());
@@ -100,8 +100,9 @@ public class UserMySQLDao implements UserDao {
             }
             ps.close();
             rs.close();
+            return value;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error al crear usuario",e);
         }
     }
 

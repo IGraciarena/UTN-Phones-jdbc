@@ -9,7 +9,9 @@ import java.util.List;
 public interface PhoneCallDao extends AbstractDao<PhoneCall> {
     ReturnedPhoneCallDto getById(Integer id);
 
-    void addPhoneCall(PhoneCallDto value);
+    PhoneCallDto add(PhoneCallDto value);
+
+    ReturnedPhoneCallDto addPhoneCall(PhoneCallDto value);
 
     List<ReturnedPhoneCallDto> getAll();
 

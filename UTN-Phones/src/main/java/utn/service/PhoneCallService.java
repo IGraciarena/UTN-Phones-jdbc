@@ -27,8 +27,8 @@ public class PhoneCallService {
         return phoneCall;
     }
 
-    public void add(PhoneCall phoneCall) throws AlreadyExistsException {
-        dao.add(phoneCall);
+    public ReturnedPhoneCallDto addPhoneCall(PhoneCallDto phoneCall) throws AlreadyExistsException {
+       return dao.addPhoneCall(phoneCall);
     }
 
     public void remove(Integer id) throws NoExistsException {
@@ -41,10 +41,6 @@ public class PhoneCallService {
         ReturnedPhoneCallDto phoneCall = dao.getById(value.getId());
         Optional.ofNullable(phoneCall).orElseThrow(NoExistsException::new);
         dao.update(value);
-    }
-
-    public void addPhoneCall(PhoneCallDto phoneCall) {
-        dao.addPhoneCall(phoneCall);
     }
 
     public List<ReturnedPhoneCallDto> getAll() {

@@ -8,7 +8,7 @@ import utn.model.enumerated.TypeLine;
 @AllArgsConstructor
 @Data
 public class UserLineDto {
-    Integer lineNumber;
+    String lineNumber;
     TypeLine typeLine;
     LineStatus lineStatus;
     String firstName;

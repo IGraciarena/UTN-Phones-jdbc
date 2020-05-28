@@ -19,7 +19,7 @@ public interface UserDao extends AbstractDao<User> {
 
     void update(User u);
 
-    void add(User u) throws AlreadyExistsException;
+    User add(User u) throws AlreadyExistsException;
 
     UserMostCalledNumberDto getMostCalledNumber(String lineNumber);
 

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import utn.dao.UserLineDao;
 import utn.dto.UserLineDto;
 import utn.exceptions.AlreadyExistsException;
+import utn.model.User;
 import utn.model.UserLine;
 import utn.model.enumerated.LineStatus;
 import utn.model.enumerated.TypeLine;
@@ -26,13 +27,13 @@ public class UserLineMySQLDao implements UserLineDao {
 
 
     @Override
-    public void add(UserLine userLine) throws AlreadyExistsException {
+    public UserLine add(UserLine userLine) throws AlreadyExistsException {
         try {
             PreparedStatement preparedStatement = con.prepareStatement(INSERT_USERLINE_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, userLine.getLineNumber());
             preparedStatement.setString(2, String.valueOf(userLine.getTypeLine()));
             preparedStatement.setString(3, String.valueOf(userLine.getLineStatus()));
-            preparedStatement.setString(4, String.valueOf(userLine.getUser()));
+            preparedStatement.setInt(4, userLine.getUser().getId());
             preparedStatement.execute();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet != null && resultSet.next()) {
@@ -40,21 +41,22 @@ public class UserLineMySQLDao implements UserLineDao {
             }
             preparedStatement.close();
             resultSet.close();
+            return userLine;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error al agregar una linea de usuario",e);
         }
     }
 
     @Override
     public void update(UserLine userLine) {
-        PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = con.prepareStatement(UPDATE_USERLINE_QUERY);
+            PreparedStatement preparedStatement = con.prepareStatement(UPDATE_USERLINE_QUERY);
             preparedStatement.setString(1, userLine.getLineNumber());
             preparedStatement.setString(2, String.valueOf(userLine.getTypeLine()));
             preparedStatement.setString(3, String.valueOf(userLine.getLineStatus()));
-            preparedStatement.setString(4, String.valueOf(userLine.getUser()));
+            preparedStatement.setInt(4, (userLine.getUser().getId()));
+            preparedStatement.setInt(5,userLine.getId());
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -64,9 +66,8 @@ public class UserLineMySQLDao implements UserLineDao {
 
     @Override
     public void remove(Integer id) {
-        PreparedStatement ps = null;
         try {
-            ps = con.prepareStatement(REMOVE_USERLINE_QUERY);
+            PreparedStatement ps = con.prepareStatement(UPDATE_USERLINE_STATUS_QUERY);
             ps.setInt(1, id);
             ps.executeUpdate();
             ps.close();
@@ -111,7 +112,7 @@ public class UserLineMySQLDao implements UserLineDao {
     }
 
     private UserLineDto createUserLine(ResultSet rs) throws SQLException {
-        UserLineDto ul = new UserLineDto(rs.getInt("line_number"),
+        UserLineDto ul = new UserLineDto(rs.getString("line_number"),
                 TypeLine.valueOf(rs.getString("type_line")),
                 LineStatus.valueOf(rs.getString("line_status")),
                 rs.getString("first_name"),

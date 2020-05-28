@@ -6,6 +6,7 @@ import utn.dao.RateDao;
 import utn.dto.RateDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.model.Rate;
+import utn.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -26,9 +27,9 @@ public class RateMySQLDao implements RateDao {
     }
 
     @Override
-    public void add(Rate value) throws AlreadyExistsException {
+    public Rate add(Rate value) {
         try {
-            PreparedStatement ps = con.prepareStatement(INSERT_USERLINE_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = con.prepareStatement(INSERT_RATES_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setFloat(1, value.getPricePerMin());
             ps.setFloat(2, value.getCostPerMin());
             ps.setInt(3, value.getCityFrom().getId());
@@ -40,9 +41,9 @@ public class RateMySQLDao implements RateDao {
             }
             ps.close();
             rs.close();
-
+            return value;
         } catch (SQLException e) {
-            e.printStackTrace();
+           throw new RuntimeException("Error al agregar una tarifa",e);
         }
     }
 

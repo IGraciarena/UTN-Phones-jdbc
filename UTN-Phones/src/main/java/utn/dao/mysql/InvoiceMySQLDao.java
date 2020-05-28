@@ -6,6 +6,7 @@ import utn.dao.InvoiceDao;
 import utn.dto.InvoiceDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.model.Invoice;
+import utn.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class InvoiceMySQLDao implements InvoiceDao {
     }
 
     @Override
-    public void add(Invoice value) throws AlreadyExistsException {
+    public User add(Invoice value) throws AlreadyExistsException {
         throw new UnsupportedOperationException();
     }
 

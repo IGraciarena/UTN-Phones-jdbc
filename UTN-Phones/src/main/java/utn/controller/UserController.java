@@ -30,8 +30,8 @@ public class UserController {
         }
     }
 
-    public void add(User user) throws AlreadyExistsException {
-        userService.add(user);
+    public User add(User user) throws AlreadyExistsException {
+        return userService.add(user);
     }
 
     public void removeUser(Integer idUser) throws UserNotExistsException {

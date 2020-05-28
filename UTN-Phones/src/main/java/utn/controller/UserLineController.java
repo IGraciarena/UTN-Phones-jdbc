@@ -18,8 +18,8 @@ public class UserLineController {
         this.userLineService = userLineService;
     }
 
-    public void add(UserLine userLine) throws AlreadyExistsException {
-        userLineService.add(userLine);
+    public UserLine add(UserLine userLine) throws AlreadyExistsException {
+        return userLineService.add(userLine);
     }
 
     public void remove(Integer id) throws NoExistsException {

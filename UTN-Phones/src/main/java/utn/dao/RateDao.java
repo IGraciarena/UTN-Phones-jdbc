@@ -8,5 +8,7 @@ import java.util.List;
 public interface RateDao extends AbstractDao<Rate> {
     RateDto getById(Integer id);
 
+    Rate add(Rate rate);
+
     List<RateDto> getAll();
 }

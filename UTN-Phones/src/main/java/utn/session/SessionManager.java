@@ -12,7 +12,7 @@ public class SessionManager {
 
     Map<String, Session> sessionMap = new Hashtable<>();
 
-    int sesionExpiration = 3000;
+    int sesionExpiration = 30000;
 
     public String createSession(User user) {
         String token = UUID.randomUUID().toString();

@@ -20,11 +20,11 @@ public class UserLineService {
         this.dao = userLineDao;
     }
 
-    public void add(UserLine userLine) throws AlreadyExistsException {
+    public UserLine add(UserLine userLine) throws AlreadyExistsException {
         if (dao.getUserLineByNumber(userLine.getLineNumber())) {
             throw new AlreadyExistsException();
         }
-        dao.add(userLine);
+        return dao.add(userLine);
     }
 
     public void remove(Integer id) throws NoExistsException {
