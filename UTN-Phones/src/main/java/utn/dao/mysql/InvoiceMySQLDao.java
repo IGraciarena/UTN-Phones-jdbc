@@ -63,9 +63,9 @@ public class InvoiceMySQLDao implements InvoiceDao {
     private InvoiceDto createInvoice(ResultSet rs) throws SQLException {
         InvoiceDto invoiceDto = new InvoiceDto(
                 rs.getInt("call_count"),
-                userLineMySQLDao.getLineNumber(rs.getInt("line_number")),
-                new Date(rs.getDate("date_emission").getTime()),
-                new Date(rs.getDate("date_expiration").getTime()),
+                userLineMySQLDao.getLineNumber(rs.getInt("id_line_fk")),
+                rs.getDate("date_emission"),
+                rs.getDate("date_expiration"),
                 rs.getFloat("price_total")
         );
         return invoiceDto;

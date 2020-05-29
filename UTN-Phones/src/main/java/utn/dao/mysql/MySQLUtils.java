@@ -47,18 +47,18 @@ public class MySQLUtils {
     public static final String UPDATE_RATES_QUERY = "update rates set price_per_min=?, cost_per_min=?, id_city_from_fk=?, id_city_to_fk=? where id_rate=?";
     public static final String GETBYID_RATES_QUERY = BASE_RATES_QUERY + " where id_rate=?";
     //-------------------INVOICES---------------------
-    public static final String BASE_INVOICES_QUERY = "select * from invoices in inner join user_lines ul on ul.id_user_line=in.id_line_fk"; //getAll
+    public static final String BASE_INVOICES_QUERY = "select * from invoices inv inner join user_lines ul on ul.id_user_line=inv.id_line_fk"; //getAll
     public static final String INSERT_INVOICES_QUERY = "insert into invoices(call_count,price_cost,price_total,date_emission,date_expiration,invoice_status,id_line_fk) values(?,?,?,?,?,?,?)";
     //public static final String REMOVE_INVOICES_QUERY = "delete from invoices where id_invoice=?"; esta tiene baja logica.
     public static final String UPDATE_INVOICES_QUERY = "update invoices set call_count=?, price_cost=?, price_total=?, date_emission=?, date_expiration=?, invoice_status=?,id_line_fk=? where id_invoice=?";
     public static final String GETBYID_INVOICES_QUERY = BASE_INVOICES_QUERY + " where id_invoice=?";
     //-------------------PHONECALLS-------------------
-    public static final String BASE_PHONECALLS_QUERY = "select * from phonecalls ph inner join invoices in on in.id_invoice=ph.id_invoice_fk"; //getAll me traigo los datos de la factura pero las cuidades y las lineas conviene traerlas a la hora de mapear el obj
-    public static final String INSERT_PHONECALLS_QUERY = "insert into phonecalls(line_number_from,line_number_to,id_line_number_from_fk,id_line_number_to_fk,id_city_from_fk,id_city_to_fk,duration,call_date,id_invoice_fk) values(?,?,?,?,?,?,?,?,?)";
+    public static final String BASE_PHONECALLS_QUERY = "select * from phonecalls ph inner join invoices inv on inv.id_invoice=ph.id_invoice_fk"; //getAll me traigo los datos de la factura pero las cuidades y las lineas conviene traerlas a la hora de mapear el obj
+    //public static final String INSERT_PHONECALLS_QUERY = "insert into phonecalls(line_number_from,line_number_to,id_line_number_from_fk,id_line_number_to_fk,id_city_from_fk,id_city_to_fk,duration,call_date,id_invoice_fk) values(?,?,?,?,?,?,?,?,?)";
     public static final String REMOVE_PHONECALLS_QUERY = "delete from phonecalls where id_phonecall=?";
     public static final String UPDATE_PHONECALLS_QUERY = "update phonecalls set line_number_from=?, line_number_to=?, id_line_number_from_fk=?, id_line_number_to_fk=?, id_city_from_fk=?, id_city_to_fk=?, duration=?, call_date=?, id_invoice_fk=? where id_phonecall=?";
     public static final String GETBYID_PHONECALLS_QUERY = BASE_PHONECALLS_QUERY + " where id_phonecall=?";
-    public static final String GETBYID_USERPHONECALLS_QUERY = "select p.line_number_from,p.line_number_to,p.id_city_from_fk,p.id_city_to_fk,p.duration,p.call_date,p.total_price\n" +
+    public static final String GETBYID_USERPHONECALLS_QUERY = "select p.id_phonecall,p.line_number_from,p.line_number_to,p.id_city_from_fk,p.id_city_to_fk,p.duration,p.call_date,p.total_price\n" +
             "from phonecalls as p\n" +
             "join user_lines as ul\n" +
             "on p.id_line_number_from_fk=ul.id_user_line\n" +

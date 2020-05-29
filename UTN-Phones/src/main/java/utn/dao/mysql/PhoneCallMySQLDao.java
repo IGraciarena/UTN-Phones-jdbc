@@ -51,7 +51,7 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
             ps.executeQuery();
             ps.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error updatiando datos de la llamada",e);
         }
     }
 

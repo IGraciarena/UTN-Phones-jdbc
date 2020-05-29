@@ -3,12 +3,10 @@ package utn.controller.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import utn.controller.InvoiceController;
 import utn.dto.InvoiceDto;
+import utn.exceptions.NoExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.model.User;
 import utn.model.enumerated.UserType;
@@ -18,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/invoice")
+@RequestMapping("/api/invoice")
 public class InvoiceWebController {
 
     SessionManager sessionManager;
@@ -41,6 +39,13 @@ public class InvoiceWebController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
+    @GetMapping("/{invoiceId}")
+    public ResponseEntity getById(@RequestHeader("Authorization") String token,@PathVariable Integer invoiceId) throws NoExistsException, UserNotExistsException {
+        if (getCurrentUser(token).getUserType().equals(UserType.EMPLOYEE)) {
+            return ResponseEntity.status(HttpStatus.OK).body(invoiceController.getById(invoiceId));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
     private User getCurrentUser(String sessionToken) throws UserNotExistsException {
         return Optional.ofNullable(sessionManager.getCurrentUser(sessionToken)).orElseThrow(UserNotExistsException::new);
     }

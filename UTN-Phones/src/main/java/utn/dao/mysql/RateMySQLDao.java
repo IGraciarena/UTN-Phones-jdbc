@@ -55,6 +55,7 @@ public class RateMySQLDao implements RateDao {
             ps.setFloat(2, value.getCostPerMin());
             ps.setInt(3, value.getCityFrom().getId());
             ps.setInt(4, value.getCityTo().getId());
+            ps.setInt(5,value.getId());
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
