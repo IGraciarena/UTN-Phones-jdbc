@@ -73,10 +73,10 @@ create table phonecalls(
 	id_city_to_fk int,
 	duration int,
 	call_date datetime,
--- 	cost_per_min decimal (12,2),
--- 	price_per_min decimal (12,2),
--- 	total_price decimal (12,2),
--- 	total_cost decimal(12,2),
+ 	cost_per_min decimal (12,2),
+ 	price_per_min decimal (12,2),
+ 	total_price decimal (12,2),
+ 	total_cost decimal(12,2),
 	id_invoice_fk int,
 	constraint fk_id_invoice foreign key (id_invoice_fk) references invoices(id_invoice),
     constraint fk_id_city_from foreign key (id_city_from_fk) references cities(id_city),
@@ -94,14 +94,103 @@ insert into user_lines (id_client_fk,line_number,type_line) values (1,"223576513
 
 insert into rates (price_per_min,cost_per_min,id_city_from_fk,id_city_to_fk)values(8,5,1,1),(8,5,2,2),(8,5,3,3),(8,5,4,4),(8,5,5,5),(8,5,6,6),(8,5,7,7),(8,5,8,8),(8,5,9,9),(9,5,1,2),(9,5,2,1),(10,5,1,3),(10,5,3,1),(9,5,1,4),(9,5,4,1),(9,7,1,5),(9,7,5,1),(15,10,1,6),(15,10,6,1),(14,11,1,7),(14,11,7,1),(10,8,1,8),(10,8,8,1),(8,6,1,9),(8,6,9,1),(10,5,2,3),(10,5,3,2),(9,5,2,4),(9,5,4,2),(9,7,2,5),(9,7,5,2),(15,10,2,6),(15,10,6,2),(14,11,2,7),(14,11,7,2),(10,8,2,8),(10,8,8,2),(8,6,2,9),(8,6,9,2),(9,5,3,4),(9,5,4,3),(9,7,3,5),(9,7,5,3),(15,10,3,6),(15,10,6,3),(14,11,3,7),(14,11,7,3),(10,8,3,8),(10,8,8,3),(8,6,3,9),(8,6,9,3),(9,7,4,5),(9,7,5,4),(15,10,4,6),(15,10,6,4),(14,11,4,7),(14,11,7,4),(10,8,4,8),(10,8,8,4),(8,6,4,9),(8,6,9,4),(15,10,5,6),(15,10,6,5),(14,11,5,7),(14,11,7,5),(10,8,5,8),(10,8,8,5),(8,6,5,9),(8,6,9,5),(14,11,6,7),(14,11,7,6),(10,8,6,8),(10,8,8,6),(8,6,6,9),(8,6,9,6),(10,8,7,8),(10,8,8,7),(8,6,7,9),(8,6,9,7),(8,6,8,9),(8,6,9,8);
 
-
-#aca va un trigger de date expiration mas 15 dias de la fecha de emission
-#aca va un trigger de price total cuando generamos la factura para agregarle un 20% mas del price cost
 insert into invoices (call_count,date_emission,date_expiration,id_line_fk,price_cost,price_total)values(1,'2020-05-06','2020-05-21',1,200,350);
 insert into phonecalls(line_number_from,line_number_to,id_line_number_from_fk,id_line_number_to_fk,id_city_from_fk,id_city_to_fk,duration,call_date,id_invoice_fk)values("2235765132","11499899",1,6,1,2,20,'2020-04-03',1),("2235765132","11499899",1,6,1,3,20,'2020-01-05',1),("2235765132","11499899",1,6,1,5,20,'2020-04-03',1),(6,5,2,3,20,'2020-01-05',1),(6,3,2,5,20,'2020-04-05',1),(5,4,3,4,20,'2020-02-05',1),(6,3,2,5,20,'2020-04-05',1),(1,5,1,2,20,'2020-07-05',1),(4,6,4,2,20,'2020-02-05',1),(5,6,3,2,20,'2020-07-05',1);
 
-select * from user_lines;
+#//////////////////////////////ADD-PHONECALL//////////////////////////////////
+drop trigger TBI_ADD_PHONECALL
+Delimiter //
+CREATE TRIGGER TBI_ADD_PHONECALL before insert on phonecalls for each row 
+begin
+	declare vIdCityFrom int;
+    declare vIdCityTo int;
+    declare vIdLineFrom int;
+    declare vIdLineTo int;
+    declare vPricePerMin int;
+    declare vCostPerMin int;
+    declare vTotalCost int;
+    declare vTotalPrice int;
+    set vIdCityFrom=CALCULATE_ID_CITY(new.line_number_from);
+    set vIdCityTo=CALCULATE_ID_CITY(new.line_number_to);
+    set vIdLineFrom=CALCULATE_ID_LINE(new.line_number_from);
+    set vIdLineFrom=CALCULATE_ID_LINE(new.line_number_to);
+    set vPricePerMin=CALCULATE_PRICE_PER_MIN(vIdCityFrom,vIdCityTo);
+    set vCostPerMin=CALCULATE_COST_PER_MIN(vIdCityFrom,vIdCityTo);
+    set vTotalCost=CALCULATE_TOTAL(new.duration,vCostPerMin);
+    set vTotalPrice=CALCULATE_TOTAL(new.duration,vPricePerMin);
+    set new.id_line_number_from_fk=vIdLineFrom;
+    set new.id_line_number_to_fk=vIdLineTo;
+    set new.id_city_from_fk=vIdCityFrom;
+    set new.id_city_to_fk=vIdCityTo;
+    set new.cost_per_min=vCostPerMin;
+    set new.price_per_min=vPricePerMin;
+    set new.total_cost=vTotalCost;
+    set new.total_price=vTotalPrice;
+    set new.call_date=now();
+end //
+#/////////////////////////////////////////////////////////////////
+Delimiter //
+CREATE DEFINER=`root`@`localhost` FUNCTION `CALCULATE_COST_PER_MIN`(pIdCityFrom int,pCityTo int) RETURNS int(11)
+    READS SQL data
+begin
+	declare vReturn int;
+    set vReturn=(select cost_per_min from rates where pIdCityFrom=id_city_from_fk && pCityTo=id_city_to_fk);
+	return vReturn;
+end //
 
+#/////////////////////////////////////////////////////////////////
+Delimiter //
+CREATE DEFINER=`root`@`localhost` FUNCTION `CALCULATE_ID_CITY`(lineNumber varchar(40)) RETURNS int(11)
+    READS SQL DATA
+begin
+	declare vPrefixCity int;
+    declare vReturn int;
+    set vPrefixCity=CALCULATE_PREFIX(lineNumber);
+	set vReturn=(select id_city from cities where prefix=vPrefixCity);
+	return vReturn;
+end //
+#/////////////////////////////////////////////////////////////////
+Delimiter //
+CREATE DEFINER=`root`@`localhost` FUNCTION `CALCULATE_ID_LINE`(plineNumber varchar(40)) RETURNS int(11)
+    READS SQL DATA
+begin
+	declare vReturn int;
+    set vReturn=(select id_user_line from user_lines where line_number=pLineNumber);
+    return vReturn;
+end //
+#/////////////////////////////////////////////////////////////////
+Delimiter //
+CREATE DEFINER=`root`@`localhost` FUNCTION `CALCULATE_PREFIX`(pLineNumber varchar(40)) RETURNS int(11)
+    READS SQL DATA
+begin
+	declare vReturn int;
+    set vReturn=substring(pLineNumber,1,3);
+    return vReturn;
+end //
+#/////////////////////////////////////////////////////////////////
+Delimiter //
+CREATE DEFINER=`root`@`localhost` FUNCTION `CALCULATE_PRICE_PER_MIN`(pIdCityFrom int,pCityTo int) RETURNS int(11)
+    READS SQL DATA
+begin
+	declare vReturn int;
+    set vReturn=(select price_per_min from rates where pIdCityFrom=id_city_from_fk && pCityTo=id_city_to_fk);
+	return vReturn;
+end //
+#/////////////////////////////////////////////////////////////////
+Delimiter //
+CREATE DEFINER=`root`@`localhost` FUNCTION `CALCULATE_TOTAL`(pDuration int,pValuePorMin int) RETURNS int(11)
+    READS SQL DATA
+begin
+	declare vReturn int;
+    set vReturn=(pDuration*pValuePorMin);
+    return vReturn;
+end //
+#/////////////////////////////////////////////////////////////////
+insert into phonecalls(line_number_from,line_number_to,duration)values(2235765132,2918309532,45);
+select * from user_lines;
+select * from phonecalls;
+
+#/////////////////////////////////////////////////////////////////
 SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;    
 rollback;
 show engines;
