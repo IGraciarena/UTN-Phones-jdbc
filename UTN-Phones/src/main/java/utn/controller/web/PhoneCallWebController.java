@@ -92,11 +92,11 @@ public class PhoneCallWebController {
         return Optional.ofNullable(sessionManager.getCurrentUser(sessionToken)).orElseThrow(UserNotExistsException::new);
     }
 
-    private URI getLocation(ReturnedPhoneCallDto phoneCall) {
+    private URI getLocation(Integer idPhoneCall) {
         return ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(phoneCall.getId())
+                .buildAndExpand(idPhoneCall)
                 .toUri();
     }
 }

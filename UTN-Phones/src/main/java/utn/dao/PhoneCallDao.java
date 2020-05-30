@@ -11,7 +11,7 @@ public interface PhoneCallDao extends AbstractDao<PhoneCall> {
 
     PhoneCallDto add(PhoneCallDto value);
 
-    ReturnedPhoneCallDto addPhoneCall(PhoneCallDto value);
+    Integer addPhoneCall(PhoneCallDto value);
 
     List<ReturnedPhoneCallDto> getAll();
 

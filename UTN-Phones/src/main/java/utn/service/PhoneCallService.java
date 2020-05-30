@@ -27,7 +27,7 @@ public class PhoneCallService {
         return phoneCall;
     }
 
-    public ReturnedPhoneCallDto addPhoneCall(PhoneCallDto phoneCall) throws AlreadyExistsException {
+    public Integer addPhoneCall(PhoneCallDto phoneCall) throws AlreadyExistsException {
        return dao.addPhoneCall(phoneCall);
     }
 

@@ -7,7 +7,6 @@ import utn.dto.PhoneCallDto;
 import utn.dto.ReturnedPhoneCallDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.model.PhoneCall;
-import utn.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -92,13 +91,29 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
 
 
     @Override
-    public ReturnedPhoneCallDto addPhoneCall(PhoneCallDto value) {
-        ReturnedPhoneCallDto returnedPhoneCallDto =null;
-        return returnedPhoneCallDto;
+    public Integer addPhoneCall(PhoneCallDto value) {
+        try {
+            Integer idPhonecall=0;
+            PreparedStatement ps = con.prepareStatement(INSERT_PHONECALLS_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setString(1,value.getLineNumberFrom());
+            ps.setString(2,value.getLineNumberTo());
+            ps.setInt(3,value.getDuration());
+            ps.setDate(4,new Date(value.getDate().getTime()));
+            ps.execute();
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs != null && rs.next()) {
+                idPhonecall = rs.getInt(1);
+            }
+            ps.close();
+            rs.close();
+            return idPhonecall;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al insertar la llamada", e);
+        }
     }
 
     private ReturnedPhoneCallDto createPhoneCall(ResultSet rs) throws SQLException {
-        ReturnedPhoneCallDto returnedPhoneCallDto = new ReturnedPhoneCallDto(rs.getInt("id_phonecall"),
+        ReturnedPhoneCallDto returnedPhoneCallDto = new ReturnedPhoneCallDto(
                 rs.getString("line_number_from"),
                 rs.getString("line_number_to"),
                 cityMySQLDao.getCityName(rs.getInt("id_city_from_fk")),

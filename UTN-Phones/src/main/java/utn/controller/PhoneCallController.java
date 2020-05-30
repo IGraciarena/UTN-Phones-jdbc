@@ -20,7 +20,7 @@ public class PhoneCallController {
         this.phoneCallService = phoneCallService;
     }
 
-    public ReturnedPhoneCallDto add(PhoneCallDto phoneCall) throws AlreadyExistsException {
+    public Integer add(PhoneCallDto phoneCall) throws AlreadyExistsException {
 
         return phoneCallService.addPhoneCall(phoneCall);
     }
