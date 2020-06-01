@@ -3,6 +3,8 @@ package utn.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import utn.dto.InvoiceDto;
+import utn.dto.InvoicesBetweenDateDto;
+import utn.dto.ReturnedPhoneCallDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.NoExistsException;
 import utn.model.Invoice;
@@ -37,5 +39,9 @@ public class InvoiceController {
 
     public List<InvoiceDto> getAll() {
         return invoiceService.getAll();
+    }
+
+    public List<InvoiceDto> getInvoicesBetweenDatesFromUserId(InvoicesBetweenDateDto invoiceDto) throws NoExistsException {
+        return invoiceService.getInvoicesBetweenDatesFromUserId(invoiceDto);
     }
 }

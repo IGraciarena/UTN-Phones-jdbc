@@ -6,6 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utn.controller.InvoiceController;
 import utn.dto.InvoiceDto;
+import utn.dto.InvoicesBetweenDateDto;
+import utn.dto.PhoneCallsBetweenDatesDto;
+import utn.dto.ReturnedPhoneCallDto;
 import utn.exceptions.NoExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.model.User;
@@ -43,6 +46,19 @@ public class InvoiceWebController {
     public ResponseEntity getById(@RequestHeader("Authorization") String token,@PathVariable Integer invoiceId) throws NoExistsException, UserNotExistsException {
         if (getCurrentUser(token).getUserType().equals(UserType.EMPLOYEE)) {
             return ResponseEntity.status(HttpStatus.OK).body(invoiceController.getById(invoiceId));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    /*
+    Consulta de facturas del usuario logueado por rango de fechas.
+    */
+    @GetMapping("/client")
+    public ResponseEntity<List<InvoiceDto>> getInvoicesBetweenDatesFromUserId(@RequestHeader("Authorization") String token, @RequestBody InvoicesBetweenDateDto invoiceDto) throws NoExistsException, UserNotExistsException {
+        if (getCurrentUser(token).getUserType().equals(UserType.CLIENT)) {
+            List<InvoiceDto> returnedInvoicesDtoList = invoiceController.getInvoicesBetweenDatesFromUserId(invoiceDto);
+            return (returnedInvoicesDtoList.size() > 0) ?
+                    ResponseEntity.ok(returnedInvoicesDtoList) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }

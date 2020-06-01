@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import utn.controller.PhoneCallController;
 import utn.dto.PhoneCallDto;
+import utn.dto.PhoneCallsBetweenDatesDto;
 import utn.dto.ReturnedPhoneCallDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.NoExistsException;
@@ -78,10 +79,39 @@ public class PhoneCallWebController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ReturnedPhoneCallDto>> getAllPhoneCallsFromUserId(@RequestHeader("Authorization") String token, @PathVariable Integer userId) throws UserNotExistsException {
+    /*
+    Consulta todas las llamadas a partir de un ID de usuario
+     */
+    @GetMapping("/employee/{userId}")
+    public ResponseEntity<List<ReturnedPhoneCallDto>> getAllPhoneCallsFromUserId(@RequestHeader("Authorization") String token, @PathVariable Integer userId) throws UserNotExistsException, NoExistsException {
         if (getCurrentUser(token).getUserType().equals(UserType.EMPLOYEE)) {
             List<ReturnedPhoneCallDto> returnedPhoneCallDtoList = phoneCallController.getAllPhoneCallsFromUserId(userId);
+            return (returnedPhoneCallDtoList.size() > 0) ?
+                    ResponseEntity.ok(returnedPhoneCallDtoList) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    /*
+    2) Consulta de llamadas del usuario logueado por rango de fechas.
+    .*/
+    @GetMapping("/client")
+    public ResponseEntity<List<ReturnedPhoneCallDto>> getPhoneCallsFromUserIdBetweenDates(@RequestHeader("Authorization") String token, @RequestBody PhoneCallsBetweenDatesDto phonecallDto) throws UserNotExistsException, NoExistsException {
+        if (getCurrentUser(token).getUserType().equals(UserType.CLIENT)) {
+            List<ReturnedPhoneCallDto> returnedPhoneCallDtoList = phoneCallController.getPhoneCallsFromUserIdBetweenDates(phonecallDto);
+            return (returnedPhoneCallDtoList.size() > 0) ?
+                    ResponseEntity.ok(returnedPhoneCallDtoList) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    /*
+     Consulta de destinos más llamados por el usuario
+     */
+    @GetMapping("/client/{userID}")
+    public ResponseEntity<List<String>> getMostCalledDestinsByUserId(@RequestHeader("Authorization") String token, @PathVariable Integer userID) throws UserNotExistsException, NoExistsException {
+        if (getCurrentUser(token).getUserType().equals(UserType.CLIENT)) {
+            List<String> returnedPhoneCallDtoList = phoneCallController.getMostCalledDestinsByUserId(userID);
             return (returnedPhoneCallDtoList.size() > 0) ?
                     ResponseEntity.ok(returnedPhoneCallDtoList) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }

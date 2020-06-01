@@ -3,6 +3,7 @@ package utn.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import utn.dto.PhoneCallDto;
+import utn.dto.PhoneCallsBetweenDatesDto;
 import utn.dto.ReturnedPhoneCallDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.NoExistsException;
@@ -41,7 +42,15 @@ public class PhoneCallController {
         return phoneCallService.getAll();
     }
 
-    public List<ReturnedPhoneCallDto> getAllPhoneCallsFromUserId(Integer userId) {
+    public List<ReturnedPhoneCallDto> getAllPhoneCallsFromUserId(Integer userId) throws NoExistsException {
         return phoneCallService.getAllPhoneCallsFromUserId(userId);
+    }
+
+    public List<ReturnedPhoneCallDto> getPhoneCallsFromUserIdBetweenDates(PhoneCallsBetweenDatesDto phonecallDto) throws NoExistsException {
+        return phoneCallService.getPhoneCallsFromUserIdBetweenDates(phonecallDto);
+    }
+
+    public List<String> getMostCalledDestinsByUserId(Integer idUser) throws NoExistsException {
+        return phoneCallService.getMostCalledDestinsByUserId(idUser);
     }
 }

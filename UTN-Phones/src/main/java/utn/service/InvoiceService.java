@@ -3,7 +3,10 @@ package utn.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import utn.dao.InvoiceDao;
+import utn.dao.UserDao;
 import utn.dto.InvoiceDto;
+import utn.dto.InvoicesBetweenDateDto;
+import utn.dto.UserDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.NoExistsException;
 import utn.model.Invoice;
@@ -14,10 +17,12 @@ import java.util.Optional;
 @Service
 public class InvoiceService {
     InvoiceDao dao;
+    UserDao daoUser;
 
     @Autowired
-    public InvoiceService(InvoiceDao invoiceDao) {
+    public InvoiceService(InvoiceDao invoiceDao,UserDao daoUser) {
         this.dao = invoiceDao;
+        this.daoUser = daoUser;
     }
 
     public InvoiceDto getById(Integer id) throws NoExistsException {
@@ -44,5 +49,11 @@ public class InvoiceService {
 
     public List<InvoiceDto> getAll() {
         return dao.getAll();
+    }
+
+    public List<InvoiceDto> getInvoicesBetweenDatesFromUserId(InvoicesBetweenDateDto invoiceDto) throws NoExistsException {
+        UserDto user = daoUser.getById(invoiceDto.getUserID());
+        Optional.ofNullable(user).orElseThrow(NoExistsException::new);
+        return dao.getInvoicesBetweenDatesFromUserId(invoiceDto);
     }
 }

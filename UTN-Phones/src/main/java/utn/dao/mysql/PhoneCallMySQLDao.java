@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import utn.dao.PhoneCallDao;
 import utn.dto.PhoneCallDto;
+import utn.dto.PhoneCallsBetweenDatesDto;
 import utn.dto.ReturnedPhoneCallDto;
 import utn.exceptions.AlreadyExistsException;
+import utn.exceptions.NoExistsException;
 import utn.model.PhoneCall;
 
 import java.sql.*;
@@ -23,6 +25,28 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
     public PhoneCallMySQLDao(Connection con, CityMySQLDao cityMySQLDao) {
         this.cityMySQLDao = cityMySQLDao;
         this.con = con;
+    }
+
+    @Override
+    public Integer addPhoneCall(PhoneCallDto value) {
+        try {
+            Integer idPhonecall=0;
+            PreparedStatement ps = con.prepareStatement(INSERT_PHONECALLS_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setString(1,value.getLineNumberFrom());
+            ps.setString(2,value.getLineNumberTo());
+            ps.setInt(3,value.getDuration());
+            ps.setDate(4,new Date(value.getDate().getTime()));
+            ps.execute();
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs != null && rs.next()) {
+                idPhonecall = rs.getInt(1);
+            }
+            ps.close();
+            rs.close();
+            return idPhonecall;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al insertar la llamada", e);
+        }
     }
 
     @Override
@@ -84,33 +108,6 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
         }
     }
 
-    @Override
-    public PhoneCallDto add(PhoneCallDto value) {
-        return null;
-    }
-
-
-    @Override
-    public Integer addPhoneCall(PhoneCallDto value) {
-        try {
-            Integer idPhonecall=0;
-            PreparedStatement ps = con.prepareStatement(INSERT_PHONECALLS_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setString(1,value.getLineNumberFrom());
-            ps.setString(2,value.getLineNumberTo());
-            ps.setInt(3,value.getDuration());
-            ps.setDate(4,new Date(value.getDate().getTime()));
-            ps.execute();
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs != null && rs.next()) {
-                idPhonecall = rs.getInt(1);
-            }
-            ps.close();
-            rs.close();
-            return idPhonecall;
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al insertar la llamada", e);
-        }
-    }
 
     private ReturnedPhoneCallDto createPhoneCall(ResultSet rs) throws SQLException {
         ReturnedPhoneCallDto returnedPhoneCallDto = new ReturnedPhoneCallDto(
@@ -122,6 +119,26 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
                 rs.getDate("call_date"),
                 rs.getFloat("total_price"));
         return returnedPhoneCallDto;
+    }
+
+    public List<ReturnedPhoneCallDto> getPhoneCallsFromUserIdBetweenDates(PhoneCallsBetweenDatesDto phonecallDto){
+        try {
+            CallableStatement cs = con.prepareCall("call sp_phonecalls_betweendates(?,?,?)");
+            cs.setInt(1,phonecallDto.getIdUser());
+            cs.setString(2,phonecallDto.getDateFrom());
+            cs.setString(3,phonecallDto.getDateTo());
+            ResultSet rs = cs.executeQuery();
+            List<ReturnedPhoneCallDto> phoneCallDtos = new ArrayList<>();
+            while (rs.next()) {
+                phoneCallDtos.add(createPhoneCall(rs));
+            }
+            rs.close();
+            cs.close();
+            return phoneCallDtos;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener las llamadas por fechas", e);
+        }
+
     }
 
 
@@ -158,6 +175,24 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
 
         } catch (SQLException e) {
             throw new RuntimeException("Error al obtener la lista de llamadas por usuario", e);
+        }
+    }
+
+    @Override
+    public List<String> getMostCalledDestinsByUserId(Integer idUser){
+        try {
+            CallableStatement cs = con.prepareCall("call sp_user_top10(?)");
+            cs.setInt(1,idUser);
+            ResultSet rs = cs.executeQuery();
+            List<String> destinsMostCalled = new ArrayList<>();
+            while (rs.next()) {
+                destinsMostCalled.add(rs.getString("line_number_to"));
+            }
+            rs.close();
+            cs.close();
+            return destinsMostCalled;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener los destinos mas llamados", e);
         }
     }
 }

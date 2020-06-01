@@ -1,6 +1,7 @@
 package utn.dao;
 
 import utn.dto.InvoiceDto;
+import utn.dto.InvoicesBetweenDateDto;
 import utn.model.Invoice;
 
 import java.util.List;
@@ -11,4 +12,5 @@ public interface InvoiceDao extends AbstractDao<Invoice> {
     List<InvoiceDto> getAll();
 
 
+    List<InvoiceDto> getInvoicesBetweenDatesFromUserId(InvoicesBetweenDateDto invoiceDto);
 }

@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import utn.dao.InvoiceDao;
 import utn.dto.InvoiceDto;
+import utn.dto.InvoicesBetweenDateDto;
+import utn.dto.ReturnedPhoneCallDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.model.Invoice;
 import utn.model.User;
@@ -66,7 +68,7 @@ public class InvoiceMySQLDao implements InvoiceDao {
                 userLineMySQLDao.getLineNumber(rs.getInt("id_line_fk")),
                 rs.getDate("date_emission"),
                 rs.getDate("date_expiration"),
-                rs.getFloat("price_total")
+                rs.getFloat("total_price")
         );
         return invoiceDto;
     }
@@ -85,6 +87,26 @@ public class InvoiceMySQLDao implements InvoiceDao {
             return invoiceDtos;
         } catch (SQLException e) {
             throw new RuntimeException("Error al obtener la lista de facturas", e);
+        }
+    }
+
+    @Override
+    public List<InvoiceDto> getInvoicesBetweenDatesFromUserId(InvoicesBetweenDateDto invoiceDto) {
+        try {
+            CallableStatement cs = con.prepareCall("call sp_invoices_betweendates(?,?,?)");
+            cs.setInt(1,invoiceDto.getUserID());
+            cs.setString(2,invoiceDto.getDateFrom());
+            cs.setString(3,invoiceDto.getDateTo());
+            ResultSet rs = cs.executeQuery();
+            List<InvoiceDto> invoicesDtos = new ArrayList<>();
+            while (rs.next()) {
+                invoicesDtos.add(createInvoice(rs));
+            }
+            rs.close();
+            cs.close();
+            return invoicesDtos;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener facturas por rango de fechas", e);
         }
     }
 }

@@ -188,11 +188,12 @@ begin
     return vReturn;
 end //
 #/////////////////////////////////////////////////////////////////
-insert into phonecalls(line_number_from,line_number_to,duration)values("0114998997","2918309532",35);
-select * from user_lines;
+
+#select * from user_lines;
+#update user_lines set line_status='DELETE' where id_user_line=1
 #select * from phonecalls;
 #select * from cities;
-delete from phonecalls
+#delete from phonecalls
 
 
 #/////////////////////////////////////////////////////////////////
@@ -225,37 +226,51 @@ begin
 	end if;
     commit;
 end; //
+#select * from users
 #select * from user_lines;
 #select * from invoices;
 #drop procedure sp_add_user_line;
 #call sp_add_user_line(38704049,2235679563,1,2);
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--- 
--- #trigger para calcular el price cost y price total en invoices
--- create trigger tbi_total_price before insert on invoices for each row 
--- begin 
--- 	
--- 	
--- 	
--- end
--- #trigger para calcular el call count en invoices
--- create trigger tbi_calculate_call_amout before insert on invoices for each row 
--- begin 
--- 	
--- 	
--- 	
--- end
+#facturas de un usuario emitidas por un rango de fechas
+Delimiter //
+create procedure sp_invoices_betweendates(in pIdUser int,in date_from datetime, in date_to datetime)
+begin 
+	set date_to=DATE_ADD(date_to, INTERVAL '23 59' hour_minute);
+	select inv.call_count,
+		   #inv.total_cost,
+           inv.total_price,
+           inv.date_emission,
+           inv.date_expiration,
+           #inv.invoice_status,
+           inv.id_line_fk
+	from invoices as inv
+	inner join user_lines ul 
+    on inv.id_line_fk=ul.id_user_line
+    inner join users u
+    on ul.id_client_fk=u.id_user
+	where inv.date_emission >= date_from 
+	and   inv.date_emission <= date_to
+	and   u.id_user=PidUser;
+end //
+#drop procedure sp_invoices_betweendates
+#select * from invoices
+#select * from user_lines
+#update invoices set date_emission='2020-05-27 00:00:00' where id_invoice=23;
+#call sp_invoices_betweendates(3,'2020-05-23','2020-05-27');
 #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 # consulta llamadas de una usuario logueado por rango de fechas
 Delimiter //
 create procedure sp_phonecalls_betweendates(in pId int,in date_from datetime, in date_to datetime)
 begin 
-	select p.id_phonecall AS "ID",
-		   p.line_number_from AS "NUMBER FROM",
-		   p.line_number_to AS "NUMBER TO",
-		   p.duration AS "DURATION",
-		   p.call_date as "DATE",
-		   p.total_price as "TOTAL" 
+	set date_to=DATE_ADD(date_to, INTERVAL '23 59' hour_minute);
+	select p.line_number_from,
+		   p.line_number_to,
+		   p.duration,
+           p.id_city_from_fk,
+           p.id_city_to_fk,
+		   p.call_date,
+		   p.total_price 
 	from phonecalls as p 
 	inner join user_lines ul 
     on p.id_line_number_from_fk=ul.id_user_line
@@ -266,7 +281,10 @@ begin
 	and   u.id_user=Pid;
 end //
 #drop procedure sp_phonecalls_betweendates;
-#call sp_phonecalls_betweendates(1,'2020-05-23','2020-05-30 23:59:00');
+#select * from phonecalls
+#update users set user_type='CLIENT' where id_user=1
+#update phonecalls set call_date="2020-05-27 15:41:35" where id_phonecall=46;
+#call sp_phonecalls_betweendates(3,'2020-05-20','2020-05-31');
 
 #///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #consulta de los top 5 destinos mas llamados por el usuario
@@ -285,12 +303,12 @@ begin
 	  order by count(line_number_to) desc
 	  limit 5;
 end //
-#call sp_user_top10(1);
+#call sp_user_top10(3);
 #select * from user_lines
 #insert into user_lines (line_number,type_line,line_status,id_client_fk)values('2236547876',1,1,6)
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #destino mas llamadi por el usuario(echo rancio)
-select f.line_number_to as "destino mas llamado" ,concat(u.first_name," ",u.surname) as "Nombre Apellido"
+/*select f.line_number_to as "destino mas llamado" ,concat(u.first_name," ",u.surname) as "Nombre Apellido"
 from users as u 
 join (select line_number_to, id_line_number_from_fk
 	  from phonecalls
@@ -299,33 +317,57 @@ join (select line_number_to, id_line_number_from_fk
 	  order by count(line_number_to) desc
 	  limit 1) as f
 on f.id_line_number_from_fk = u.id_user;
-
+*/
 #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #todas las llamadas de un usuario 
-select p.line_number_from,p.line_number_to,p.id_city_from_fk,p.id_city_to_fk,p.duration,p.call_date,p.total_price
+/*select p.line_number_from,p.line_number_to,p.id_city_from_fk,p.id_city_to_fk,p.duration,p.call_date,p.total_price
 from phonecalls as p
 join user_lines as ul
 on p.id_line_number_from_fk=ul.id_user_line
 join users as u
 on ul.id_client_fk=u.id_user
-where u.id_user=1;
+where u.id_user=1;*/
 #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CREATE EVENT invoice_facturation
-ON SCHEDULE EVERY '1' MONTH
-STARTS '2020-05-01 00:00:00'
-DO
-CALL store_procedure();
+
 #///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*y debe generar una
 factura por línea y debe tomar en cuenta todas las llamadas no facturadas
 para cada una de las líneas, sin tener en cuenta su fecha. La fecha de
 vencimiento de esta factura será estipulada a 15 días.*/
 Delimiter //
-create procedure sp_invoice_facturation()
+create function GET_USER_LINE_STATUS(pIdLine int)
+returns int
+reads sql data
 begin
-	
+	declare vReturn int;
+	if((select line_status from user_lines where id_user_line=pIdLine)='ACTIVE')then
+		set vReturn=1;
+	else
+		set vReturn=0;
+	end if;
+    return vReturn;
 end //
+#/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7
+Delimiter //
+create function IF_HAVE_PHONECALLS(pIdLine int)
+returns int
+reads sql data
+begin
+        declare vReturn int;
+        
+		if exists(select id_phonecall from phonecalls where id_line_number_from_fk=pIdLine && id_invoice_fk is null)then
+			set vReturn=1;
+        else
+			set vReturn=0;
+        end if;
+        return vReturn;
+end //
+#drop function IF_HAVE_PHONECALLS;
+#select IF_HAVE_PHONECALLS(6);
+#select * from users
+#select * from phonecalls
+#update users set user_type='EMPLOYEE' where id_user=1
 #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7
 Delimiter //
 create procedure sp_create_invoices()
@@ -347,15 +389,30 @@ begin
 		IF finished = 1 THEN 
 			LEAVE getUserLine;
 		END IF;
-        insert into invoices(id_line_fk)VALUES(id_userline);
+        if((IF_HAVE_PHONECALLS(id_userline)=1) && (GET_USER_LINE_STATUS(id_userline)=1))then 
+				insert into invoices(id_line_fk)VALUES(id_userline);
+		end if;
 	END LOOP getUserLine;
 	CLOSE curUserLines;
 end //
-call sp_create_invoices();
-select * from phonecalls
-select * from invoices;
-delete from invoices;
-delete from phonecalls;
+
+#call sp_create_invoices();
+#drop procedure sp_create_invoices;
+#delete from phonecalls;
+#delete from invoices;
+#select * from INVOICES
+#select * from user_lines
+#select * from phonecalls
+#update user_lines set line_status='DELETE' where id_user_line=1;
+#insert into phonecalls(line_number_from,line_number_to,duration)values("3834918309","0114998997",35);
+#///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#evento que se ejecuta primer dia de cada mes
+
+CREATE EVENT invoice_facturation
+ON SCHEDULE EVERY '1' MONTH
+STARTS '2020-05-01 00:00:00'
+DO
+CALL sp_create_invoices();
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Delimiter //
 create function CALCULATE_CALLCOUNT(pIdLine int)
@@ -373,9 +430,10 @@ returns int
 reads sql data
 begin
 	declare vReturn int;
-    set vReturn=(select sum(total_cost) from phonecalls where id_line_number_from_fk=pIdLine);
+    set vReturn=(select sum(total_cost) from phonecalls where id_line_number_from_fk=pIdLine && id_invoice_fk is null);
     return vReturn;
 end //
+#drop function CALCULATE_TOTAL_COST
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Delimiter //
 create function CALCULATE_TOTAL_PRICE(pIdLine int)
@@ -383,9 +441,10 @@ returns int
 reads sql data
 begin
 	declare vReturn int;
-    set vReturn=(select sum(total_price) from phonecalls where id_line_number_from_fk=pIdLine);
+    set vReturn=(select sum(total_price) from phonecalls where id_line_number_from_fk=pIdLine && id_invoice_fk is null);
     return vReturn;
 end //
+#drop function CALCULATE_TOTAL_PRICE
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Delimiter //
 create trigger tbi_calculate_invoice_data before insert on invoices for each row
