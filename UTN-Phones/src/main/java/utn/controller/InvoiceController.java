@@ -2,10 +2,12 @@ package utn.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import utn.dto.DateDto;
 import utn.dto.InvoiceDto;
 import utn.dto.InvoicesBetweenDateDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.NoExistsException;
+import utn.exceptions.ValidationException;
 import utn.model.Invoice;
 import utn.service.InvoiceService;
 
@@ -42,5 +44,13 @@ public class InvoiceController {
 
     public List<InvoiceDto> getInvoicesBetweenDatesFromUserId(InvoicesBetweenDateDto invoiceDto) throws NoExistsException {
         return invoiceService.getInvoicesBetweenDatesFromUserId(invoiceDto);
+    }
+
+    public List<InvoiceDto> getInvoicesByDate(DateDto dateDto) throws ValidationException {
+        if(dateDto!=null) {
+            return invoiceService.getInvoicesByDate(dateDto);
+        }else{
+            throw new ValidationException();
+        }
     }
 }

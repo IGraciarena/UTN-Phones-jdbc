@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import utn.dao.InvoiceDao;
 import utn.dao.UserDao;
+import utn.dto.DateDto;
 import utn.dto.InvoiceDto;
 import utn.dto.InvoicesBetweenDateDto;
 import utn.dto.UserDto;
@@ -55,5 +56,9 @@ public class InvoiceService {
         UserDto user = daoUser.getById(invoiceDto.getUserID());
         Optional.ofNullable(user).orElseThrow(NoExistsException::new);
         return dao.getInvoicesBetweenDatesFromUserId(invoiceDto);
+    }
+
+    public List<InvoiceDto> getInvoicesByDate(DateDto dateDto) {
+        return dao.getInvoicesByDate(dateDto);
     }
 }

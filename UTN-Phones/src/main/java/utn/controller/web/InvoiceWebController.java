@@ -5,10 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utn.controller.InvoiceController;
+import utn.dto.DateDto;
 import utn.dto.InvoiceDto;
 import utn.dto.InvoicesBetweenDateDto;
 import utn.exceptions.NoExistsException;
 import utn.exceptions.UserNotExistsException;
+import utn.exceptions.ValidationException;
 import utn.model.User;
 import utn.model.enumerated.UserType;
 import utn.session.SessionManager;
@@ -44,6 +46,20 @@ public class InvoiceWebController {
     public ResponseEntity getById(@RequestHeader("Authorization") String token, @PathVariable Integer invoiceId) throws NoExistsException, UserNotExistsException {
         if (getCurrentUser(token).getUserType().equals(UserType.EMPLOYEE)) {
             return ResponseEntity.status(HttpStatus.OK).body(invoiceController.getById(invoiceId));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    /*
+    ENDPOINT PARCIAL.
+    Hago que reciba un dto con la fecha por que no se si puede pasar la fecha por la url, como no me levanta el proyecto no lo puedo probar.
+    */
+    @GetMapping
+    public ResponseEntity<List<InvoiceDto>> getInvoicesByDate(@RequestHeader("Authorization") String token, @RequestBody DateDto dateDto) throws UserNotExistsException, ValidationException {
+        if (getCurrentUser(token).getUserType().equals(UserType.CLIENT)) {
+            List<InvoiceDto> returnedInvoicesDtoList = invoiceController.getInvoicesByDate(dateDto);
+            return (returnedInvoicesDtoList.size() > 0) ?
+                    ResponseEntity.ok(returnedInvoicesDtoList) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
