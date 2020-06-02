@@ -27,7 +27,7 @@ create table rates(
 	constraint fk_city_from foreign key (id_city_from_fk) references cities(id_city),
 	constraint fk_city_to foreign key (id_city_to_fk) references cities(id_city)
 );
-    
+
 create table users(
 	id_user int not null auto_increment primary key,
 	first_name varchar(50),
@@ -468,3 +468,15 @@ create trigger tai_addphonecall_to_invoice after insert on invoices for each row
 begin
 	update phonecalls set id_invoice_fk=new.id_invoice where id_line_number_from_fk=new.id_line_fk;
 end //
+#//////////////////////////////////////////////////////////////////////////////////////
+select * from invoices;
+update invoices set date_emission='2020-05-23 00:00:00' where id_invoice=18;
+Delimiter //
+create procedure sp_invoices_by_date(pDate date)
+begin
+	select inv.call_count,inv.total_price,inv.date_emission,inv.date_expiration,inv.id_line_fk
+	from invoices as inv
+	where date_emission=pDate;
+end //
+drop procedure sp_invoices_by_date;
+call sp_invoices_by_date('2020-05-23');
