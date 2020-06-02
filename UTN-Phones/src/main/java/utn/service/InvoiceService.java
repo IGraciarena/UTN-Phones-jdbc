@@ -20,7 +20,7 @@ public class InvoiceService {
     UserDao daoUser;
 
     @Autowired
-    public InvoiceService(InvoiceDao invoiceDao,UserDao daoUser) {
+    public InvoiceService(InvoiceDao invoiceDao, UserDao daoUser) {
         this.dao = invoiceDao;
         this.daoUser = daoUser;
     }

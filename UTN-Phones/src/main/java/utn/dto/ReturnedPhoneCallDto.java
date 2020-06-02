@@ -14,5 +14,5 @@ public class ReturnedPhoneCallDto {
     private String cityTo;
     private Integer duration;
     private Date callDate;
-    private float totalPrice;
+    private Integer totalPrice;
 }

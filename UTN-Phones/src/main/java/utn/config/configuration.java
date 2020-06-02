@@ -31,9 +31,9 @@ public class configuration {
     String password;
 
     @Bean
-    public Connection getConnection()throws ClassNotFoundException, SQLException, IllegalAccessException,InstantiationException {
+    public Connection getConnection() throws ClassNotFoundException, SQLException, IllegalAccessException, InstantiationException {
         Class.forName(driver).newInstance();
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/"+db,username,password);
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + db, username, password);
         return con;
     }
 

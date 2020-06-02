@@ -58,7 +58,7 @@ public class UserWebController {
 
     @GetMapping("/mostCalled/{lineNumber}")
     public ResponseEntity getMostCalledNumber(@RequestHeader("Authorization") String token, @PathVariable String lineNumber) throws UserNotExistsException {
-        if (getCurrentUser(token).getUserType().equals(UserType.CLIENT)){
+        if (getCurrentUser(token).getUserType().equals(UserType.CLIENT)) {
             return ResponseEntity.status(HttpStatus.OK).body(userController.getMostCalledNumber(lineNumber));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

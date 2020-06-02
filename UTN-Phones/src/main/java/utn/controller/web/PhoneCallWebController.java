@@ -13,7 +13,6 @@ import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.NoExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.model.PhoneCall;
-import utn.model.Rate;
 import utn.model.User;
 import utn.model.enumerated.UserType;
 import utn.session.SessionManager;
@@ -118,7 +117,7 @@ public class PhoneCallWebController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    private User getCurrentUser(String sessionToken) throws UserNotExistsException {
+    public User getCurrentUser(String sessionToken) throws UserNotExistsException {
         return Optional.ofNullable(sessionManager.getCurrentUser(sessionToken)).orElseThrow(UserNotExistsException::new);
     }
 

@@ -12,7 +12,6 @@ import utn.exceptions.NoExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.model.Rate;
 import utn.model.User;
-import utn.model.UserLine;
 import utn.model.enumerated.UserType;
 import utn.session.SessionManager;
 

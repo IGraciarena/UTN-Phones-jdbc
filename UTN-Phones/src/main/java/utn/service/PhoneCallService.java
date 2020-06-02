@@ -8,7 +8,6 @@ import utn.dto.PhoneCallDto;
 import utn.dto.PhoneCallsBetweenDatesDto;
 import utn.dto.ReturnedPhoneCallDto;
 import utn.dto.UserDto;
-import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.NoExistsException;
 import utn.model.PhoneCall;
 
@@ -21,7 +20,7 @@ public class PhoneCallService {
     UserDao daoUser;
 
     @Autowired
-    public PhoneCallService(PhoneCallDao dao,UserDao daoUser) {
+    public PhoneCallService(PhoneCallDao dao, UserDao daoUser) {
         this.dao = dao;
         this.daoUser = daoUser;
     }
@@ -32,8 +31,8 @@ public class PhoneCallService {
         return phoneCall;
     }
 
-    public Integer addPhoneCall(PhoneCallDto phoneCall){
-       return dao.addPhoneCall(phoneCall);
+    public Integer addPhoneCall(PhoneCallDto phoneCall) {
+        return dao.addPhoneCall(phoneCall);
     }
 
     public void remove(Integer id) throws NoExistsException {

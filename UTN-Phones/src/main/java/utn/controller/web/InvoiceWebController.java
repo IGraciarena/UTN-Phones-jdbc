@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import utn.controller.InvoiceController;
 import utn.dto.InvoiceDto;
 import utn.dto.InvoicesBetweenDateDto;
-import utn.dto.PhoneCallsBetweenDatesDto;
-import utn.dto.ReturnedPhoneCallDto;
 import utn.exceptions.NoExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.model.User;
@@ -43,7 +41,7 @@ public class InvoiceWebController {
     }
 
     @GetMapping("/{invoiceId}")
-    public ResponseEntity getById(@RequestHeader("Authorization") String token,@PathVariable Integer invoiceId) throws NoExistsException, UserNotExistsException {
+    public ResponseEntity getById(@RequestHeader("Authorization") String token, @PathVariable Integer invoiceId) throws NoExistsException, UserNotExistsException {
         if (getCurrentUser(token).getUserType().equals(UserType.EMPLOYEE)) {
             return ResponseEntity.status(HttpStatus.OK).body(invoiceController.getById(invoiceId));
         }
@@ -62,6 +60,7 @@ public class InvoiceWebController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
     private User getCurrentUser(String sessionToken) throws UserNotExistsException {
         return Optional.ofNullable(sessionManager.getCurrentUser(sessionToken)).orElseThrow(UserNotExistsException::new);
     }

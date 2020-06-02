@@ -109,7 +109,7 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
     }
 
 
-    private ReturnedPhoneCallDto createPhoneCall(ResultSet rs) throws SQLException {
+    public ReturnedPhoneCallDto createPhoneCall(ResultSet rs) throws SQLException {
         ReturnedPhoneCallDto returnedPhoneCallDto = new ReturnedPhoneCallDto(
                 rs.getString("line_number_from"),
                 rs.getString("line_number_to"),
@@ -117,7 +117,7 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
                 cityMySQLDao.getCityName(rs.getInt("id_city_to_fk")),
                 rs.getInt("duration"),
                 rs.getDate("call_date"),
-                rs.getFloat("total_price"));
+                rs.getInt("total_price"));
         return returnedPhoneCallDto;
     }
 
