@@ -30,7 +30,7 @@ public class UserLineService {
     public void remove(Integer id) throws NoExistsException {
         UserLineDto userLineDto = dao.getById(id);
         Optional.ofNullable(userLineDto).orElseThrow(NoExistsException::new);
-        dao.remove(id);
+        dao.delete(id);
     }
 
     public void update(UserLine userLine) throws NoExistsException {

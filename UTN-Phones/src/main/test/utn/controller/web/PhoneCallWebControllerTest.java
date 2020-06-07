@@ -1,20 +1,10 @@
 package utn.controller.web;
 
 import org.junit.Before;
-import org.junit.Test;
 import org.mockito.Mock;
-import org.springframework.http.ResponseEntity;
 import utn.controller.PhoneCallController;
-import utn.dto.ReturnedPhoneCallDto;
-import utn.exceptions.NoExistsException;
-import utn.exceptions.UserNotExistsException;
-import utn.model.enumerated.UserType;
 import utn.session.SessionManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class PhoneCallWebControllerTest {

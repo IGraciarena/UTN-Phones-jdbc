@@ -38,7 +38,7 @@ public class PhoneCallService {
     public void remove(Integer id) throws NoExistsException {
         ReturnedPhoneCallDto phoneCall = dao.getById(id);
         Optional.ofNullable(phoneCall).orElseThrow(NoExistsException::new);
-        dao.remove(id);
+        dao.delete(id);
     }
 
     public void update(PhoneCall value) throws NoExistsException {
@@ -57,10 +57,10 @@ public class PhoneCallService {
         return dao.getAllPhoneCallsFromUserId(userId);
     }
 
-    public List<ReturnedPhoneCallDto> getPhoneCallsFromUserIdBetweenDates(PhoneCallsBetweenDatesDto phonecallDto) throws NoExistsException {
-        UserDto user = daoUser.getById(phonecallDto.getIdUser());
+    public List<ReturnedPhoneCallDto> getPhoneCallsFromUserIdBetweenDates(PhoneCallsBetweenDatesDto phonecallDto,Integer userId) throws NoExistsException {
+        UserDto user = daoUser.getById(userId);
         Optional.ofNullable(user).orElseThrow(NoExistsException::new);
-        return dao.getPhoneCallsFromUserIdBetweenDates(phonecallDto);
+        return dao.getPhoneCallsFromUserIdBetweenDates(phonecallDto,userId);
     }
 
     public List<String> getMostCalledDestinsByUserId(Integer idUser) throws NoExistsException {

@@ -30,10 +30,10 @@ public class RateService {
         return dao.getById(id);
     }
 
-    public void remove(Integer id) throws NoExistsException {
+    public void delete(Integer id) throws NoExistsException {
         RateDto rateDto = dao.getById(id);
         Optional.ofNullable(rateDto).orElseThrow(NoExistsException::new);
-        dao.remove(id);
+        dao.delete(id);
     }
 
     public void update(Rate rate) throws NoExistsException {

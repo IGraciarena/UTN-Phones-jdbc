@@ -147,7 +147,7 @@ public class UserMySQLDao implements UserDao {
     }
 
     @Override
-    public void remove(Integer id) {
+    public void delete(Integer id) {
         try {
             PreparedStatement ps = connection.prepareStatement(UPDATE_USER_STATUS_QUERY);
             ps.setInt(1, id);

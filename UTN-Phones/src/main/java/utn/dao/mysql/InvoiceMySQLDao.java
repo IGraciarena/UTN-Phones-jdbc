@@ -40,7 +40,7 @@ public class InvoiceMySQLDao implements InvoiceDao {
     }
 
     @Override
-    public void remove(Integer id) {
+    public void delete(Integer id) {
         throw new UnsupportedOperationException();
     }
 

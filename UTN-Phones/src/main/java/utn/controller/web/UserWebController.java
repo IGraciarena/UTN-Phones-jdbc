@@ -10,15 +10,13 @@ import utn.dto.UserDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.model.User;
-import utn.model.enumerated.UserType;
 import utn.session.SessionManager;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping
 public class UserWebController {
 
     UserController userController;
@@ -30,53 +28,40 @@ public class UserWebController {
         this.sessionManager = sessionManager;
     }
 
-    @PostMapping
+    @PostMapping("/backoffice/users")
     public ResponseEntity add(@RequestBody User user, @RequestHeader("Authorization") String token) throws AlreadyExistsException, UserNotExistsException {
-        if (getCurrentUser(token).getUserType().equals(UserType.EMPLOYEE)) {
-            return ResponseEntity.created(getLocation(userController.add(user))).build();
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.created(getLocation(userController.add(user))).build();
     }
 
-    @DeleteMapping("/{idUser}")
+    @DeleteMapping("backoffice/users/{idUser}")
     public ResponseEntity remove(@PathVariable Integer idUser, @RequestHeader("Authorization") String token) throws UserNotExistsException {
-        if (getCurrentUser(token).getUserType().equals(UserType.EMPLOYEE)) {
-            userController.removeUser(idUser);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        userController.removeUser(idUser);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PutMapping
+    @PutMapping("/backoffice/users")
     public ResponseEntity<Object> update(@RequestBody User user, @RequestHeader("Authorization") String token) throws UserNotExistsException {
-        if (getCurrentUser(token).getUserType().equals(UserType.EMPLOYEE)) {
-            userController.updateUser(user);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        userController.updateUser(user);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @GetMapping("/mostCalled/{lineNumber}")
-    public ResponseEntity getMostCalledNumber(@RequestHeader("Authorization") String token, @PathVariable String lineNumber) throws UserNotExistsException {
-        if (getCurrentUser(token).getUserType().equals(UserType.CLIENT)) {
-            return ResponseEntity.status(HttpStatus.OK).body(userController.getMostCalledNumber(lineNumber));
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    @GetMapping("/backoffice/users/most-called/{lineNumber}")
+    public ResponseEntity getMostCalledNumber(@RequestHeader("Authorization") String token, @PathVariable String lineNumber) {
+        return ResponseEntity.status(HttpStatus.OK).body(userController.getMostCalledNumber(lineNumber));
     }
 
-    @GetMapping
-    public ResponseEntity<List<UserDto>> getAll(@RequestHeader("Authorization") String token) throws UserNotExistsException {
-        if (getCurrentUser(token).getUserType().equals(UserType.EMPLOYEE)) {
-            List<UserDto> userList = userController.getAll();
-            return (userList.size() > 0) ?
-                    ResponseEntity.ok(userList) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    @GetMapping("/backoffice/users")
+    public ResponseEntity<List<UserDto>> getAll(@RequestHeader("Authorization") String token) {
+        List<UserDto> userList = userController.getAll();
+        return (userList.size() > 0) ?
+                ResponseEntity.ok(userList) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    private User getCurrentUser(String sessionToken) throws UserNotExistsException {
-        return Optional.ofNullable(sessionManager.getCurrentUser(sessionToken)).orElseThrow(UserNotExistsException::new);
+    @GetMapping("/backoffice/users/{userId}")
+    public ResponseEntity getById(@RequestHeader("Authorization") String token,@PathVariable Integer userId){
+        return ResponseEntity.status(HttpStatus.OK).body(userController.getById(userId));
     }
+    //todo getById
 
     private URI getLocation(User user) {
         return ServletUriComponentsBuilder
@@ -85,5 +70,4 @@ public class UserWebController {
                 .buildAndExpand(user.getId())
                 .toUri();
     }
-
 }

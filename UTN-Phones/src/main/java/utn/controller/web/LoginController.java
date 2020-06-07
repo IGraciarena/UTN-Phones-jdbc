@@ -55,8 +55,8 @@ public class LoginController {
     }
 
 
-    private User getCurrentUser(String sessionToken) throws UserNotExistsException {
-        return Optional.ofNullable(sessionManager.getCurrentUser(sessionToken)).orElseThrow(UserNotExistsException::new);
-    }
+//    private User getCurrentUser(String sessionToken) throws UserNotExistsException {
+//        return Optional.ofNullable(sessionManager.getCurrentUser(sessionToken)).orElseThrow(UserNotExistsException::new);
+//    }
 
 }

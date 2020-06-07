@@ -48,7 +48,7 @@ public class UserService {
     public void removeUser(Integer idUser) throws UserNotExistsException {
         UserDto user = dao.getById(idUser);
         Optional.ofNullable(user).orElseThrow(UserNotExistsException::new);
-        dao.remove(idUser);
+        dao.delete(idUser);
     }
 
     public UserDto getById(Integer id) {

@@ -65,7 +65,7 @@ public class UserLineMySQLDao implements UserLineDao {
     }
 
     @Override
-    public void remove(Integer id) {
+    public void delete(Integer id) {
         try {
             PreparedStatement ps = con.prepareStatement(UPDATE_USERLINE_STATUS_QUERY);
             ps.setInt(1, id);

@@ -79,7 +79,7 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
     }
 
     @Override
-    public void remove(Integer id) {
+    public void delete(Integer id) {
         try {
             PreparedStatement ps = con.prepareStatement(REMOVE_PHONECALLS_QUERY);
             ps.setInt(1, id);
@@ -121,10 +121,10 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
         return returnedPhoneCallDto;
     }
 
-    public List<ReturnedPhoneCallDto> getPhoneCallsFromUserIdBetweenDates(PhoneCallsBetweenDatesDto phonecallDto){
+    public List<ReturnedPhoneCallDto> getPhoneCallsFromUserIdBetweenDates(PhoneCallsBetweenDatesDto phonecallDto,Integer userId){
         try {
             CallableStatement cs = con.prepareCall("call sp_phonecalls_betweendates(?,?,?)");
-            cs.setInt(1,phonecallDto.getIdUser());
+            cs.setInt(1,userId);
             cs.setString(2,phonecallDto.getDateFrom());
             cs.setString(3,phonecallDto.getDateTo());
             ResultSet rs = cs.executeQuery();

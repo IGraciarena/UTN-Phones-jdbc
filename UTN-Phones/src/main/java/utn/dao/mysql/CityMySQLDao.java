@@ -80,7 +80,7 @@ public class CityMySQLDao implements CityDao {
     }
 
     @Override
-    public void remove(Integer id) {
+    public void delete(Integer id) {
         try {
             PreparedStatement ps = con.prepareStatement(REMOVE_CITY_QUERY);
             ps.setInt(1, id);

@@ -31,7 +31,7 @@ public class CityService {
     public void remove(Integer id) throws NoExistsException {
         City city = dao.getById(id);
         Optional.ofNullable(city).orElseThrow(NoExistsException::new);
-        dao.remove(id);
+        dao.delete(id);
     }
 
     public void update(City value) throws NoExistsException {

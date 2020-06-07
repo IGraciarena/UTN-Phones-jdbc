@@ -11,16 +11,13 @@ import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.NoExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.model.Rate;
-import utn.model.User;
-import utn.model.enumerated.UserType;
 import utn.session.SessionManager;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/rate")
+@RequestMapping
 public class RateWebController {
     RateController rateController;
     SessionManager sessionManager;
@@ -31,52 +28,33 @@ public class RateWebController {
         this.sessionManager = sessionManager;
     }
 
-    @PostMapping
+    @PostMapping("/backoffice/rates/")
     public ResponseEntity add(@RequestBody Rate rate, @RequestHeader("Authorization") String token) throws UserNotExistsException, AlreadyExistsException {
-        if (getCurrentUser(token).getUserType().equals(UserType.EMPLOYEE)) {
-            return ResponseEntity.created(getLocation(rateController.add(rate))).build();
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.created(getLocation(rateController.add(rate))).build();
     }
 
-    @DeleteMapping("{rateId}")
-    public ResponseEntity remove(@RequestHeader("Authorization") String token, @PathVariable Integer rateId) throws NoExistsException, UserNotExistsException {
-        if (getCurrentUser(token).getUserType().equals(UserType.EMPLOYEE)) {
-            rateController.remove(rateId);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    @PutMapping("/backoffice/rates/")
+    public ResponseEntity update(@RequestBody Rate rate, @RequestHeader("Authorization") String token) throws NoExistsException {
+        rateController.update(rate);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @GetMapping
-    public ResponseEntity<List<RateDto>> getAll(@RequestHeader("Authorization") String token) throws UserNotExistsException {
-        if (getCurrentUser(token).getUserType().equals(UserType.EMPLOYEE)) {
-            List<RateDto> rateDtos = rateController.getAll();
-            return (rateDtos.size() > 0) ?
-                    ResponseEntity.ok(rateDtos) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    @DeleteMapping("/backoffice/rates/{rateId}")
+    public ResponseEntity delete(@RequestHeader("Authorization") String token, @PathVariable Integer rateId) throws NoExistsException {
+        rateController.delete(rateId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @GetMapping("/{rateId}")
-    public ResponseEntity<RateDto> getById(@RequestHeader("Authorization") String token, @PathVariable Integer rateId) throws NoExistsException, UserNotExistsException {
-        if (getCurrentUser(token).getUserType().equals(UserType.EMPLOYEE)) {
-            return ResponseEntity.status(HttpStatus.OK).body(rateController.getById(rateId));
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    @GetMapping("/backoffice/rates/")
+    public ResponseEntity<List<RateDto>> getAll(@RequestHeader("Authorization") String token) {
+        List<RateDto> rateDtos = rateController.getAll();
+        return (rateDtos.size() > 0) ?
+                ResponseEntity.ok(rateDtos) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PutMapping
-    public ResponseEntity update(@RequestBody Rate rate, @RequestHeader("Authorization") String token) throws NoExistsException, UserNotExistsException {
-        if (getCurrentUser(token).getUserType().equals(UserType.EMPLOYEE)) {
-            rateController.update(rate);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-
-    private User getCurrentUser(String sessionToken) throws UserNotExistsException {
-        return Optional.ofNullable(sessionManager.getCurrentUser(sessionToken)).orElseThrow(UserNotExistsException::new);
+    @GetMapping("/backoffice/rates/{rateId}")
+    public ResponseEntity<RateDto> getById(@RequestHeader("Authorization") String token, @PathVariable Integer rateId) throws NoExistsException {
+        return ResponseEntity.status(HttpStatus.OK).body(rateController.getById(rateId));
     }
 
     private URI getLocation(Rate rate) {

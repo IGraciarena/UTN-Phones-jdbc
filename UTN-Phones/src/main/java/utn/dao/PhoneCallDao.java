@@ -10,7 +10,7 @@ import java.util.List;
 public interface PhoneCallDao extends AbstractDao<PhoneCall> {
     ReturnedPhoneCallDto getById(Integer id);
 
-    List<ReturnedPhoneCallDto> getPhoneCallsFromUserIdBetweenDates(PhoneCallsBetweenDatesDto phonecallDto);
+    List<ReturnedPhoneCallDto> getPhoneCallsFromUserIdBetweenDates(PhoneCallsBetweenDatesDto phonecallDto,Integer userId);
 
     Integer addPhoneCall(PhoneCallDto value);
 

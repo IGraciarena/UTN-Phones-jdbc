@@ -253,6 +253,7 @@ begin
 	and   inv.date_emission <= date_to
 	and   u.id_user=PidUser;
 end //
+
 #drop procedure sp_invoices_betweendates
 #select * from invoices
 #select * from user_lines
@@ -405,6 +406,7 @@ end //
 #select * from phonecalls
 #update user_lines set line_status='DELETE' where id_user_line=1;
 #insert into phonecalls(line_number_from,line_number_to,duration)values("3834918309","0114998997",35);
+#update phonecalls set call_date='2020-05-20 15:41:03' where id_phonecall=6;
 #///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #evento que se ejecuta primer dia de cada mes
 
@@ -469,8 +471,8 @@ begin
 	update phonecalls set id_invoice_fk=new.id_invoice where id_line_number_from_fk=new.id_line_fk;
 end //
 #//////////////////////////////////////////////////////////////////////////////////////
-select * from invoices;
-update invoices set date_emission='2020-05-23 00:00:00' where id_invoice=18;
+#select * from invoices;
+#update invoices set date_emission='2020-05-23 00:00:00' where id_invoice=18;
 Delimiter //
 create procedure sp_invoices_by_date(pDate date)
 begin
@@ -478,5 +480,5 @@ begin
 	from invoices as inv
 	where date_emission=pDate;
 end //
-drop procedure sp_invoices_by_date;
-call sp_invoices_by_date('2020-05-23');
+#drop procedure sp_invoices_by_date;
+#call sp_invoices_by_date('2020-05-23');

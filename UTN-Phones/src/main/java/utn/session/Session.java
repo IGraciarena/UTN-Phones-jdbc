@@ -20,16 +20,8 @@ public class Session {
         return token;
     }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
-
     public User getLoggedUser() {
         return loggedUser;
-    }
-
-    public void setLoggedUser(User loggedUser) {
-        this.loggedUser = loggedUser;
     }
 
     public Date getLastAction() {

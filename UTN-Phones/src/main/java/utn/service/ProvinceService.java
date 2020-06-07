@@ -22,7 +22,7 @@ public class ProvinceService {
     }
 
     public void remove(Integer id) {
-        dao.remove(id);
+        dao.delete(id);
     }
 
     public void update(Province province) {

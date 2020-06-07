@@ -8,7 +8,7 @@ public interface AbstractDao<T> {
 
     void update(T value);
 
-    void remove(Integer id);
+    void delete(Integer id);
 
     Object getById(Integer id);
 

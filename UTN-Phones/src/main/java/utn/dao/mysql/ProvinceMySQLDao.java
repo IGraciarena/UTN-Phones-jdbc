@@ -53,7 +53,7 @@ public class ProvinceMySQLDao implements ProvinceDao {
     }
 
     @Override
-    public void remove(Integer id) {
+    public void delete(Integer id) {
         try {
             PreparedStatement ps = con.prepareStatement(REMOVE_PROVINCE_QUERY);
             ps.setInt(1, id);

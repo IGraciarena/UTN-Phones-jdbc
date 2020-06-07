@@ -9,22 +9,17 @@ import utn.dto.DateDto;
 import utn.dto.InvoiceDto;
 import utn.dto.InvoicesBetweenDateDto;
 import utn.exceptions.NoExistsException;
-import utn.exceptions.UserNotExistsException;
 import utn.exceptions.ValidationException;
-import utn.model.User;
-import utn.model.enumerated.UserType;
 import utn.session.SessionManager;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/invoice")
+@RequestMapping
 public class InvoiceWebController {
 
     SessionManager sessionManager;
     InvoiceController invoiceController;
-
 
     @Autowired
     public InvoiceWebController(SessionManager sessionManager, InvoiceController invoiceController) {
@@ -32,53 +27,51 @@ public class InvoiceWebController {
         this.sessionManager = sessionManager;
     }
 
-    @GetMapping
-    public ResponseEntity<List<InvoiceDto>> getAllInvoices(@RequestHeader("Authorization") String token) throws UserNotExistsException {
-        if (getCurrentUser(token).getUserType().equals(UserType.EMPLOYEE)) {
-            List<InvoiceDto> invoiceDtos = invoiceController.getAll();
-            return (invoiceDtos.size() > 0) ?
-                    ResponseEntity.ok(invoiceDtos) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    // en este no hace falta trae todo
+    @GetMapping("/backoffice/invoices/")
+    public ResponseEntity<List<InvoiceDto>> getAllInvoicesEmployee(@RequestHeader("Authorization") String token) {
+        List<InvoiceDto> invoiceDtos = invoiceController.getAll();
+        return (invoiceDtos.size() > 0) ?
+                ResponseEntity.ok(invoiceDtos) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("/{invoiceId}")
-    public ResponseEntity getById(@RequestHeader("Authorization") String token, @PathVariable Integer invoiceId) throws NoExistsException, UserNotExistsException {
-        if (getCurrentUser(token).getUserType().equals(UserType.EMPLOYEE)) {
-            return ResponseEntity.status(HttpStatus.OK).body(invoiceController.getById(invoiceId));
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//    //todo deberiamos tomar el id del usuario logueado de la session
+//    @GetMapping("/api/invoices/")
+//    public ResponseEntity<List<InvoiceDto>> getAllInvoicesClient(@RequestHeader("Authorization") String token) {
+//        List<InvoiceDto> invoiceDtos = invoiceController.getAll();
+//        return (invoiceDtos.size() > 0) ?
+//                ResponseEntity.ok(invoiceDtos) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+//    }
+
+    @GetMapping("/backoffice/invoices/{invoiceId}")
+    public ResponseEntity getByIdEmployee(@RequestHeader("Authorization") String token, @PathVariable Integer invoiceId) throws NoExistsException {
+        return ResponseEntity.status(HttpStatus.OK).body(invoiceController.getById(invoiceId));
     }
+
+    // casi seguro que esta mal esto
+//    @GetMapping("/api/invoices/{invoiceId}")
+//    public ResponseEntity getByIdClient(@RequestHeader("Authorization") String token, @PathVariable Integer invoiceId) throws NoExistsException {
+//        return ResponseEntity.status(HttpStatus.OK).body(invoiceController.getById(invoiceId));
+//    }
 
     /*
     ENDPOINT PARCIAL.
     Hago que reciba un dto con la fecha por que no se si puede pasar la fecha por la url, como no me levanta el proyecto no lo puedo probar.
     */
-    @GetMapping
-    public ResponseEntity<List<InvoiceDto>> getInvoicesByDate(@RequestHeader("Authorization") String token, @RequestBody DateDto dateDto) throws UserNotExistsException, ValidationException {
-        if (getCurrentUser(token).getUserType().equals(UserType.CLIENT)) {
-            List<InvoiceDto> returnedInvoicesDtoList = invoiceController.getInvoicesByDate(dateDto);
-            return (returnedInvoicesDtoList.size() > 0) ?
-                    ResponseEntity.ok(returnedInvoicesDtoList) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    @GetMapping("/api/invoices/date")
+    public ResponseEntity<List<InvoiceDto>> getInvoicesByDate(@RequestHeader("Authorization") String token, @RequestBody DateDto dateDto) throws ValidationException {
+        List<InvoiceDto> returnedInvoicesDtoList = invoiceController.getInvoicesByDate(dateDto);
+        return (returnedInvoicesDtoList.size() > 0) ?
+                ResponseEntity.ok(returnedInvoicesDtoList) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     /*
     Consulta de facturas del usuario logueado por rango de fechas.
     */
-    @GetMapping("/client")
-    public ResponseEntity<List<InvoiceDto>> getInvoicesBetweenDatesFromUserId(@RequestHeader("Authorization") String token, @RequestBody InvoicesBetweenDateDto invoiceDto) throws NoExistsException, UserNotExistsException {
-        if (getCurrentUser(token).getUserType().equals(UserType.CLIENT)) {
-            List<InvoiceDto> returnedInvoicesDtoList = invoiceController.getInvoicesBetweenDatesFromUserId(invoiceDto);
-            return (returnedInvoicesDtoList.size() > 0) ?
-                    ResponseEntity.ok(returnedInvoicesDtoList) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    @GetMapping("/api/invoices/dates/")
+    public ResponseEntity<List<InvoiceDto>> getInvoicesBetweenDatesFromUserId(@RequestHeader("Authorization") String token, @RequestBody InvoicesBetweenDateDto invoiceDto) throws NoExistsException {
+        List<InvoiceDto> returnedInvoicesDtoList = invoiceController.getInvoicesBetweenDatesFromUserId(invoiceDto);
+        return (returnedInvoicesDtoList.size() > 0) ?
+                ResponseEntity.ok(returnedInvoicesDtoList) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-    private User getCurrentUser(String sessionToken) throws UserNotExistsException {
-        return Optional.ofNullable(sessionManager.getCurrentUser(sessionToken)).orElseThrow(UserNotExistsException::new);
-    }
-
 }

@@ -23,8 +23,8 @@ public class RateController {
         return rateService.add(rate);
     }
 
-    public void remove(Integer id) throws NoExistsException {
-        rateService.remove(id);
+    public void delete(Integer id) throws NoExistsException {
+        rateService.delete(id);
     }
 
     public void update(Rate rate) throws NoExistsException {

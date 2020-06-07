@@ -64,7 +64,7 @@ public class RateMySQLDao implements RateDao {
     }
 
     @Override
-    public void remove(Integer id) {
+    public void delete(Integer id) {
         try {
             PreparedStatement ps = con.prepareStatement(REMOVE_RATES_QUERY);
             ps.setInt(1, id);

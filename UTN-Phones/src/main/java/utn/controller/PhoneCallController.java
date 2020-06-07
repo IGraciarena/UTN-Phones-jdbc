@@ -46,8 +46,8 @@ public class PhoneCallController {
         return phoneCallService.getAllPhoneCallsFromUserId(userId);
     }
 
-    public List<ReturnedPhoneCallDto> getPhoneCallsFromUserIdBetweenDates(PhoneCallsBetweenDatesDto phonecallDto) throws NoExistsException {
-        return phoneCallService.getPhoneCallsFromUserIdBetweenDates(phonecallDto);
+    public List<ReturnedPhoneCallDto> getPhoneCallsFromUserIdBetweenDates(PhoneCallsBetweenDatesDto phonecallDto,Integer userId) throws NoExistsException {
+        return phoneCallService.getPhoneCallsFromUserIdBetweenDates(phonecallDto,userId);
     }
 
     public List<String> getMostCalledDestinsByUserId(Integer idUser) throws NoExistsException {
