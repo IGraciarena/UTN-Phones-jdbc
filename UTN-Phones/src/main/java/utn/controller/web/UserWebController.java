@@ -58,7 +58,7 @@ public class UserWebController {
     }
 
     @GetMapping("/backoffice/users/{userId}")
-    public ResponseEntity getById(@RequestHeader("Authorization") String token,@PathVariable Integer userId){
+    public ResponseEntity getById(@RequestHeader("Authorization") String token,@PathVariable Integer userId) throws UserNotExistsException {
         return ResponseEntity.status(HttpStatus.OK).body(userController.getById(userId));
     }
     //todo getById

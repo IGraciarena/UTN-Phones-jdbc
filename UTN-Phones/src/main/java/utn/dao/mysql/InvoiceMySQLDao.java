@@ -6,7 +6,6 @@ import utn.dao.InvoiceDao;
 import utn.dto.DateDto;
 import utn.dto.InvoiceDto;
 import utn.dto.InvoicesBetweenDateDto;
-import utn.dto.ReturnedPhoneCallDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.model.Invoice;
 import utn.model.User;
@@ -74,7 +73,6 @@ public class InvoiceMySQLDao implements InvoiceDao {
     }
 
 
-
     @Override
     public List<InvoiceDto> getAll() {
         try {
@@ -96,9 +94,9 @@ public class InvoiceMySQLDao implements InvoiceDao {
     public List<InvoiceDto> getInvoicesBetweenDatesFromUserId(InvoicesBetweenDateDto invoiceDto) {
         try {
             CallableStatement cs = con.prepareCall("call sp_invoices_betweendates(?,?,?)");
-            cs.setInt(1,invoiceDto.getUserID());
-            cs.setString(2,invoiceDto.getDateFrom());
-            cs.setString(3,invoiceDto.getDateTo());
+            cs.setInt(1, invoiceDto.getUserID());
+            cs.setString(2, invoiceDto.getDateFrom());
+            cs.setString(3, invoiceDto.getDateTo());
             ResultSet rs = cs.executeQuery();
             List<InvoiceDto> invoicesDtos = new ArrayList<>();
             while (rs.next()) {
@@ -120,7 +118,7 @@ public class InvoiceMySQLDao implements InvoiceDao {
         CallableStatement cs = null;
         try {
             cs = con.prepareCall("call sp_invoices_by_date(?)");
-            cs.setDate(1,new Date(dateDto.getDate().getTime()));
+            cs.setDate(1, new Date(dateDto.getDate().getTime()));
             ResultSet rs = cs.executeQuery();
             List<InvoiceDto> invoicesDtos = new ArrayList<>();
             while (rs.next()) {

@@ -43,7 +43,7 @@ public class UserController {
         userService.updateUser(user);
     }
 
-    public UserDto getById(Integer id) {
+    public UserDto getById(Integer id) throws UserNotExistsException {
         return userService.getById(id);
     }
 

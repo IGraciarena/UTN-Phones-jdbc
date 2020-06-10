@@ -9,9 +9,9 @@ import utn.controller.PhoneCallController;
 import utn.dto.PhoneCallDto;
 import utn.dto.PhoneCallsBetweenDatesDto;
 import utn.dto.ReturnedPhoneCallDto;
-import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.NoExistsException;
 import utn.exceptions.UserNotExistsException;
+import utn.exceptions.ValidationException;
 import utn.model.PhoneCall;
 import utn.session.SessionManager;
 
@@ -31,8 +31,8 @@ public class PhoneCallWebController {
     }
 
     @PostMapping("/backoffice/phonecalls/")
-    public ResponseEntity add(@RequestBody PhoneCallDto phoneCallDto, @RequestHeader("Authorization") String token) throws UserNotExistsException, AlreadyExistsException {
-        return ResponseEntity.created(getLocation(phoneCallController.add(phoneCallDto))).build();
+    public ResponseEntity add(@RequestBody PhoneCallDto phoneCallDto, @RequestHeader("Authorization") String token) throws UserNotExistsException, ValidationException, NoExistsException {
+        return ResponseEntity.created(getLocation(phoneCallController.addPhoneCall(phoneCallDto))).build();
     }
 
     @PutMapping("/backoffice/phonecalls/")
@@ -43,7 +43,7 @@ public class PhoneCallWebController {
 
     @DeleteMapping("/backoffice/phonecalls/{idPhoneCall}")
     public ResponseEntity delete(@RequestHeader("Authorization") String token, @PathVariable Integer idPhoneCall) throws NoExistsException {
-        phoneCallController.remove(idPhoneCall);
+        phoneCallController.delete(idPhoneCall);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -78,7 +78,7 @@ public class PhoneCallWebController {
     .*/
     @GetMapping("/api/phonecalls/dates/")
     public ResponseEntity<List<ReturnedPhoneCallDto>> getPhoneCallsFromUserIdBetweenDates(@RequestHeader("Authorization") String token, @RequestBody PhoneCallsBetweenDatesDto phonecallDto) throws NoExistsException {
-        List<ReturnedPhoneCallDto> returnedPhoneCallDtoList = phoneCallController.getPhoneCallsFromUserIdBetweenDates(phonecallDto,sessionManager.getCurrentUser(token).getId());
+        List<ReturnedPhoneCallDto> returnedPhoneCallDtoList = phoneCallController.getPhoneCallsFromUserIdBetweenDates(phonecallDto, sessionManager.getCurrentUser(token).getId());
         return (returnedPhoneCallDtoList.size() > 0) ?
                 ResponseEntity.ok(returnedPhoneCallDtoList) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

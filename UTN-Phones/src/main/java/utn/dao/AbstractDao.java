@@ -1,6 +1,7 @@
 package utn.dao;
 
 import utn.exceptions.AlreadyExistsException;
+import utn.exceptions.NoExistsException;
 
 public interface AbstractDao<T> {
 

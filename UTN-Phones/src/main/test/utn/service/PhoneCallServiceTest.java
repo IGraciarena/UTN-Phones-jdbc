@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import utn.dao.PhoneCallDao;
 import utn.dao.UserDao;
+import utn.dao.UserLineDao;
 import utn.dto.ReturnedPhoneCallDto;
 import utn.dto.UserDto;
 import utn.exceptions.NoExistsException;
@@ -23,11 +24,13 @@ public class PhoneCallServiceTest {
     PhoneCallDao phoneCallDao;
     @Mock
     UserDao userDao;
+    @Mock
+    UserLineDao userLineDao;
 
     @Before
     public void setUp() {
         initMocks(this);
-        phoneCallService = new PhoneCallService(phoneCallDao, userDao);
+        phoneCallService = new PhoneCallService(phoneCallDao, userDao,userLineDao);
     }
 
     @Test

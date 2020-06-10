@@ -4,6 +4,7 @@ package utn.dao;
 import utn.dto.UserDto;
 import utn.dto.UserMostCalledNumberDto;
 import utn.exceptions.AlreadyExistsException;
+import utn.exceptions.UserNotExistsException;
 import utn.model.City;
 import utn.model.User;
 

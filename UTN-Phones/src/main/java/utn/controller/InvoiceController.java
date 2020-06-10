@@ -22,10 +22,6 @@ public class InvoiceController {
         this.invoiceService = invoiceService;
     }
 
-    public void add(Invoice invoice) throws AlreadyExistsException {
-        invoiceService.add(invoice);
-    }
-
     public void remove(Integer id) throws NoExistsException {
         invoiceService.remove(id);
     }

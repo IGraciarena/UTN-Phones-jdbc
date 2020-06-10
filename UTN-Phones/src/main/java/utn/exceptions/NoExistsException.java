@@ -1,4 +1,5 @@
 package utn.exceptions;
 
-public class NoExistsException extends Throwable {
+public class NoExistsException extends Exception {
+
 }

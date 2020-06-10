@@ -32,10 +32,6 @@ public class InvoiceService {
         return invoice;
     }
 
-    public void add(Invoice invoice) throws AlreadyExistsException {
-        dao.add(invoice);
-    }
-
     public void remove(Integer id) throws NoExistsException {
         InvoiceDto invoice = dao.getById(id);
         Optional.ofNullable(invoice).orElseThrow(NoExistsException::new);

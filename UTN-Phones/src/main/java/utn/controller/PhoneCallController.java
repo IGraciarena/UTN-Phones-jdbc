@@ -5,8 +5,8 @@ import org.springframework.stereotype.Controller;
 import utn.dto.PhoneCallDto;
 import utn.dto.PhoneCallsBetweenDatesDto;
 import utn.dto.ReturnedPhoneCallDto;
-import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.NoExistsException;
+import utn.exceptions.ValidationException;
 import utn.model.PhoneCall;
 import utn.service.PhoneCallService;
 
@@ -14,6 +14,7 @@ import java.util.List;
 
 @Controller
 public class PhoneCallController {
+
     PhoneCallService phoneCallService;
 
     @Autowired
@@ -21,13 +22,17 @@ public class PhoneCallController {
         this.phoneCallService = phoneCallService;
     }
 
-    public Integer add(PhoneCallDto phoneCall) throws AlreadyExistsException {
-
-        return phoneCallService.addPhoneCall(phoneCall);
+    public Integer addPhoneCall(PhoneCallDto phoneCall) throws ValidationException, NoExistsException {
+        if (phoneCall.getDate() != null && phoneCall.getLineNumberFrom() != null && phoneCall.getLineNumberTo() != null && phoneCall.getDuration() != null){
+            return phoneCallService.addPhoneCall(phoneCall);
+        }
+        else {
+            throw new ValidationException();
+        }
     }
 
-    public void remove(Integer id) throws NoExistsException {
-        phoneCallService.remove(id);
+    public void delete(Integer id) throws NoExistsException {
+        phoneCallService.delete(id);
     }
 
     public void update(PhoneCall phoneCall) throws NoExistsException {
@@ -46,8 +51,8 @@ public class PhoneCallController {
         return phoneCallService.getAllPhoneCallsFromUserId(userId);
     }
 
-    public List<ReturnedPhoneCallDto> getPhoneCallsFromUserIdBetweenDates(PhoneCallsBetweenDatesDto phonecallDto,Integer userId) throws NoExistsException {
-        return phoneCallService.getPhoneCallsFromUserIdBetweenDates(phonecallDto,userId);
+    public List<ReturnedPhoneCallDto> getPhoneCallsFromUserIdBetweenDates(PhoneCallsBetweenDatesDto phonecallDto, Integer userId) throws NoExistsException {
+        return phoneCallService.getPhoneCallsFromUserIdBetweenDates(phonecallDto, userId);
     }
 
     public List<String> getMostCalledDestinsByUserId(Integer idUser) throws NoExistsException {
