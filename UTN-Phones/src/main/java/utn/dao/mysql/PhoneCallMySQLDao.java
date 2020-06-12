@@ -145,8 +145,8 @@ public class PhoneCallMySQLDao implements PhoneCallDao {
     @Override
     public List<ReturnedPhoneCallDto> getAll() {
         try {
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(BASE_PHONECALLS_QUERY);
+            PreparedStatement st = con.prepareStatement(BASE_PHONECALLS_QUERY);
+            ResultSet rs = st.executeQuery();
             List<ReturnedPhoneCallDto> phoneCallDtos = new ArrayList<>();
             while (rs.next()) {
                 phoneCallDtos.add(createPhoneCall(rs));

@@ -119,7 +119,7 @@ public class UserMySQLDao implements UserDao {
             ps.close();
             rs.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error al obtener usuario",e);
         }
         return aux;
     }

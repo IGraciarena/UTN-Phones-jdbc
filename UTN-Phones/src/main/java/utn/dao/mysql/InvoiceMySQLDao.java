@@ -76,8 +76,8 @@ public class InvoiceMySQLDao implements InvoiceDao {
     @Override
     public List<InvoiceDto> getAll() {
         try {
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(BASE_INVOICES_QUERY);
+            PreparedStatement st = con.prepareStatement(BASE_INVOICES_QUERY);
+            ResultSet rs = st.executeQuery();
             List<InvoiceDto> invoiceDtos = new ArrayList<>();
             while (rs.next()) {
                 invoiceDtos.add(createInvoice(rs));
