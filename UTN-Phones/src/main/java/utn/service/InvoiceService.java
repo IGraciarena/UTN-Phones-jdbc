@@ -32,7 +32,7 @@ public class InvoiceService {
         return invoice;
     }
 
-    public void remove(Integer id) throws NoExistsException {
+    public void delete(Integer id) throws NoExistsException {
         InvoiceDto invoice = dao.getById(id);
         Optional.ofNullable(invoice).orElseThrow(NoExistsException::new);
         dao.delete(id);

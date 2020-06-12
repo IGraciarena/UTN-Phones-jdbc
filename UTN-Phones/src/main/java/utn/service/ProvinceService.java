@@ -3,6 +3,7 @@ package utn.service;
 import org.springframework.stereotype.Service;
 import utn.dao.ProvinceDao;
 import utn.exceptions.AlreadyExistsException;
+import utn.exceptions.NoExistsException;
 import utn.model.Province;
 
 @Service
@@ -21,11 +22,11 @@ public class ProvinceService {
         dao.add(province);
     }
 
-    public void remove(Integer id) {
+    public void remove(Integer id) throws NoExistsException {
         dao.delete(id);
     }
 
-    public void update(Province province) {
+    public void update(Province province) throws NoExistsException {
         dao.update(province);
     }
 }

@@ -22,8 +22,8 @@ public class InvoiceController {
         this.invoiceService = invoiceService;
     }
 
-    public void remove(Integer id) throws NoExistsException {
-        invoiceService.remove(id);
+    public void delete(Integer id) throws NoExistsException {
+        invoiceService.delete(id);
     }
 
     public void update(Invoice invoice) throws NoExistsException {
