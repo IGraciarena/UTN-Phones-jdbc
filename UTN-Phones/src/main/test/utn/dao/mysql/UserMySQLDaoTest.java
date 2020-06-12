@@ -5,14 +5,16 @@ import org.junit.Test;
 import org.mockito.Mock;
 import utn.dao.mysql.CityMySQLDao;
 import utn.dao.mysql.UserMySQLDao;
+import utn.dto.UserDto;
 import utn.dto.UserMostCalledNumberDto;
-import utn.model.City;
-import utn.model.Province;
-import utn.model.User;
+import utn.model.*;
+import utn.model.enumerated.LineStatus;
+import utn.model.enumerated.TypeLine;
 import utn.model.enumerated.UserStatus;
 import utn.model.enumerated.UserType;
 
 import java.sql.*;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -102,15 +104,15 @@ public class UserMySQLDaoTest {
     public void testAddOk() throws SQLException {
         when(con.prepareStatement(INSERT_USER_QUERY, PreparedStatement.RETURN_GENERATED_KEYS)).thenReturn(ps);
         doNothing().when(ps).setString(1, "jor");
-        doNothing().when(ps).setString(1, "vill");
-        doNothing().when(ps).setInt(1, 123);
-        doNothing().when(ps).setDate(1, new Date(2005,05,05));
-        doNothing().when(ps).setString(1, "user");
-        doNothing().when(ps).setString(1, "pwd");
-        doNothing().when(ps).setString(1, "email");
-        doNothing().when(ps).setString(1, "CLIENT");
-        doNothing().when(ps).setString(1, "ACTIVE");
-        doNothing().when(ps).setInt(1, 1);
+        doNothing().when(ps).setString(2, "vill");
+        doNothing().when(ps).setInt(3, 123);
+        doNothing().when(ps).setDate(4, new Date(2005,05,05));
+        doNothing().when(ps).setString(5, "user");
+        doNothing().when(ps).setString(6, "pwd");
+        doNothing().when(ps).setString(7, "email");
+        doNothing().when(ps).setString(8, "CLIENT");
+        doNothing().when(ps).setString(9, "ACTIVE");
+        doNothing().when(ps).setInt(10, 1);
 
         when(ps.execute()).thenReturn(true);
         when(ps.getGeneratedKeys()).thenReturn(rs);
@@ -217,75 +219,233 @@ public class UserMySQLDaoTest {
         when(con.prepareStatement(GET_MOST_CALLED_NUMBER)).thenThrow(new SQLException());
         dao.getMostCalledNumber( "223");
     }
-//******************************************************************************************************************************
-   /* @Test
-    public void testOk() throws SQLException {
+//*******************************************************update***********************************************************************
+    @Test
+    public void testUpdateOk() throws SQLException {
+        when(con.prepareStatement(UPDATE_USER_QUERY)).thenReturn(ps);
+        doNothing().when(ps).setString(1, "jor");
+        doNothing().when(ps).setString(2, "vill");
+        doNothing().when(ps).setInt(3, 123);
+        doNothing().when(ps).setDate(4, new Date(2005,05,05));
+        doNothing().when(ps).setString(5, "user");
+        doNothing().when(ps).setString(6, "pwd");
+        doNothing().when(ps).setString(7, "email");
+        doNothing().when(ps).setString(8, "CLIENT");
+        doNothing().when(ps).setString(9, "ACTIVE");
+        doNothing().when(ps).setInt(10, 2);
+        doNothing().when(ps).setInt(11, 1);
+
+        when(ps.executeUpdate()).thenReturn(1);
+
+        doNothing().when(ps).close();
+        User u = new User(1,
+                "jor",
+                "vill",
+                123,
+                new Date(2005,05,05),
+                "user",
+                "pwd",
+                "email",
+                UserType.valueOf("CLIENT"),
+                UserStatus.valueOf("ACTIVE"),
+                new City(2,"mdp",223,
+                        new Province(3,"bsas")));
+        dao.update(u);
+        verify(ps,times(7)).setString(anyInt(),anyString());
+        verify(ps,times(3)).setInt(anyInt(),anyInt());
 
     }
 
-    @Test
-    public void testNoContent() throws SQLException {
+    @Test(expected = RuntimeException.class)
+    public void testUpdateSQLException() throws SQLException {
+        when(con.prepareStatement(UPDATE_USER_QUERY)).thenThrow(new SQLException());
+        User u = new User(1,
+                "jor",
+                "vill",
+                123,
+                new Date(2005,05,05),
+                "user",
+                "pwd",
+                "email",
+                UserType.valueOf("CLIENT"),
+                UserStatus.valueOf("ACTIVE"),
+                new City(2,"mdp",223,
+                        new Province(3,"bsas")));
+        dao.update(u);
 
+    }
+//******************************************************Delete************************************************************************
+    @Test
+    public void testDeleteOk() throws SQLException {
+        when(con.prepareStatement(UPDATE_USER_STATUS_QUERY)).thenReturn(ps);
+        doNothing().when(ps).setInt(1, 1);
+        when(ps.executeUpdate()).thenReturn(1);
+        doNothing().when(ps).close();
+        dao.delete(1);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testDeleteSQLException() throws SQLException {
+        when(con.prepareStatement(UPDATE_USER_STATUS_QUERY)).thenThrow(new SQLException());
+        dao.delete(1);
+
+    }
+//**************************************************************getById****************************************************************
+    @Test
+    public void testGetByIdOk() throws SQLException {
+        when(con.prepareStatement(GET_BY_ID_USER_QUERY)).thenReturn(ps);
+        doNothing().when(ps).setInt(1, 1);
+
+        when(ps.executeQuery()).thenReturn(rs);
+        when(rs.next()).thenReturn(true);
+
+        when(rs.getString("first_name")).thenReturn("jor");
+        when(rs.getString("surname")).thenReturn("vill");
+        when(rs.getInt("dni")).thenReturn(321);
+        when(rs.getString("username")).thenReturn("villo");
+        when(rs.getString("email")).thenReturn("vill@");
+        when(rs.getInt("id_city_fk")).thenReturn(1);
+        when(cmd.getCityName(1)).thenReturn("mdp");
+
+        doNothing().when(ps).close();
+        doNothing().when(rs).close();
+
+        UserDto u = dao.getById( 1);
+
+        assertEquals("jor", u.getFirstName());
+        assertEquals(Integer.valueOf(321), u.getDni());
+        assertEquals("vill", u.getSurname());
+        assertEquals("villo", u.getUsername());
+        assertEquals("vill@", u.getEmail());
+        assertEquals("mdp", u.getCityName());
+
+        verify(ps,times(1)).setInt(1,1);
+        verify(con,times(1)).prepareStatement(GET_BY_ID_USER_QUERY);
+        verify(ps,times(1)).executeQuery();
+    }
+
+    @Test
+    public void testGetByIdNoContent() throws SQLException {
+        when(con.prepareStatement(GET_BY_ID_USER_QUERY)).thenReturn(ps);
+        doNothing().when(ps).setInt(1, 1);
+
+        when(ps.executeQuery()).thenReturn(rs);
+        when(rs.next()).thenReturn(false);
+
+        doNothing().when(ps).close();
+        doNothing().when(rs).close();
+
+        UserDto u = dao.getById( 1);
+
+        assertEquals(null, u);
+
+        verify(ps,times(1)).setInt(1,1);
+        verify(con,times(1)).prepareStatement(GET_BY_ID_USER_QUERY);
+        verify(ps,times(1)).executeQuery();
     }
     @Test(expected = RuntimeException.class)
-    public void testSQLException() throws SQLException {
-
+    public void testGetByIdSQLException() throws SQLException {
+        when(con.prepareStatement(GET_BY_ID_USER_QUERY)).thenThrow(new SQLException());
+        dao.getById( 1);
     }
-//******************************************************************************************************************************
+    //*******************************************************getByUsername***********************************************************************
     @Test
-    public void testOk() throws SQLException {
+    public void testGetByUsernameOk() throws SQLException {
+        when(con.prepareStatement(GET_BY_USERNAME)).thenReturn(ps);
+        doNothing().when(ps).setString(1, "username");
 
+        when(ps.executeQuery()).thenReturn(rs);
+        when(rs.next()).thenReturn(true);
+
+        doNothing().when(ps).close();
+        doNothing().when(rs).close();
+
+        boolean bool = dao.getByUsername( "username");
+
+        assertEquals(true, bool);
+
+        verify(ps,times(1)).setString(1,"username");
+        verify(con,times(1)).prepareStatement(GET_BY_USERNAME);
+        verify(ps,times(1)).executeQuery();
     }
 
     @Test
-    public void testNoContent() throws SQLException {
+    public void testGetByUsernameNoContent() throws SQLException {
+        when(con.prepareStatement(GET_BY_USERNAME)).thenReturn(ps);
+        doNothing().when(ps).setString(1, "username");
 
+        when(ps.executeQuery()).thenReturn(rs);
+        when(rs.next()).thenReturn(false);
+
+        doNothing().when(ps).close();
+        doNothing().when(rs).close();
+
+        boolean bool = dao.getByUsername( "username");
+
+        assertEquals(false, bool);
+
+        verify(ps,times(1)).setString(1,"username");
+        verify(con,times(1)).prepareStatement(GET_BY_USERNAME);
+        verify(ps,times(1)).executeQuery();
     }
     @Test(expected = RuntimeException.class)
-    public void testSQLException() throws SQLException {
-
+    public void testGetByUsernameSQLException() throws SQLException {
+        when(con.prepareStatement(GET_BY_USERNAME)).thenThrow(new SQLException());
+        dao.getByUsername( "username");
     }
-//******************************************************************************************************************************
+    //**********************************************************getAll********************************************************************
     @Test
-    public void testOk() throws SQLException {
+    public void testGetAllUsersOk() throws SQLException {
+        when(con.prepareStatement(BASE_USER_QUERY)).thenReturn(ps);
 
+        when(ps.executeQuery()).thenReturn(rs);
+        when(rs.next()).thenReturn(true).thenReturn(false);
+
+        when(rs.getString("first_name")).thenReturn("jor");
+        when(rs.getString("surname")).thenReturn("vill");
+        when(rs.getInt("dni")).thenReturn(321);
+        when(rs.getString("username")).thenReturn("villo");
+        when(rs.getString("email")).thenReturn("vill@");
+        when(rs.getInt("id_city_fk")).thenReturn(1);
+        when(cmd.getCityName(1)).thenReturn("mdp");
+
+        doNothing().when(ps).close();
+        doNothing().when(rs).close();
+
+        List<UserDto> list = dao.getAll();
+
+        assertEquals("jor", list.get(0).getFirstName());
+        assertEquals(Integer.valueOf(321),list.get(0).getDni());
+        assertEquals("vill", list.get(0).getSurname());
+        assertEquals("villo", list.get(0).getUsername());
+        assertEquals("vill@", list.get(0).getEmail());
+        assertEquals("mdp", list.get(0).getCityName());
+
+        verify(con,times(1)).prepareStatement(BASE_USER_QUERY);
+        verify(ps,times(1)).executeQuery();
     }
 
     @Test
-    public void testNoContent() throws SQLException {
+    public void testGetAllNoContent() throws SQLException {
+        when(con.prepareStatement(BASE_USER_QUERY)).thenReturn(ps);
 
+        when(ps.executeQuery()).thenReturn(rs);
+        when(rs.next()).thenReturn(false);
+
+        doNothing().when(ps).close();
+        doNothing().when(rs).close();
+
+        List<UserDto> list = dao.getAll();
+
+        assertEquals(0, list.size());
+
+        verify(con,times(1)).prepareStatement(BASE_USER_QUERY);
+        verify(ps,times(1)).executeQuery();
     }
     @Test(expected = RuntimeException.class)
-    public void testSQLException() throws SQLException {
-
+    public void testGetAllSQLException() throws SQLException {
+        when(con.prepareStatement(BASE_USER_QUERY)).thenThrow(new SQLException());
+        dao.getAll();
     }
-    //******************************************************************************************************************************
-    @Test
-    public void testOk() throws SQLException {
-
-    }
-
-    @Test
-    public void testNoContent() throws SQLException {
-
-    }
-    @Test(expected = RuntimeException.class)
-    public void testSQLException() throws SQLException {
-
-    }
-    //******************************************************************************************************************************
-    @Test
-    public void testOk() throws SQLException {
-
-    }
-
-    @Test
-    public void testNoContent() throws SQLException {
-
-    }
-    @Test(expected = RuntimeException.class)
-    public void testSQLException() throws SQLException {
-
-    } */
-//******************************************************************************************************************************
+//*****************************************************************getAll*************************************************************
 }

@@ -46,65 +46,6 @@ public class CityMySQLDao implements CityDao {
         return c;
     }
 
-    @Override
-    public List<City> getAll() {
-        try {
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(BASE_CITY_QUERY);
-            List<City> userList = new ArrayList<>();
-            while (rs.next()) {
-                userList.add(createCity(rs));
-            }
-            st.close();
-            rs.close();
-            return userList;
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al obtener la lista de ciudades", e);
-        }
-    }
-
-    @Override
-    public User add(City value) {
-        try {
-            PreparedStatement ps = con.prepareStatement(INSERT_CITY_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, value.getId());
-            ps.execute();
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs != null && rs.next()) {
-                value.setId(rs.getInt(1));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al insertar city", e);
-        }
-        return null;
-    }
-
-    @Override
-    public void delete(Integer id) {
-        try {
-            PreparedStatement ps = con.prepareStatement(REMOVE_CITY_QUERY);
-            ps.setInt(1, id);
-            ps.executeUpdate();
-            ps.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al eliminar provincia", e);
-        }
-    }
-
-    @Override
-    public void update(City value) {
-        try {
-            PreparedStatement ps = con.prepareStatement(UPDATE_CITY_QUERY);
-            ps.setString(1, value.getCityName());
-            ps.setInt(2, value.getPrefix());
-            ps.setInt(3, value.getProvince().getId());
-            ps.setInt(2, value.getId());
-            ps.executeUpdate();
-            ps.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al modificar ciudad", e);
-        }
-    }
 
     public String getCityName(Integer id) {
         String aux = "";

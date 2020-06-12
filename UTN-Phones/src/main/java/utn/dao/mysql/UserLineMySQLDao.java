@@ -124,8 +124,8 @@ public class UserLineMySQLDao implements UserLineDao {
     @Override
     public List<UserLineDto> getAll() {
         try {
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(BASE_USERLINE_QUERY);
+            PreparedStatement st = con.prepareStatement(BASE_USERLINE_QUERY);
+            ResultSet rs = st.executeQuery();
             List<UserLineDto> userLineList = new ArrayList<>();
             while (rs.next()) {
                 userLineList.add(createUserLine(rs));

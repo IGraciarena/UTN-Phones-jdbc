@@ -106,8 +106,8 @@ public class RateMySQLDao implements RateDao {
     @Override
     public List<RateDto> getAll() {
         try {
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(BASE_RATES_QUERY);
+            PreparedStatement st = con.prepareStatement(BASE_RATES_QUERY);
+            ResultSet rs = st.executeQuery();
             List<RateDto> rateDtos = new ArrayList<>();
             while (rs.next()) {
                 rateDtos.add(createRate(rs));

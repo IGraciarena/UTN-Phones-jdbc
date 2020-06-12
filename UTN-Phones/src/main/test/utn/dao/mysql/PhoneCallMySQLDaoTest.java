@@ -347,36 +347,7 @@ public class PhoneCallMySQLDaoTest {
 //**************************************************************GetById**************************************************************************************
     @Test
     public void testGetByIdOk() throws SQLException {
-        when(connection.prepareStatement(GETBYID_PHONECALLS_QUERY)).thenReturn(preparedStatement);
-        doNothing().when(preparedStatement).setInt(1, 1);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
 
-        when(resultSet.getString("line_number_from")).thenReturn("1");
-        when(resultSet.getString("line_number_to")).thenReturn("2");
-        when(resultSet.getInt("id_city_from_fk")).thenReturn(1);
-        when(cityMySQLDao.getCityName(1)).thenReturn("mdp");
-        when(resultSet.getInt("id_city_to_fk")).thenReturn(2);
-        when(cityMySQLDao.getCityName(2)).thenReturn("bsas");
-        when(resultSet.getInt("duration")).thenReturn(3);
-        when(resultSet.getInt("total_price")).thenReturn(10);
-
-        doNothing().when(resultSet).close();
-        doNothing().when(preparedStatement).close();
-
-        ReturnedPhoneCallDto byId = phoneCallMySQLDao.getById(1);
-
-        assertEquals("1", byId.getLineNumberFrom());
-        assertEquals("2", byId.getLineNumberTo());
-        assertEquals("mdp", byId.getCityFrom());
-        assertEquals("bsas", byId.getCityTo());
-        assertEquals(Integer.valueOf(3), byId.getDuration());
-        assertEquals(Integer.valueOf(10), byId.getTotalPrice());
-        verify(resultSet,times(1)).getString("line_number_from");
-        verify(resultSet,times(1)).getString("line_number_to");
-        verify(connection,times(1)).prepareStatement(GETBYID_PHONECALLS_QUERY);
-        verify(preparedStatement,times(1)).setInt(1,1);
-        verify(preparedStatement,times(1)).executeQuery();
 
     }
 

@@ -201,8 +201,8 @@ public class UserMySQLDao implements UserDao {
     @Override
     public List<UserDto> getAll() {
         try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(BASE_USER_QUERY);
+            PreparedStatement st = connection.prepareStatement(BASE_USER_QUERY);
+            ResultSet rs = st.executeQuery();
             List<UserDto> userList = new ArrayList<>();
             while (rs.next()) {
                 userList.add(createUserDto(rs));
