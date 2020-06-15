@@ -5,13 +5,13 @@ import org.springframework.stereotype.Repository;
 import utn.dao.CityDao;
 import utn.model.City;
 import utn.model.Province;
-import utn.model.User;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import static utn.dao.mysql.MySQLUtils.*;
+import static utn.dao.mysql.MySQLUtils.GETBYID_CITY_QUERY;
 
 @Repository
 public class CityMySQLDao implements CityDao {
@@ -35,7 +35,7 @@ public class CityMySQLDao implements CityDao {
             rs.close();
             ps.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error al obtener la ciudad", e);
         }
         return c;
     }
@@ -60,7 +60,7 @@ public class CityMySQLDao implements CityDao {
             ps.close();
             return aux;
         } catch (SQLException e) {
-            throw new RuntimeException("Error en traer el nombre de la ciudad", e);
+            throw new RuntimeException("Error al traer el nombre de la ciudad", e);
         }
     }
 }

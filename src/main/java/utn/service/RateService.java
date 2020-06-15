@@ -27,7 +27,7 @@ public class RateService {
     public RateDto getById(Integer id) throws NoExistsException {
         RateDto rateDto = dao.getById(id);
         Optional.ofNullable(rateDto).orElseThrow(NoExistsException::new);
-        return dao.getById(id);
+        return rateDto;
     }
 
     public void delete(Integer id) throws NoExistsException {

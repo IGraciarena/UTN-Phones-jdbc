@@ -40,6 +40,7 @@ public class RateControllerTest {
         verify(rateService, times(1)).add(rate);
     }
 
+
     @Test(expected = AlreadyExistsException.class)
     public void testAddAlreadyExistsException() throws AlreadyExistsException {
         Rate rate = new Rate(1, 10, 7, new City(), new City());

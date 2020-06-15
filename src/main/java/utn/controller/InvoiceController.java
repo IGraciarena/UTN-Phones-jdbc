@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import utn.dto.DateDto;
 import utn.dto.InvoiceDto;
 import utn.dto.InvoicesBetweenDateDto;
-import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.NoExistsException;
 import utn.exceptions.ValidationException;
 import utn.model.Invoice;
@@ -22,6 +21,7 @@ public class InvoiceController {
         this.invoiceService = invoiceService;
     }
 
+    //todo baja logica
     public void delete(Integer id) throws NoExistsException {
         invoiceService.delete(id);
     }
@@ -43,9 +43,9 @@ public class InvoiceController {
     }
 
     public List<InvoiceDto> getInvoicesByDate(DateDto dateDto) throws ValidationException {
-        if(dateDto!=null) {
+        if (dateDto != null) {
             return invoiceService.getInvoicesByDate(dateDto);
-        }else{
+        } else {
             throw new ValidationException();
         }
     }

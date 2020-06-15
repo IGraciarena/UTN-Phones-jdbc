@@ -57,9 +57,9 @@ public class UserServiceTest {
 
     @Test
     public void testAddOk() throws AlreadyExistsException {
-        User userAux = new User(1, "carlos", "lolo", 38888765, new Date(), "username", "password", "email", null, null, null);
+        User userAux = new User(1, "carlos", "lolo", 38888765, new Date(), "username", "password", "email", UserType.EMPLOYEE, UserStatus.ACTIVE, new City());
         User newUser = new User(2, "ivan", "gracianrea", 38794382, new Date(), "ivanmdq22", "123", "ivan@ivan.com", UserType.EMPLOYEE, UserStatus.ACTIVE, new City());
-        doNothing().when(userDao).getByUsername(userAux.getUsername());
+        when(userDao.getByUsername(anyString())).thenReturn(false);
         when(userDao.add(userAux)).thenReturn(newUser);
         User add = userService.add(userAux);
         assertEquals(add.getId(), newUser.getId());

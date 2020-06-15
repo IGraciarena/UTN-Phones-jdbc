@@ -8,7 +8,6 @@ import utn.dto.DateDto;
 import utn.dto.InvoiceDto;
 import utn.dto.InvoicesBetweenDateDto;
 import utn.dto.UserDto;
-import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.NoExistsException;
 import utn.model.Invoice;
 

@@ -42,7 +42,7 @@ public class UserLineService {
     public UserLineDto getById(Integer id) throws NoExistsException {
         UserLineDto userLineDto = dao.getById(id);
         Optional.ofNullable(userLineDto).orElseThrow(NoExistsException::new);
-        return dao.getById(id);
+        return userLineDto;
     }
 
     public List<UserLineDto> getAll() {

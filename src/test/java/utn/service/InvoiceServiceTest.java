@@ -9,6 +9,9 @@ import utn.dto.InvoiceDto;
 import utn.dto.InvoicesBetweenDateDto;
 import utn.dto.UserDto;
 import utn.exceptions.NoExistsException;
+import utn.model.Invoice;
+import utn.model.UserLine;
+import utn.model.enumerated.InvoiceStatus;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,6 +65,24 @@ public class InvoiceServiceTest {
         invoiceService.getById(1);
     }
 
+
+    @Test
+    public void testUpdateOk() throws NoExistsException {
+
+        InvoiceDto invoiceaux = new InvoiceDto(2, "123", new Date(), new Date(), 10f);
+        when(invoiceDao.getById(1)).thenReturn(invoiceaux);
+        Invoice invoice = new Invoice(1, 20, 20f, 30f, new Date(), new Date(), InvoiceStatus.NOT_PAY, new UserLine());
+        doNothing().when(invoiceDao).update(invoice);
+        invoiceService.update(invoice);
+        verify(invoiceDao, times(1)).update(invoice);
+    }
+
+    @Test(expected = NoExistsException.class)
+    public void testUpdateNoExistsException() throws NoExistsException {
+        Invoice invoice = new Invoice(1, 20, 20f, 30f, new Date(), new Date(), InvoiceStatus.NOT_PAY, new UserLine());
+        when(invoiceDao.getById(anyInt())).thenReturn(null);
+        invoiceService.update(invoice);
+    }
 
     @Test
     public void testRemoveOk() throws NoExistsException {
