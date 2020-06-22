@@ -16,4 +16,6 @@ public interface InvoiceDao extends AbstractDao<Invoice> {
     List<InvoiceDto> getInvoicesBetweenDatesFromUserId(InvoicesBetweenDateDto invoiceDto);
 
     List<InvoiceDto> getInvoicesByDate(DateDto dateDto);
+
+    List<InvoiceDto> getAllFromUserId(Integer id);
 }

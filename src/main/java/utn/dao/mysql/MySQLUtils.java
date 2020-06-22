@@ -52,6 +52,7 @@ public class MySQLUtils {
     //public static final String REMOVE_INVOICES_QUERY = "delete from invoices where id_invoice=?"; esta tiene baja logica.
     public static final String UPDATE_INVOICES_QUERY = "update invoices set call_count=?, price_cost=?, price_total=?, date_emission=?, date_expiration=?, invoice_status=?,id_line_fk=? where id_invoice=?";
     public static final String GETBYID_INVOICES_QUERY = BASE_INVOICES_QUERY + " where id_invoice=?";
+    public static final String GETALLBYID_INVOICES_QUERY = BASE_INVOICES_QUERY + " where ul.id_client_fk=?";
     //-------------------PHONECALLS-------------------
     public static final String BASE_PHONECALLS_QUERY = "select * from phonecalls ph inner join invoices inv on inv.id_invoice=ph.id_invoice_fk"; //getAll me traigo los datos de la factura pero las cuidades y las lineas conviene traerlas a la hora de mapear el obj
     public static final String INSERT_PHONECALLS_QUERY = "insert into phonecalls(line_number_from,line_number_to,duration,call_date) values(?,?,?,?)";

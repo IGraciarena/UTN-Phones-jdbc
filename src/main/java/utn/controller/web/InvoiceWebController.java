@@ -35,13 +35,18 @@ public class InvoiceWebController {
                 ResponseEntity.ok(invoiceDtos) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-//    //todo deberiamos tomar el id del usuario logueado de la session
-//    @GetMapping("/api/invoices/")
-//    public ResponseEntity<List<InvoiceDto>> getAllInvoicesClient(@RequestHeader("Authorization") String token) {
-//        List<InvoiceDto> invoiceDtos = invoiceController.getAll();
-//        return (invoiceDtos.size() > 0) ?
-//                ResponseEntity.ok(invoiceDtos) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-//    }
+    /*@GetMapping("/api/invoices/")
+    public ResponseEntity<List<InvoiceDto>> getAllInvoicesClient(@RequestHeader("Authorization") String token) {
+        List<InvoiceDto> invoiceDtos = invoiceController.getAll();
+        return (invoiceDtos.size() > 0) ?
+                ResponseEntity.ok(invoiceDtos) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }*/
+    @GetMapping("/api/invoices/")
+    public ResponseEntity getByIdClient(@RequestHeader("Authorization") String token, @RequestParam(required = false) Integer invoiceId) throws NoExistsException {
+        List<InvoiceDto> invoiceDtos = invoiceController.getInvoices(invoiceId);
+        return (invoiceDtos.size() > 0) ?
+                ResponseEntity.ok(invoiceDtos) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
     @GetMapping("/backoffice/invoices/{invoiceId}")
     public ResponseEntity getByIdEmployee(@RequestHeader("Authorization") String token, @PathVariable Integer invoiceId) throws NoExistsException {
@@ -49,10 +54,10 @@ public class InvoiceWebController {
     }
 
     // casi seguro que esta mal esto
-//    @GetMapping("/api/invoices/{invoiceId}")
-//    public ResponseEntity getByIdClient(@RequestHeader("Authorization") String token, @PathVariable Integer invoiceId) throws NoExistsException {
-//        return ResponseEntity.status(HttpStatus.OK).body(invoiceController.getById(invoiceId));
-//    }
+   /* @GetMapping("/api/invoices/{invoiceId}")
+    public ResponseEntity getByIdClient(@RequestHeader("Authorization") String token, @PathVariable Integer invoiceId) throws NoExistsException {
+        return ResponseEntity.status(HttpStatus.OK).body(invoiceController.getById(invoiceId));
+    }*/
 
     /*
     ENDPOINT PARCIAL.

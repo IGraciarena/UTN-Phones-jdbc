@@ -43,6 +43,9 @@ public class InvoiceService {
         dao.update(value);
     }
 
+    public List<InvoiceDto> getAllFromUserId(Integer id) {
+        return dao.getAllFromUserId(id);
+    }
     public List<InvoiceDto> getAll() {
         return dao.getAll();
     }

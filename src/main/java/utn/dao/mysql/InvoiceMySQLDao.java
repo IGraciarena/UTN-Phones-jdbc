@@ -14,8 +14,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static utn.dao.mysql.MySQLUtils.BASE_INVOICES_QUERY;
-import static utn.dao.mysql.MySQLUtils.GETBYID_INVOICES_QUERY;
+import static utn.dao.mysql.MySQLUtils.*;
 
 @Repository
 public class InvoiceMySQLDao implements InvoiceDao {
@@ -87,6 +86,23 @@ public class InvoiceMySQLDao implements InvoiceDao {
             return invoiceDtos;
         } catch (SQLException e) {
             throw new RuntimeException("Error al obtener la lista de facturas", e);
+        }
+    }
+    @Override
+    public List<InvoiceDto> getAllFromUserId(Integer id) {
+        try {
+            PreparedStatement st = con.prepareStatement(GETALLBYID_INVOICES_QUERY);
+            st.setInt(1,id);
+            ResultSet rs = st.executeQuery();
+            List<InvoiceDto> invoiceDtos = new ArrayList<>();
+            while (rs.next()) {
+                invoiceDtos.add(createInvoice(rs));
+            }
+            rs.close();
+            st.close();
+            return invoiceDtos;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener la lista de facturas por id de cliente", e);
         }
     }
 

@@ -10,6 +10,7 @@ import utn.exceptions.ValidationException;
 import utn.model.Invoice;
 import utn.service.InvoiceService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -48,5 +49,15 @@ public class InvoiceController {
         } else {
             throw new ValidationException();
         }
+    }
+
+    public List<InvoiceDto> getInvoices(Integer invoiceId) throws NoExistsException {
+        List<InvoiceDto> invoiceDtos = new ArrayList<>();
+        if(invoiceId != null){
+            invoiceDtos = invoiceService.getAllFromUserId(invoiceId);
+        }else{
+            invoiceDtos = invoiceService.getAll();
+        }
+        return invoiceDtos;
     }
 }

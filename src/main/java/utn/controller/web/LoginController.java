@@ -37,6 +37,8 @@ public class LoginController {
             response = ResponseEntity.ok().headers(createHeaders(token)).build();
         } catch (UserNotExistsException e) {
             throw new InvalidLoginException(e, "El usuario ingresado no existe.");
+        }catch (ValidationException e){
+            throw new InvalidLoginException(e, "Asegurese de que los campos no sean nulos.");
         }
         return response;
     }

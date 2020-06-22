@@ -32,7 +32,7 @@ public class PhoneCallWebController {
 
     @PostMapping("/backoffice/phonecalls/")
     public ResponseEntity add(@RequestBody PhoneCallDto phoneCallDto, @RequestHeader("Authorization") String token) throws UserNotExistsException, ValidationException, NoExistsException {
-        return ResponseEntity.created(getLocation(phoneCallController.addPhoneCall(phoneCallDto))).build();
+        return ResponseEntity.created(RestUtils.getLocationPhoneCall(phoneCallController.addPhoneCall(phoneCallDto))).build();
     }
 
     @PutMapping("/backoffice/phonecalls/")
@@ -93,11 +93,5 @@ public class PhoneCallWebController {
                 ResponseEntity.ok(returnedPhoneCallDtoList) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    private URI getLocation(Integer idPhoneCall) {
-        return ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(idPhoneCall)
-                .toUri();
-    }
+
 }
