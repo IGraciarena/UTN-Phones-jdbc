@@ -12,8 +12,6 @@ import utn.exceptions.ValidationException;
 import utn.model.User;
 import utn.session.SessionManager;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/")
 public class LoginController {
@@ -37,7 +35,7 @@ public class LoginController {
             response = ResponseEntity.ok().headers(createHeaders(token)).build();
         } catch (UserNotExistsException e) {
             throw new InvalidLoginException(e, "El usuario ingresado no existe.");
-        }catch (ValidationException e){
+        } catch (ValidationException e) {
             throw new InvalidLoginException(e, "Asegurese de que los campos no sean nulos.");
         }
         return response;
@@ -55,10 +53,5 @@ public class LoginController {
         responseHeaders.set("Authorization", token);
         return responseHeaders;
     }
-
-
-//    private User getCurrentUser(String sessionToken) throws UserNotExistsException {
-//        return Optional.ofNullable(sessionManager.getCurrentUser(sessionToken)).orElseThrow(UserNotExistsException::new);
-//    }
 
 }

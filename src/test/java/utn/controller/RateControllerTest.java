@@ -76,25 +76,6 @@ public class RateControllerTest {
     }
 
     @Test
-    public void testGetByIdOk() throws NoExistsException {
-        RateDto rate = new RateDto(10f, 20f, "mdq", "capital");
-        when(rateService.getById(1)).thenReturn(rate);
-        RateDto byId = rateController.getById(1);
-        assertEquals(rate.getCityFrom(), byId.getCityFrom());
-        assertEquals(rate.getCityTo(), byId.getCityTo());
-        assertEquals(rate.getCostPerMin(), byId.getCostPerMin());
-        assertEquals(rate.getPricePerMin(), byId.getPricePerMin());
-        verify(rateService, times(1)).getById(1);
-    }
-
-    @Test(expected = NoExistsException.class)
-    public void testGetByIdNoExistsException() throws NoExistsException {
-        RateDto rate = new RateDto(10f, 20f, "mdq", "capital");
-        when(rateService.getById(1)).thenThrow(new NoExistsException());
-        rateController.getById(1);
-    }
-
-    @Test
     public void testGetAllOk() {
         List<RateDto> rateDtos = new ArrayList<>();
         when(rateService.getAll()).thenReturn(rateDtos);

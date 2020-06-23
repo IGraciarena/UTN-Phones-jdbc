@@ -3,6 +3,7 @@ package utn.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import utn.dao.RateDao;
+import utn.dto.GetRateCityDto;
 import utn.dto.RateDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.NoExistsException;
@@ -24,12 +25,6 @@ public class RateService {
         return dao.add(rate);
     }
 
-    public RateDto getById(Integer id) throws NoExistsException {
-        RateDto rateDto = dao.getById(id);
-        Optional.ofNullable(rateDto).orElseThrow(NoExistsException::new);
-        return rateDto;
-    }
-
     public void delete(Integer id) throws NoExistsException {
         RateDto rateDto = dao.getById(id);
         Optional.ofNullable(rateDto).orElseThrow(NoExistsException::new);
@@ -44,5 +39,9 @@ public class RateService {
 
     public List<RateDto> getAll() {
         return dao.getAll();
+    }
+
+    public List<RateDto> getRateByCity(GetRateCityDto city) {
+        return dao.getRateByCity(city);
     }
 }

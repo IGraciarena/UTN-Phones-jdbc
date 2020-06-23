@@ -3,6 +3,7 @@ package utn.dao.mysql;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import utn.dao.RateDao;
+import utn.dto.GetRateCityDto;
 import utn.dto.RateDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.model.Rate;
@@ -94,6 +95,7 @@ public class RateMySQLDao implements RateDao {
 
     }
 
+
     private RateDto createRate(ResultSet rs) throws SQLException {
         RateDto rateDto = new RateDto(
                 rs.getFloat("price_per_min"),
@@ -119,4 +121,27 @@ public class RateMySQLDao implements RateDao {
             throw new RuntimeException("Error al obtener la lista de tarifas", e);
         }
     }
+
+    @Override
+    public List<RateDto> getRateByCity(GetRateCityDto city) {
+        try {
+            PreparedStatement st = con.prepareStatement(GET_RATE_BY_CITY_QUERY);
+            Integer cityFromint = cityMySQLDao.getIdByName(city.getCityFrom());
+            Integer cityToint = cityMySQLDao.getIdByName(city.getCityTo());
+            st.setInt(1,cityFromint);
+            st.setInt(2,cityToint);
+            ResultSet rs = st.executeQuery();
+            List<RateDto> rateDtos = new ArrayList<>();
+            while (rs.next()) {
+                rateDtos.add(createRate(rs));
+            }
+            st.close();
+            rs.close();
+            return rateDtos;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener la lista de tarifas", e);
+        }
+    }
+
 }

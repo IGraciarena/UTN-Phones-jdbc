@@ -51,13 +51,11 @@ public class InvoiceController {
         }
     }
 
-    public List<InvoiceDto> getInvoices(Integer invoiceId) throws NoExistsException {
-        List<InvoiceDto> invoiceDtos = new ArrayList<>();
+    public List<InvoiceDto> getInvoices(Integer invoiceId) throws NoExistsException, ValidationException {
         if(invoiceId != null){
-            invoiceDtos = invoiceService.getAllFromUserId(invoiceId);
+             return invoiceService.getAllFromUserId(invoiceId);
         }else{
-            invoiceDtos = invoiceService.getAll();
+            throw new ValidationException();
         }
-        return invoiceDtos;
     }
 }

@@ -63,4 +63,21 @@ public class CityMySQLDao implements CityDao {
             throw new RuntimeException("Error al traer el nombre de la ciudad", e);
         }
     }
+
+    public Integer getIdByName(String cityName) {
+        Integer aux = 0;
+        try {
+            PreparedStatement ps = con.prepareStatement("select id_city from cities where city_name=?");
+            ps.setString(1, cityName);
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+                aux = resultSet.getInt("id_city");
+            }
+            resultSet.close();
+            ps.close();
+            return aux;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al traer el nombre de la ciudad", e);
+        }
+    }
 }

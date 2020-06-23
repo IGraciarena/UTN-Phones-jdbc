@@ -2,6 +2,7 @@ package utn.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import utn.dto.GetRateCityDto;
 import utn.dto.RateDto;
 import utn.exceptions.AlreadyExistsException;
 import utn.exceptions.NoExistsException;
@@ -31,11 +32,11 @@ public class RateController {
         rateService.update(rate);
     }
 
-    public RateDto getById(Integer id) throws NoExistsException {
-        return rateService.getById(id);
-    }
-
     public List<RateDto> getAll() {
         return rateService.getAll();
+    }
+
+    public List<RateDto> getRateByCity(GetRateCityDto city) {
+        return rateService.getRateByCity(city);
     }
 }

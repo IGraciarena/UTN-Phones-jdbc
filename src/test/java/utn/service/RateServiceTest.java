@@ -42,21 +42,6 @@ public class RateServiceTest {
         verify(rateDao, times(1)).add(rate);
     }
 
-    @Test
-    public void testGetByIdOk() throws NoExistsException {
-        RateDto rateDto = new RateDto(15f, 10f, "mdq", "mdz");
-        when(rateDao.getById(1)).thenReturn(rateDto);
-        RateDto byId = rateService.getById(1);
-        assertEquals(byId.getCityFrom(), rateDto.getCityFrom());
-        assertEquals(byId.getCityTo(), rateDto.getCityTo());
-        verify(rateDao, times(1)).getById(1);
-    }
-
-    @Test(expected = NoExistsException.class)
-    public void testGetByIdNoExistsException() throws NoExistsException {
-        when(rateDao.getById(anyInt())).thenReturn(null);
-        rateService.getById(anyInt());
-    }
 
     @Test
     public void testDeleteOk() throws NoExistsException {

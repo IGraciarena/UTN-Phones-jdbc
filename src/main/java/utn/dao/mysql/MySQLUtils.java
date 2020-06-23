@@ -19,7 +19,6 @@ public class MySQLUtils {
             "\t  order by count(line_number_to) desc\n" +
             "\t  limit 1) as f\n" +
             "on f.id_line_number_from_fk = u.id_user";
-    //ToDo: Todo esto compa, gg no?
     //--------------------CITIES------------------------
     public static final String BASE_CITY_QUERY = "select * from cities c inner join provinces p on p.id_province=c.id_province_fk"; //getAll
     public static final String GET_CITY_BY_PREFIX = BASE_CITY_QUERY + " where prefix = ?";
@@ -46,6 +45,7 @@ public class MySQLUtils {
     public static final String REMOVE_RATES_QUERY = "delete from rates where id_rate=?";
     public static final String UPDATE_RATES_QUERY = "update rates set price_per_min=?, cost_per_min=?, id_city_from_fk=?, id_city_to_fk=? where id_rate=?";
     public static final String GETBYID_RATES_QUERY = BASE_RATES_QUERY + " where id_rate=?";
+    public static final String GET_RATE_BY_CITY_QUERY = "select * from rates as r where r.id_city_from_fk = ? and r.id_city_to_fk = ?";
     //-------------------INVOICES---------------------
     public static final String BASE_INVOICES_QUERY = "select * from invoices inv inner join user_lines ul on ul.id_user_line=inv.id_line_fk"; //getAll
     public static final String INSERT_INVOICES_QUERY = "insert into invoices(call_count,price_cost,price_total,date_emission,date_expiration,invoice_status,id_line_fk) values(?,?,?,?,?,?,?)";
