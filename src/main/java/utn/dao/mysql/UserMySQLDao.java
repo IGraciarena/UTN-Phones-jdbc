@@ -22,11 +22,13 @@ public class UserMySQLDao implements UserDao {
 
     Connection connection;
     CityMySQLDao cityMySQLDao;
+    UserLineMySQLDao userLineMySQLDao;
 
     @Autowired
-    public UserMySQLDao(Connection connection, CityMySQLDao cityMySQLDao) {
+    public UserMySQLDao(Connection connection, CityMySQLDao cityMySQLDao, UserLineMySQLDao userLineMySQLDao) {
         this.connection = connection;
         this.cityMySQLDao = cityMySQLDao;
+        this.userLineMySQLDao = userLineMySQLDao;
     }
 
     @Override
@@ -151,6 +153,7 @@ public class UserMySQLDao implements UserDao {
         try {
             PreparedStatement ps = connection.prepareStatement(UPDATE_USER_STATUS_QUERY);
             ps.setInt(1, id);
+            userLineMySQLDao.suspendLines(id);//Al eliminar un usuario tambien debo suspender las lineas que le pertenecia.
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {

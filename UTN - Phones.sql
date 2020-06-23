@@ -85,7 +85,8 @@ create table phonecalls(
     constraint fk_id_line_number_from foreign key (id_line_number_from_fk) references user_lines(id_user_line),
     constraint fk_id_line_number_to foreign key (id_line_number_to_fk) references user_lines(id_user_line)
 );
-
+#////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#DEFAULT INSERT
 INSERT INTO provinces (province_name) values('Buenos Aires'),('Buenos Aires-GBA'),('Capital Federal'),('Catamarca'),('Chaco'),('Chubut'),('Córdoba'),('Corrientes'),('Entre Ríos'),('Formosa'),('Jujuy'),('La Pampa'),('La Rioja'),('Mendoza'),('Misiones'),('Neuquén'),('Río Negro'),('Salta'),('San Juan'),('San Luis'),('Santa Cruz'),('Santa Fe'),('Santiago del Estero'),('Tierra del Fuego'),('Tucumán');
 insert into cities(city_name,prefix,id_province_fk)values("Mar del Plata","223",1),("La Plata","011",3),("Bahia Blanca","291",1),("Catamarca ","383",4),("Córdoba ","351",7),("Corrientes","378",8),("Resistencia","372",5),("Rawson","296",10),("Parana","343",9);
 
@@ -95,10 +96,7 @@ insert into user_lines (id_client_fk,line_number,type_line) values (1,"223576513
 
 insert into rates (price_per_min,cost_per_min,id_city_from_fk,id_city_to_fk)values(8,5,1,1),(8,5,2,2),(8,5,3,3),(8,5,4,4),(8,5,5,5),(8,5,6,6),(8,5,7,7),(8,5,8,8),(8,5,9,9),(9,5,1,2),(9,5,2,1),(10,5,1,3),(10,5,3,1),(9,5,1,4),(9,5,4,1),(9,7,1,5),(9,7,5,1),(15,10,1,6),(15,10,6,1),(14,11,1,7),(14,11,7,1),(10,8,1,8),(10,8,8,1),(8,6,1,9),(8,6,9,1),(10,5,2,3),(10,5,3,2),(9,5,2,4),(9,5,4,2),(9,7,2,5),(9,7,5,2),(15,10,2,6),(15,10,6,2),(14,11,2,7),(14,11,7,2),(10,8,2,8),(10,8,8,2),(8,6,2,9),(8,6,9,2),(9,5,3,4),(9,5,4,3),(9,7,3,5),(9,7,5,3),(15,10,3,6),(15,10,6,3),(14,11,3,7),(14,11,7,3),(10,8,3,8),(10,8,8,3),(8,6,3,9),(8,6,9,3),(9,7,4,5),(9,7,5,4),(15,10,4,6),(15,10,6,4),(14,11,4,7),(14,11,7,4),(10,8,4,8),(10,8,8,4),(8,6,4,9),(8,6,9,4),(15,10,5,6),(15,10,6,5),(14,11,5,7),(14,11,7,5),(10,8,5,8),(10,8,8,5),(8,6,5,9),(8,6,9,5),(14,11,6,7),(14,11,7,6),(10,8,6,8),(10,8,8,6),(8,6,6,9),(8,6,9,6),(10,8,7,8),(10,8,8,7),(8,6,7,9),(8,6,9,7),(8,6,8,9),(8,6,9,8);
 
-#insert into invoices (call_count,date_emission,date_expiration,id_line_fk,price_cost,price_total)values(1,'2020-05-06','2020-05-21',1,200,350);
-#insert into phonecalls(line_number_from,line_number_to,id_line_number_from_fk,id_line_number_to_fk,id_city_from_fk,id_city_to_fk,duration,call_date,id_invoice_fk)values("2235765132","11499899",1,6,1,2,20,'2020-04-03',1),("2235765132","11499899",1,6,1,3,20,'2020-01-05',1),("2235765132","11499899",1,6,1,5,20,'2020-04-03',1),(6,5,2,3,20,'2020-01-05',1),(6,3,2,5,20,'2020-04-05',1),(5,4,3,4,20,'2020-02-05',1),(6,3,2,5,20,'2020-04-05',1),(1,5,1,2,20,'2020-07-05',1),(4,6,4,2,20,'2020-02-05',1),(5,6,3,2,20,'2020-07-05',1);
-
-#//////////////////////////////ADD-PHONECALL//////////////////////////////////
+#//////////////////////////////ADD-PHONECALL//////////////////////////////////////////////////////////////////////////////////////////////////////77
 #drop trigger TBI_ADD_PHONECALL;
 #select * from phonecalls;
 Delimiter //
@@ -116,19 +114,25 @@ begin
     set vIdCityTo=CALCULATE_ID_CITY(new.line_number_to);
     set vIdLineFrom=CALCULATE_ID_LINE(new.line_number_from);
     set vIdLineTo=CALCULATE_ID_LINE(new.line_number_to);
-    set vPricePerMin=CALCULATE_PRICE_PER_MIN(vIdCityFrom,vIdCityTo);
-    set vCostPerMin=CALCULATE_COST_PER_MIN(vIdCityFrom,vIdCityTo);
-    set vTotalCost=CALCULATE_TOTAL(new.duration,vCostPerMin);
-    set vTotalPrice=CALCULATE_TOTAL(new.duration,vPricePerMin);
-    set new.id_line_number_from_fk=vIdLineFrom;
-    set new.id_line_number_to_fk=vIdLineTo;
-    set new.id_city_from_fk=vIdCityFrom;
-    set new.id_city_to_fk=vIdCityTo;
-    set new.cost_per_min=vCostPerMin;
-    set new.price_per_min=vPricePerMin;
-    set new.total_cost=vTotalCost;
-    set new.total_price=vTotalPrice;
-    set new.call_date=now();
+    if(GET_USER_LINE_STATUS(vIdLineFrom)=1 && GET_USER_LINE_STATUS(vIdLineTo)=1)then
+		set vPricePerMin=CALCULATE_PRICE_PER_MIN(vIdCityFrom,vIdCityTo);
+		set vCostPerMin=CALCULATE_COST_PER_MIN(vIdCityFrom,vIdCityTo);
+		set vTotalCost=CALCULATE_TOTAL(new.duration,vCostPerMin);
+		set vTotalPrice=CALCULATE_TOTAL(new.duration,vPricePerMin);
+		set new.id_line_number_from_fk=vIdLineFrom;
+		set new.id_line_number_to_fk=vIdLineTo;
+		set new.id_city_from_fk=vIdCityFrom;
+		set new.id_city_to_fk=vIdCityTo;
+		set new.cost_per_min=vCostPerMin;
+		set new.price_per_min=vPricePerMin;
+		set new.total_cost=vTotalCost;
+		set new.total_price=vTotalPrice;
+		set new.call_date=now();
+    else
+		signal sqlstate '45000'
+		SET MESSAGE_TEXT = 'Una de las lineas ingresadas no se encuentra activa.',
+		MYSQL_ERRNO = 1001;
+    end if;
 end //
 #/////////////////////////////////////////////////////////////////
 Delimiter //
@@ -189,46 +193,6 @@ begin
 end //
 #/////////////////////////////////////////////////////////////////
 
-#select * from user_lines;
-#update user_lines set line_status='DELETE' where id_user_line=1
-#select * from phonecalls;
-#select * from cities;
-#delete from phonecalls
-
-
-#/////////////////////////////////////////////////////////////////
-
-#sp_add_phone_line(line type, username ,line number, line status)
-#agregar transaccion
-set autocommit = 0;
-Delimiter //
-create procedure sp_add_user_line(pUserDni int,pLineNumber bigint,pLineStatus int,pLineType int)
-begin
-	declare vUser_id int default 0;
-    declare vIdLine int;
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION 
-        BEGIN
-            ROLLBACK;
-            RESIGNAL;
-        END;
-    start transaction;
-    select id into vUser_id from users us where us.dni=pUserDni;
-    if(vUser_id <> 0) then
-		insert into user_lines (line_number,type_line,line_status,id_client) values (pLineNumber,pLineType,pLineStatus,vUser_id);
-         set vIdLine = last_insert_id();
-		insert into invoices (call_count,price_cost,price_total,date_emission,date_expiration,invoice_statu,id_line) values (0,0,0,Date(now()),LAST_DAY(now()),1,vIdLine);
-	else 
-		signal sqlstate '45000'
-		SET MESSAGE_TEXT = 'El Dni ingresado no coincide con un Cliente existente.',
-		MYSQL_ERRNO = 1001;
-	end if;
-    commit;
-end; //
-#select * from users
-#select * from user_lines;
-#select * from invoices;
-#drop procedure sp_add_user_line;
-#call sp_add_user_line(38704049,2235679563,1,2);
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #facturas de un usuario emitidas por un rango de fechas
 Delimiter //
@@ -306,18 +270,6 @@ end //
 #insert into user_lines (line_number,type_line,line_status,id_client_fk)values('2236547876',1,1,6)
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#todas las llamadas de un usuario 
-/*select p.line_number_from,p.line_number_to,p.id_city_from_fk,p.id_city_to_fk,p.duration,p.call_date,p.total_price
-from phonecalls as p
-join user_lines as ul
-on p.id_line_number_from_fk=ul.id_user_line
-join users as u
-on ul.id_client_fk=u.id_user
-where u.id_user=1;*/
-#/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 #///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*y debe generar una
 factura por línea y debe tomar en cuenta todas las llamadas no facturadas
@@ -356,9 +308,7 @@ end //
 #select * from users
 #select * from phonecalls
 #update users set user_type='EMPLOYEE' where id_user=1
-#/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7
-
-#///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Delimiter //
@@ -393,8 +343,6 @@ begin
 end //
 #drop function CALCULATE_TOTAL_PRICE
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////77
 
 #//////////////////////////////////////////////////////////////////////////////////////
 #select * from invoices;
@@ -431,7 +379,9 @@ BEGIN
 		IF vFinished = 1 THEN 
 			LEAVE getUserLine;
 		END IF;
+			if(IF_HAVE_PHONECALLS(id_userline)=1 && GET_USER_LINE_STATUS(id_userline)=1)then
 			call line_facturation(id_userline);
+            end if;
 	END LOOP getUserLine;
 	CLOSE curUserLines;
 END //
@@ -472,8 +422,35 @@ DO
 CALL facturation();
 #///////////////////////////////////////////////////777/////////////////////////////////////////////////////////////////////////////////
 
+#USUARIOS
 
-call facturation();
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'asd123';
+GRANT ALL ON utnphones.* TO 'admin'@'localhost';
+
+CREATE USER 'backoffice'@'localhost' IDENTIFIED BY 'asd123';
+GRANT ALL ON utnphones.user_lines TO 'backoffice'@'localhost';
+GRANT ALL ON utnphones.users TO 'backoffice'@'localhost';
+GRANT ALL ON utnphones.rates TO 'backoffice'@'localhost';
+
+CREATE USER 'clients'@'localhost' IDENTIFIED BY 'asd123';
+GRANT SELECT ON utnphones.phonecalls TO 'clients'@'localhost';
+GRANT SELECT ON utnphones.invoices TO 'clients'@'localhost';
+
+CREATE USER 'infrastructure'@'localhost' IDENTIFIED BY 'asd123';
+GRANT INSERT ON utnphones.phonecalls TO 'infrastructure'@'localhost';
+GRANT TRIGGER ON utnphones.* TO 'infrastructure'@'localhost';
+
+CREATE USER 'facturation'@'localhost' IDENTIFIED BY 'asd123';
+GRANT EVENT ON utnphones.* TO 'facturation'@'localhost';
+GRANT EXECUTE ON PROCEDURE utnphones.facturation TO 'billing'@'localhost';
+GRANT EXECUTE ON PROCEDURE utnphones.line_facturation TO 'billing'@'localhost';
+
+#/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+DELIMITER //
+CREATE INDEX index_calls ON calls (origin_phone_line, date);
+//
+/*call facturation();
 insert into phonecalls(line_number_from,line_number_to,duration)values("2235765132","0114998997",35);
 insert into phonecalls(line_number_from,line_number_to,duration)values("3511557539","0114998997",35);
 insert into phonecalls(line_number_from,line_number_to,duration)values("2918309532","0114998997",35);
@@ -482,3 +459,33 @@ select * from phonecalls;
 select * from invoices;
 delete from phonecalls;
 delete from invoices;
+*/
+Delimiter //
+CREATE TRIGGER BI_USER_LINE before insert on user_lines for each row
+BEGIN
+	declare vNewPrefix int;
+    declare vIdCity int;
+    set vNewPrefix=CALCULATE_PREFIX(new.line_number);
+    set vIdCity = (select id_city from cities where prefix=vNewPrefix);
+    if(vIdCity is null)then
+		signal sqlstate '45000'
+		SET MESSAGE_TEXT = 'El prefijo ingresado no corresponde a ninguna cuidad existente.',
+		MYSQL_ERRNO = 1001;
+	end if;
+END //
+#////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7
+
+Delimiter //
+create procedure sp_add_user_line()
+begin
+	
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+        BEGIN
+            ROLLBACK;
+            RESIGNAL;
+        END;
+    start transaction;
+  
+    commit;
+end; //
+

@@ -157,4 +157,16 @@ public class UserLineMySQLDao implements UserLineDao {
             throw new RuntimeException("Error al obtener linea de usuario", e);
         }
     }
+
+    public void suspendLines(Integer id) {
+        PreparedStatement ps = null;
+        try {
+            ps = con.prepareStatement(SUSPEND_USERLINE_QUERY);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener ID de cliente", e);
+        }
+    }
 }
