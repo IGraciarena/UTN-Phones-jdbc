@@ -62,21 +62,21 @@ public class InvoiceControllerTest {
 
     @Test
     public void testGetInvoicesBetweenDatesFromUserIdOk() throws NoExistsException {
-        InvoicesBetweenDateDto invoicesBetweenDateDto = new InvoicesBetweenDateDto(1, "111", "222");
+        InvoicesBetweenDateDto invoicesBetweenDateDto = new InvoicesBetweenDateDto( "111", "222");
         InvoiceDto invoice = new InvoiceDto(1, "123", new Date(), new Date(), 1);
         List<InvoiceDto> invoiceDtos = new ArrayList<>();
         invoiceDtos.add(invoice);
-        when(invoiceService.getInvoicesBetweenDatesFromUserId(invoicesBetweenDateDto)).thenReturn(invoiceDtos);
-        List<InvoiceDto> invoiceDtoList = invoiceController.getInvoicesBetweenDatesFromUserId(invoicesBetweenDateDto);
+        when(invoiceService.getInvoicesBetweenDatesFromUserId(invoicesBetweenDateDto,1)).thenReturn(invoiceDtos);
+        List<InvoiceDto> invoiceDtoList = invoiceController.getInvoicesBetweenDatesFromUserId(invoicesBetweenDateDto,1);
         assertEquals(invoiceDtoList.size(), invoiceDtos.size());
-        verify(invoiceService, times(1)).getInvoicesBetweenDatesFromUserId(invoicesBetweenDateDto);
+        verify(invoiceService, times(1)).getInvoicesBetweenDatesFromUserId(invoicesBetweenDateDto,1);
     }
 
     @Test(expected = NoExistsException.class)
     public void testGetInvoicesBetweenDatesFromUserIdNoExistsException() throws NoExistsException {
-        InvoicesBetweenDateDto invoicesBetweenDateDto = new InvoicesBetweenDateDto(1, "111", "222");
-        when(invoiceService.getInvoicesBetweenDatesFromUserId(invoicesBetweenDateDto)).thenThrow(new NoExistsException());
-        invoiceController.getInvoicesBetweenDatesFromUserId(invoicesBetweenDateDto);
+        InvoicesBetweenDateDto invoicesBetweenDateDto = new InvoicesBetweenDateDto( "111", "222");
+        when(invoiceService.getInvoicesBetweenDatesFromUserId(invoicesBetweenDateDto,1)).thenThrow(new NoExistsException());
+        invoiceController.getInvoicesBetweenDatesFromUserId(invoicesBetweenDateDto,1);
     }
 
 

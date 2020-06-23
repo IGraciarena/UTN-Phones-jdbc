@@ -88,11 +88,12 @@ public class InvoiceMySQLDao implements InvoiceDao {
             throw new RuntimeException("Error al obtener la lista de facturas", e);
         }
     }
+
     @Override
     public List<InvoiceDto> getAllFromUserId(Integer id) {
         try {
             PreparedStatement st = con.prepareStatement(GETALLBYID_INVOICES_QUERY);
-            st.setInt(1,id);
+            st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             List<InvoiceDto> invoiceDtos = new ArrayList<>();
             while (rs.next()) {
@@ -107,10 +108,10 @@ public class InvoiceMySQLDao implements InvoiceDao {
     }
 
     @Override
-    public List<InvoiceDto> getInvoicesBetweenDatesFromUserId(InvoicesBetweenDateDto invoiceDto) {
+    public List<InvoiceDto> getInvoicesBetweenDatesFromUserId(InvoicesBetweenDateDto invoiceDto, Integer id) {
         try {
             CallableStatement cs = con.prepareCall("call sp_invoices_betweendates(?,?,?)");
-            cs.setInt(1, invoiceDto.getUserID());
+            cs.setInt(1, id);
             cs.setString(2, invoiceDto.getDateFrom());
             cs.setString(3, invoiceDto.getDateTo());
             ResultSet rs = cs.executeQuery();

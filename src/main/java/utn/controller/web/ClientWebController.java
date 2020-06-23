@@ -68,7 +68,7 @@ public class ClientWebController {
     */
     @GetMapping("/invoices/dates/")
     public ResponseEntity<List<InvoiceDto>> getInvoicesBetweenDatesFromUserId(@RequestHeader("Authorization") String token, @RequestBody InvoicesBetweenDateDto invoiceDto) throws NoExistsException {
-        List<InvoiceDto> returnedInvoicesDtoList = invoiceController.getInvoicesBetweenDatesFromUserId(invoiceDto);
+        List<InvoiceDto> returnedInvoicesDtoList = invoiceController.getInvoicesBetweenDatesFromUserId(invoiceDto,sessionManager.getCurrentUser(token).getId());
         return (returnedInvoicesDtoList.size() > 0) ?
                 ResponseEntity.ok(returnedInvoicesDtoList) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

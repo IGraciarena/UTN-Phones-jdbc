@@ -23,7 +23,7 @@ public class AntennaWebController {
         this.sessionManager = sessionManager;
     }
 
-    @PostMapping("/phonecalls/")
+    @PostMapping("/phonecall/")
     public ResponseEntity addPhoneCall(@RequestBody PhoneCallDto phoneCallDto, @RequestHeader("Authorization") String token) throws UserNotExistsException, ValidationException, NoExistsException {
         return ResponseEntity.created(RestUtils.getLocationPhoneCall(phoneCallController.addPhoneCall(phoneCallDto))).build();
     }

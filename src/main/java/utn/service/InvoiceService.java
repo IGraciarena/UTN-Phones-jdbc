@@ -50,10 +50,10 @@ public class InvoiceService {
         return dao.getAll();
     }
 
-    public List<InvoiceDto> getInvoicesBetweenDatesFromUserId(InvoicesBetweenDateDto invoiceDto) throws NoExistsException {
-        UserDto user = daoUser.getById(invoiceDto.getUserID());
+    public List<InvoiceDto> getInvoicesBetweenDatesFromUserId(InvoicesBetweenDateDto invoiceDto,Integer id) throws NoExistsException {
+        UserDto user = daoUser.getById(id);
         Optional.ofNullable(user).orElseThrow(NoExistsException::new);
-        return dao.getInvoicesBetweenDatesFromUserId(invoiceDto);
+        return dao.getInvoicesBetweenDatesFromUserId(invoiceDto,id);
     }
 
     public List<InvoiceDto> getInvoicesByDate(DateDto dateDto) {

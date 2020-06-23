@@ -118,8 +118,8 @@ public class InvoiceMySQLDaoTest {
         doNothing().when(resultSet).close();
         doNothing().when(preparedStatement).close();
 
-        InvoicesBetweenDateDto invoicesDto = new InvoicesBetweenDateDto(1,"2005-06-06","2005-06-07");
-        List<InvoiceDto> allInvoices = invoiceMySQLDao.getInvoicesBetweenDatesFromUserId(invoicesDto);
+        InvoicesBetweenDateDto invoicesDto = new InvoicesBetweenDateDto("2005-06-06","2005-06-07");
+        List<InvoiceDto> allInvoices = invoiceMySQLDao.getInvoicesBetweenDatesFromUserId(invoicesDto,1);
 
         assertEquals(Integer.valueOf(10), allInvoices.get(0).getCallCount());
         assertEquals("223", allInvoices.get(0).getLineNumber());
@@ -145,8 +145,8 @@ public class InvoiceMySQLDaoTest {
         doNothing().when(resultSet).close();
         doNothing().when(preparedStatement).close();
 
-        InvoicesBetweenDateDto invoicesDto = new InvoicesBetweenDateDto(1,"2005-06-06","2005-06-07");
-        List<InvoiceDto> allInvoices = invoiceMySQLDao.getInvoicesBetweenDatesFromUserId(invoicesDto);
+        InvoicesBetweenDateDto invoicesDto = new InvoicesBetweenDateDto("2005-06-06","2005-06-07");
+        List<InvoiceDto> allInvoices = invoiceMySQLDao.getInvoicesBetweenDatesFromUserId(invoicesDto,1);
 
         assertEquals(0, allInvoices.size());
 
@@ -159,8 +159,8 @@ public class InvoiceMySQLDaoTest {
     @Test(expected = RuntimeException.class)
     public void testGetInvoicesBetweenDatesFromUserIdSQLException() throws SQLException {
         when(connection.prepareCall("call sp_invoices_betweendates(?,?,?)")).thenThrow(new SQLException());
-        InvoicesBetweenDateDto invoicesDto = new InvoicesBetweenDateDto(1,"2005-06-06","2005-06-07");
-        invoiceMySQLDao.getInvoicesBetweenDatesFromUserId(invoicesDto);
+        InvoicesBetweenDateDto invoicesDto = new InvoicesBetweenDateDto("2005-06-06","2005-06-07");
+        invoiceMySQLDao.getInvoicesBetweenDatesFromUserId(invoicesDto,1);
     }
 //**************************************************************getAll***************************************************************
     @Test

@@ -55,4 +55,12 @@ public class configuration {
         registration.addUrlPatterns("/backoffice/*");
         return registration;
     }
+
+    @Bean
+    public FilterRegistrationBean Antenna(){
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(backOfficeSessionFilter);
+        registration.addUrlPatterns("/antenna/*");
+        return registration;
+    }
 }

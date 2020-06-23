@@ -121,20 +121,20 @@ public class InvoiceServiceTest {
         InvoiceDto r2 = new InvoiceDto(3, "2234567843", new Date(), new Date(), 10);
         list.add(invoice);
         list.add(r2);
-        InvoicesBetweenDateDto invoicedto = new InvoicesBetweenDateDto(any(), "11-11-1911", "11-12-1992");
+        InvoicesBetweenDateDto invoicedto = new InvoicesBetweenDateDto( "11-11-1911", "11-12-1992");
         UserDto user = new UserDto("ivan", "graciarena", 38877444, "ivanmdq22", "ivan@ivan.com", "mdq");
-        when(userDao.getById(invoicedto.getUserID())).thenReturn(user);
-        when(invoiceDao.getInvoicesBetweenDatesFromUserId(invoicedto)).thenReturn(list);
-        List<InvoiceDto> invoicesBetweenDatesFromUserId = invoiceService.getInvoicesBetweenDatesFromUserId(invoicedto);
+        when(userDao.getById(1)).thenReturn(user);
+        when(invoiceDao.getInvoicesBetweenDatesFromUserId(invoicedto,1)).thenReturn(list);
+        List<InvoiceDto> invoicesBetweenDatesFromUserId = invoiceService.getInvoicesBetweenDatesFromUserId(invoicedto,1);
         assertEquals(invoicesBetweenDatesFromUserId.size(), list.size());
-        verify(invoiceDao, times(1)).getInvoicesBetweenDatesFromUserId(invoicedto);
+        verify(invoiceDao, times(1)).getInvoicesBetweenDatesFromUserId(invoicedto,1);
     }
 
     @Test(expected = NoExistsException.class)
     public void testGetInvoicesBetweenDatesFromUserIdNoExistsException() throws NoExistsException {
-        InvoicesBetweenDateDto invoicedto = new InvoicesBetweenDateDto(any(), "11-11-1911", "11-12-1992");
+        InvoicesBetweenDateDto invoicedto = new InvoicesBetweenDateDto( "11-11-1911", "11-12-1992");
         when(invoiceDao.getById(1)).thenReturn(null);
-        invoiceService.getInvoicesBetweenDatesFromUserId(invoicedto);
+        invoiceService.getInvoicesBetweenDatesFromUserId(invoicedto,1);
     }
 
 }

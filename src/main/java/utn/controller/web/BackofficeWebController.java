@@ -1,5 +1,7 @@
 package utn.controller.web;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -114,7 +116,7 @@ public class BackofficeWebController {
         return ResponseEntity.created(RestUtils.getLocationUserLine(userLineController.add(userLine))).build();
     }
 
-    @PutMapping("/backoffice/userlines")
+    @PutMapping("/userlines")
     public ResponseEntity updateUserLine(@RequestBody UserLine userLine, @RequestHeader("Authorization") String token) throws NoExistsException {
         userLineController.update(userLine);
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -131,7 +133,7 @@ public class BackofficeWebController {
         return ResponseEntity.status(HttpStatus.OK).body(userLineController.getById(userLineId));
     }
 
-    @GetMapping("/backoffice/userlines")
+    @GetMapping("/userlines")
     public ResponseEntity<List<UserLineDto>> getAllUserLines(@RequestHeader("Authorization") String token) throws UserNotExistsException {
         List<UserLineDto> userLineDtos = userLineController.getAll();
         return (userLineDtos.size() > 0) ?
@@ -169,7 +171,7 @@ public class BackofficeWebController {
     }
 
     @GetMapping("/phonecalls/{idPhoneCall}")
-    public ResponseEntity getByIdEmployee(@PathVariable Integer idPhoneCall, @RequestHeader("Authorization") String token) throws NoExistsException {
+    public ResponseEntity getByIdPhonecall(@PathVariable Integer idPhoneCall, @RequestHeader("Authorization") String token) throws NoExistsException {
         return ResponseEntity.status(HttpStatus.OK).body(phoneCallController.getById(idPhoneCall));
     }
 

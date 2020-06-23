@@ -51,7 +51,7 @@ public class BackofficeWebControllerTest {
 
         when(phoneCallController.getById(1)).thenReturn(r1);
         ResponseEntity responseRta = ResponseEntity.ok(r1);
-        ResponseEntity response = backofficeWebController.getByIdEmployee(1, "123");
+        ResponseEntity response = backofficeWebController.getByIdPhonecall(1, "123");
 
         assertEquals(responseRta, response);
         verify(phoneCallController, times(1)).getById(1);
@@ -61,7 +61,7 @@ public class BackofficeWebControllerTest {
     public void testGetByIdEmployeeSQLException() throws NoExistsException {
         when(phoneCallController.getById(1)).thenThrow(new NoExistsException());
         ResponseEntity responseRta = ResponseEntity.badRequest().build();
-        ResponseEntity response = backofficeWebController.getByIdEmployee(1, "123");
+        ResponseEntity response = backofficeWebController.getByIdPhonecall(1, "123");
         assertEquals(responseRta, response);
         verify(phoneCallController, times(1)).getById(1);
     }

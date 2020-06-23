@@ -39,8 +39,8 @@ public class InvoiceController {
         return invoiceService.getAll();
     }
 
-    public List<InvoiceDto> getInvoicesBetweenDatesFromUserId(InvoicesBetweenDateDto invoiceDto) throws NoExistsException {
-        return invoiceService.getInvoicesBetweenDatesFromUserId(invoiceDto);
+    public List<InvoiceDto> getInvoicesBetweenDatesFromUserId(InvoicesBetweenDateDto invoiceDto, Integer id) throws NoExistsException {
+        return invoiceService.getInvoicesBetweenDatesFromUserId(invoiceDto,id);
     }
 
     public List<InvoiceDto> getInvoicesByDate(DateDto dateDto) throws ValidationException {
