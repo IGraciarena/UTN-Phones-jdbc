@@ -15,6 +15,7 @@ import utn.model.UserLine;
 import utn.session.SessionManager;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -41,13 +42,13 @@ public class BackofficeWebControllerTest {
     @Before
     public void setUp() {
         initMocks(this);
-        //PowerMockito.mockStatic(RestUtils.class);
         backofficeWebController = new BackofficeWebController(sessionManager, userController, phoneCallController, invoiceController, rateController, userLineController);
     }
+
     //******************************************************getByIdEmployee************************************************************************************
     @Test
-    public void testGetByIdEmployeeOk() throws NoExistsException {
-        ReturnedPhoneCallDto r1 = new ReturnedPhoneCallDto("123", "456", "1", "2", 1, null, 10);
+    public void testGetByIdPhonecallOk() throws NoExistsException {
+        ReturnedPhoneCallDto r1 = new ReturnedPhoneCallDto("123", "456", "1", "2", 1, new Date(), 10);
 
         when(phoneCallController.getById(1)).thenReturn(r1);
         ResponseEntity responseRta = ResponseEntity.ok(r1);
@@ -58,19 +59,20 @@ public class BackofficeWebControllerTest {
     }
 
     @Test(expected = NoExistsException.class)
-    public void testGetByIdEmployeeSQLException() throws NoExistsException {
+    public void testGetByIdPhonecallNoExistsException() throws NoExistsException {
         when(phoneCallController.getById(1)).thenThrow(new NoExistsException());
         ResponseEntity responseRta = ResponseEntity.badRequest().build();
         ResponseEntity response = backofficeWebController.getByIdPhonecall(1, "123");
         assertEquals(responseRta, response);
         verify(phoneCallController, times(1)).getById(1);
     }
+
     //********************************************************getAll*************************************************************************************
     @Test
     public void testGetAllPhoneCallsOk() throws NoExistsException {
         List<ReturnedPhoneCallDto> phoneCallDtoList = new ArrayList<>();
-        ReturnedPhoneCallDto r1 = new ReturnedPhoneCallDto("123", "456", "1", "2", 1, null, 10);
-        ReturnedPhoneCallDto r2 = new ReturnedPhoneCallDto("456", "789", "3", "4", 5, null, 20);
+        ReturnedPhoneCallDto r1 = new ReturnedPhoneCallDto("123", "456", "1", "2", 1, new Date(), 10);
+        ReturnedPhoneCallDto r2 = new ReturnedPhoneCallDto("456", "789", "3", "4", 5, new Date(), 20);
         phoneCallDtoList.add(r1);
         phoneCallDtoList.add(r2);
         when(phoneCallController.getAll()).thenReturn(phoneCallDtoList);
@@ -80,6 +82,7 @@ public class BackofficeWebControllerTest {
         assertEquals(responseRta, response);
         verify(phoneCallController, times(1)).getAll();
     }
+
     @Test
     public void testGetAllPhoneCallsNoContent() throws NoExistsException {
         List<ReturnedPhoneCallDto> phoneCallDtoList = new ArrayList<>();
@@ -98,7 +101,7 @@ public class BackofficeWebControllerTest {
     public void testDeleteOk() throws NoExistsException {
         doNothing().when(phoneCallController).delete(1);
         ResponseEntity responseRta = ResponseEntity.status(HttpStatus.OK).build();
-        ResponseEntity response = backofficeWebController.deletePhoneCall("asd",1);
+        ResponseEntity response = backofficeWebController.deletePhoneCall("asd", 1);
         assertEquals(responseRta, response);
         verify(phoneCallController, times(1)).delete(1);
     }
@@ -107,11 +110,12 @@ public class BackofficeWebControllerTest {
     public void testDeleteNoExistsException() throws NoExistsException {
         doThrow(new NoExistsException()).when(phoneCallController).delete(1);
         ResponseEntity responseRta = ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        ResponseEntity response = backofficeWebController.deletePhoneCall("asd",1);
+        ResponseEntity response = backofficeWebController.deletePhoneCall("asd", 1);
         assertEquals(responseRta, response);
         verify(phoneCallController, times(1)).delete(1);
 
     }
+
     //*******************************************************************************************************************************************
     @Test
     public void testUpdatePhoneCallOk() throws NoExistsException {
@@ -124,10 +128,11 @@ public class BackofficeWebControllerTest {
                 new Invoice());
         doNothing().when(phoneCallController).update(phoneCall);
         ResponseEntity responseRta = ResponseEntity.status(HttpStatus.OK).build();
-        ResponseEntity response = backofficeWebController.updatePhoneCall(phoneCall,"asd");
+        ResponseEntity response = backofficeWebController.updatePhoneCall(phoneCall, "asd");
         assertEquals(responseRta, response);
         verify(phoneCallController, times(1)).update(phoneCall);
     }
+
     @Test(expected = NoExistsException.class)
     public void testUpdatePhoneCallNotExists() throws NoExistsException {
         PhoneCall phoneCall = new PhoneCall(1, "1", "2",
@@ -139,7 +144,7 @@ public class BackofficeWebControllerTest {
                 new Invoice());
         doThrow(new NoExistsException()).when(phoneCallController).update(phoneCall);
         ResponseEntity responseRta = ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        ResponseEntity response = backofficeWebController.updatePhoneCall(phoneCall,"asd");
+        ResponseEntity response = backofficeWebController.updatePhoneCall(phoneCall, "asd");
         assertEquals(responseRta, response);
         verify(phoneCallController, times(1)).update(phoneCall);
     }
@@ -148,8 +153,8 @@ public class BackofficeWebControllerTest {
     @Test
     public void testGetAllPhoneCallsFromUserIdOk() throws NoExistsException {
         List<ReturnedPhoneCallDto> phoneCallDtoList = new ArrayList<>();
-        ReturnedPhoneCallDto r1 = new ReturnedPhoneCallDto("123", "456", "1", "2", 1, null, 10);
-        ReturnedPhoneCallDto r2 = new ReturnedPhoneCallDto("456", "789", "3", "4", 5, null, 20);
+        ReturnedPhoneCallDto r1 = new ReturnedPhoneCallDto("123", "456", "1", "2", 1, new Date(), 10);
+        ReturnedPhoneCallDto r2 = new ReturnedPhoneCallDto("456", "789", "3", "4", 5, new Date(), 20);
         phoneCallDtoList.add(r1);
         phoneCallDtoList.add(r2);
         when(phoneCallController.getAllPhoneCallsFromUserId(1)).thenReturn(phoneCallDtoList);
