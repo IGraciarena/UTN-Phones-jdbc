@@ -16,8 +16,10 @@ import utn.model.PhoneCall;
 import utn.model.Rate;
 import utn.model.User;
 import utn.model.UserLine;
+import utn.model.enumerated.UserType;
 //import utn.session.SessionManager;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -184,16 +186,26 @@ public class BackofficeWebController {
 
 //****************************************************INVOICES***********************************************************
 
-    @GetMapping("/invoices/{invoiceId}")
+    /*@GetMapping("/invoices/{invoiceId}")
     public ResponseEntity getInvoiceById(@RequestHeader("Authorization") String token, @PathVariable Integer invoiceId) throws NoExistsException {
         return ResponseEntity.status(HttpStatus.OK).body(invoiceController.getById(invoiceId));
-    }
+    }*/
 
     @GetMapping("/invoices/client/{invoiceId}")
     public ResponseEntity getInvoiceByIdClient(@RequestHeader("Authorization") String token, @PathVariable Integer invoiceId) throws NoExistsException, ValidationException {
         List<InvoiceDto> invoiceDtos = invoiceController.getInvoices(invoiceId);
         return (invoiceDtos.size() > 0) ?
                 ResponseEntity.ok(invoiceDtos) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    /*
+        ENDPOINT PARCIAL.
+     */
+    @GetMapping("/invoices/{date}")
+    public ResponseEntity<List<InvoiceDto>> getInvoicesByDate( @PathVariable String date) throws ValidationException {
+        List<InvoiceDto> returnedInvoicesDtoList = invoiceController.getInvoicesByDate(date);
+        return (returnedInvoicesDtoList.size() > 0) ?
+                    ResponseEntity.ok(returnedInvoicesDtoList) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

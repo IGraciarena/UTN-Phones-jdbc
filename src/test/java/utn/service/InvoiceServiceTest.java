@@ -34,7 +34,10 @@ public class InvoiceServiceTest {
         initMocks(this);
         invoiceService = new InvoiceService(invoiceDao, userDao);
     }
-
+    //********************************************************************************************************************************
+    /*
+    ENDPOINT PARCIAL
+ */
     @Test
     public void testGetInvoicesByDateOk() {
         List<InvoiceDto> invoiceDtoList = new ArrayList<>();
@@ -47,6 +50,17 @@ public class InvoiceServiceTest {
         assertEquals(invoicesByDate.size(), invoiceDtoList.size());
         verify(invoiceDao, times(1)).getInvoicesByDate(any());
     }
+    @Test
+    public void testGetInvoicesByDateNoContent() {
+        List<InvoiceDto> invoiceDtoList = new ArrayList<>();
+        when(invoiceDao.getInvoicesByDate(any())).thenReturn(invoiceDtoList);
+        List<InvoiceDto> invoicesByDate = invoiceService.getInvoicesByDate(any());
+        assertEquals(0, invoiceDtoList.size());
+        verify(invoiceDao, times(1)).getInvoicesByDate(any());
+    }
+
+    //********************************************************************************************************************************
+
 
     @Test
     public void testGetByIdOk() throws NoExistsException {
@@ -64,7 +78,6 @@ public class InvoiceServiceTest {
         when(invoiceDao.getById(1)).thenReturn(null);
         invoiceService.getById(1);
     }
-
 
     @Test
     public void testUpdateOk() throws NoExistsException {

@@ -43,9 +43,9 @@ public class InvoiceController {
         return invoiceService.getInvoicesBetweenDatesFromUserId(invoiceDto,id);
     }
 
-    public List<InvoiceDto> getInvoicesByDate(DateDto dateDto) throws ValidationException {
-        if (dateDto != null) {
-            return invoiceService.getInvoicesByDate(dateDto);
+    public List<InvoiceDto> getInvoicesByDate(String date) throws ValidationException {
+        if (date != null) {
+            return invoiceService.getInvoicesByDate(date);
         } else {
             throw new ValidationException();
         }

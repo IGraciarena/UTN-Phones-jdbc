@@ -79,20 +79,33 @@ public class InvoiceControllerTest {
         invoiceController.getInvoicesBetweenDatesFromUserId(invoicesBetweenDateDto,1);
     }
 
-
+///////////////////////////////////////////////PARCIAL////////////////////////////////////////////////////////////////77777
+/*
+    ENDPOINT PARCIAL
+ */
     @Test
     public void testGetInvoicesByDateOk() throws ValidationException {
 
-        DateDto dateDto = new DateDto(new Date());
+        String date ="date";
         List<InvoiceDto> invoiceDtoList = new ArrayList<>();
         InvoiceDto r1 = new InvoiceDto(3, "2234567843", new Date(),new Date(), 10);
         InvoiceDto r2 = new InvoiceDto(3, "2234567843", new Date(), new Date(), 10);
         invoiceDtoList.add(r1);
         invoiceDtoList.add(r2);
-        when(invoiceService.getInvoicesByDate(dateDto)).thenReturn(invoiceDtoList);
-        List<InvoiceDto> invoiceDtoList2 = invoiceController.getInvoicesByDate(dateDto);
-        verify(invoiceService, times(1)).getInvoicesByDate(dateDto);
+        when(invoiceService.getInvoicesByDate(date)).thenReturn(invoiceDtoList);
+        List<InvoiceDto> invoiceDtoList2 = invoiceController.getInvoicesByDate(date);
+        verify(invoiceService, times(1)).getInvoicesByDate(date);
         assertEquals(invoiceDtoList.size(), invoiceDtoList2.size());
+    }
+    @Test
+    public void testGetInvoicesByDateNoContent() throws ValidationException {
+
+        String date ="date";
+        List<InvoiceDto> invoiceDtoList = new ArrayList<>();
+        when(invoiceService.getInvoicesByDate(date)).thenReturn(invoiceDtoList);
+        List<InvoiceDto> invoiceDtoList2 = invoiceController.getInvoicesByDate(date);
+        verify(invoiceService, times(1)).getInvoicesByDate(date);
+        assertEquals(0, invoiceDtoList2.size());
     }
 
     @Test(expected = ValidationException.class)

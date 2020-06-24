@@ -130,12 +130,11 @@ public class InvoiceMySQLDao implements InvoiceDao {
     /*
      * PARCIAL
      * */
-    @Override
-    public List<InvoiceDto> getInvoicesByDate(DateDto dateDto) {
+    public List<InvoiceDto> getInvoicesByDate(String date) {
         CallableStatement cs = null;
         try {
             cs = con.prepareCall("call sp_invoices_by_date(?)");
-            cs.setDate(1, new Date(dateDto.getDate().getTime()));
+            cs.setString(1,date);
             ResultSet rs = cs.executeQuery();
             List<InvoiceDto> invoicesDtos = new ArrayList<>();
             while (rs.next()) {

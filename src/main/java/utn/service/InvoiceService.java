@@ -56,7 +56,7 @@ public class InvoiceService {
         return dao.getInvoicesBetweenDatesFromUserId(invoiceDto,id);
     }
 
-    public List<InvoiceDto> getInvoicesByDate(DateDto dateDto) {
-        return dao.getInvoicesByDate(dateDto);
+    public List<InvoiceDto> getInvoicesByDate(String date) {
+        return dao.getInvoicesByDate(date);
     }
 }

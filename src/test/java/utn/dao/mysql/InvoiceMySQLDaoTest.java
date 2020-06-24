@@ -36,7 +36,9 @@ public class InvoiceMySQLDaoTest {
     }
 
 //****************************************************************getInvoicesByDate*************************************************************
-
+    /*
+        ENDPOINT PARCIAL
+     */
     @Test
     public void testGetInvoicesByDateOk() throws SQLException {
         when(connection.prepareCall("call sp_invoices_by_date(?)")).thenReturn(cs);
@@ -56,7 +58,7 @@ public class InvoiceMySQLDaoTest {
         doNothing().when(resultSet).close();
         doNothing().when(preparedStatement).close();
 
-        DateDto dateDto = new DateDto(new Date(2005,06,06));
+        String dateDto = "date";
         List<InvoiceDto> allInvoices = invoiceMySQLDao.getInvoicesByDate(dateDto);
 
         assertEquals(Integer.valueOf(10), allInvoices.get(0).getCallCount());
@@ -80,8 +82,8 @@ public class InvoiceMySQLDaoTest {
         doNothing().when(resultSet).close();
         doNothing().when(preparedStatement).close();
 
-        DateDto dateDto = new DateDto(new Date(2005,05,05));
-        List<InvoiceDto> allInvoices = invoiceMySQLDao.getInvoicesByDate(dateDto);
+        String date = "date";
+        List<InvoiceDto> allInvoices = invoiceMySQLDao.getInvoicesByDate(date);
 
         assertEquals(0, allInvoices.size());
 
@@ -92,8 +94,8 @@ public class InvoiceMySQLDaoTest {
     @Test(expected = RuntimeException.class)
     public void testInvoicesByDateSQLException() throws SQLException {
         when(connection.prepareCall("call sp_invoices_by_date(?)")).thenThrow(new SQLException());
-        DateDto dateDto = new DateDto(new Date(2005,05,05));
-        invoiceMySQLDao.getInvoicesByDate(dateDto);
+        String date = "date";
+        invoiceMySQLDao.getInvoicesByDate(date);
     }
 //**********************************************************getInvoicesBetweenDatesFromUserId*******************************************************************
     @Test
