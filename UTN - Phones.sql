@@ -442,13 +442,13 @@ GRANT TRIGGER ON utnphones.* TO 'infrastructure'@'localhost';
 
 CREATE USER 'facturation'@'localhost' IDENTIFIED BY 'asd123';
 GRANT EVENT ON utnphones.* TO 'facturation'@'localhost';
-GRANT EXECUTE ON PROCEDURE utnphones.facturation TO 'billing'@'localhost';
-GRANT EXECUTE ON PROCEDURE utnphones.line_facturation TO 'billing'@'localhost';
+GRANT EXECUTE ON PROCEDURE utnphones.facturation TO 'facturation'@'localhost';
+GRANT EXECUTE ON PROCEDURE utnphones.line_facturation TO 'facturation'@'localhost';
 
 #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 DELIMITER //
-CREATE INDEX index_calls ON calls (origin_phone_line, date);
+CREATE INDEX index_phonecalls ON calls (id_line_number_from_fk, int);
 //
 /*call facturation();
 insert into phonecalls(line_number_from,line_number_to,duration)values("2235765132","0114998997",35);
