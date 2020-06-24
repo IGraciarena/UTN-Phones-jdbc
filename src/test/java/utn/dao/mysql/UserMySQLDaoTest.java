@@ -32,12 +32,13 @@ public class UserMySQLDaoTest {
     ResultSet rs;
     @Mock
     CityMySQLDao cmd;
-
+    @Mock
+    UserLineMySQLDao userLineMySQLDao;
 
     @Before
     public void setUp() {
         initMocks(this);
-        dao = new UserMySQLDao(con, cmd);
+        dao = new UserMySQLDao(con, cmd,userLineMySQLDao);
     }
 //*********************************************************getByUsername*********************************************************************
     @Test

@@ -65,7 +65,7 @@ public class CityMySQLDao implements CityDao {
     }
 
     public Integer getIdByName(String cityName) {
-        Integer aux = 0;
+        Integer aux = null;
         try {
             PreparedStatement ps = con.prepareStatement("select id_city from cities where city_name=?");
             ps.setString(1, cityName);

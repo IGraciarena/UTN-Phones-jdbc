@@ -14,8 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static utn.dao.mysql.MySQLUtils.BASE_INVOICES_QUERY;
-import static utn.dao.mysql.MySQLUtils.GETBYID_INVOICES_QUERY;
+import static utn.dao.mysql.MySQLUtils.*;
 
 public class InvoiceMySQLDaoTest {
     InvoiceMySQLDao invoiceMySQLDao;
@@ -214,7 +213,61 @@ public class InvoiceMySQLDaoTest {
         when(connection.prepareStatement(BASE_INVOICES_QUERY)).thenThrow(new SQLException());
         invoiceMySQLDao.getAll();
     }
+//******************************************************getAllFromUserId***********************************************************************
+    @Test
+    public void testGetAllFromUserIdOk() throws SQLException {
+        when(connection.prepareStatement(GETALLBYID_INVOICES_QUERY)).thenReturn(preparedStatement);
+        doNothing().when(preparedStatement).setInt(1, 1);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        when(resultSet.next()).thenReturn(true).thenReturn(false);
+        when(resultSet.getInt("call_count")).thenReturn(10);
+        when(resultSet.getInt("id_line_fk")).thenReturn(1);
+        when(userLineMySQLDao.getLineNumber(1)).thenReturn("223");
+        when(resultSet.getDate("date_emission")).thenReturn( new Date(2005,06,06));
+        when(resultSet.getDate("date_expiration")).thenReturn( new Date(2005,06,07));
+        when(resultSet.getFloat("total_price")).thenReturn(10f);
+
+
+        doNothing().when(resultSet).close();
+        doNothing().when(preparedStatement).close();
+
+        List<InvoiceDto> allInvoices = invoiceMySQLDao.getAllFromUserId(1);
+
+        assertEquals(Integer.valueOf(10), allInvoices.get(0).getCallCount());
+        assertEquals("223", allInvoices.get(0).getLineNumber());
+        assertEquals(new Date(2005,06,06), allInvoices.get(0).getDateEmission());
+        assertEquals(new Date(2005,06,07), allInvoices.get(0).getDateExpiration());
+
+        verify(connection,times(1)).prepareStatement(GETALLBYID_INVOICES_QUERY);
+        verify(preparedStatement,times(1)).executeQuery();
+    }
+    @Test
+    public void testGetAllFromUserIdNoContent() throws SQLException{
+        when(connection.prepareStatement(GETALLBYID_INVOICES_QUERY)).thenReturn(preparedStatement);
+        doNothing().when(preparedStatement).setInt(1, 1);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        when(resultSet.next()).thenReturn(false);
+
+        doNothing().when(resultSet).close();
+        doNothing().when(preparedStatement).close();
+
+        List<InvoiceDto> allInvoices = invoiceMySQLDao.getAllFromUserId(1);
+
+        assertEquals(0, allInvoices.size());
+
+        verify(connection,times(1)).prepareStatement(GETALLBYID_INVOICES_QUERY);
+        verify(preparedStatement,times(1)).executeQuery();
+    }
+    @Test(expected = RuntimeException.class)
+    public void testGetAllFromUserIdSQLException() throws SQLException {
+        when(connection.prepareStatement(GETALLBYID_INVOICES_QUERY)).thenThrow(new SQLException());
+        invoiceMySQLDao.getAllFromUserId(1);
+    }
+
 //******************************************************getById***********************************************************************
+
     @Test
     public void testGetByIdOk() throws SQLException {
         when(connection.prepareStatement(GETBYID_INVOICES_QUERY)).thenReturn(preparedStatement);

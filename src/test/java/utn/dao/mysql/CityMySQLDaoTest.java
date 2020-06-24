@@ -134,7 +134,54 @@ public class CityMySQLDaoTest {
         when(con.prepareStatement("select city_name from cities where id_city=?")).thenThrow(new SQLException());
         cityMySQLDao.getCityName(1);
     }
-//*********************************************************************************************************************
+//****************************************************getIdByName*****************************************************************
+    @Test
+    public void testGetIdByNameOk() throws SQLException {
+        when(con.prepareStatement("select id_city from cities where city_name=?")).thenReturn(preparedStatement);
+        doNothing().when(preparedStatement).setString(1, "asd");
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true);
 
+        when(resultSet.getInt("id_city")).thenReturn(1);
+
+        doNothing().when(resultSet).close();
+        doNothing().when(preparedStatement).close();
+
+        Integer byId = cityMySQLDao.getIdByName("asd");
+
+        assertEquals(Integer.valueOf(1), byId);
+
+
+        verify(resultSet, times(1)).getInt("id_city");
+        verify(con, times(1)).prepareStatement("select id_city from cities where city_name=?");
+        verify(preparedStatement, times(1)).setString(1, "asd");
+        verify(preparedStatement, times(1)).executeQuery();
+    }
+
+    @Test
+    public void testGetIdByNameNoContent() throws SQLException {
+        when(con.prepareStatement("select id_city from cities where city_name=?")).thenReturn(preparedStatement);
+        doNothing().when(preparedStatement).setString(1, "asd");
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+
+        doNothing().when(resultSet).close();
+        doNothing().when(preparedStatement).close();
+
+        Integer byId = cityMySQLDao.getIdByName("asd");
+
+        assertEquals(null, byId);
+
+
+        verify(con, times(1)).prepareStatement("select id_city from cities where city_name=?");
+        verify(preparedStatement, times(1)).setString(1, "asd");
+        verify(preparedStatement, times(1)).executeQuery();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testGetIdByNameSQLException() throws SQLException {
+        when(con.prepareStatement("select id_city from cities where city_name=?")).thenThrow(new SQLException());
+        cityMySQLDao.getIdByName("asd");
+    }
 
 }

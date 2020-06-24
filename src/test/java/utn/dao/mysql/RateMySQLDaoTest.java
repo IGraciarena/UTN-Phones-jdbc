@@ -3,6 +3,7 @@ package utn.dao.mysql;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import utn.dto.GetRateCityDto;
 import utn.dto.RateDto;
 import utn.dto.ReturnedPhoneCallDto;
 import utn.model.City;
@@ -218,6 +219,69 @@ public class RateMySQLDaoTest {
         when(con.prepareStatement(BASE_RATES_QUERY)).thenThrow(new SQLException());
         rateMySQLDao.getAll();
     }
-//*************************************************************************************************************************
+//******************************************************GetRateByCity*******************************************************************
+    @Test
+    public void testGetRateByCityOk() throws SQLException {
+        when(con.prepareStatement(GET_RATE_BY_CITY_QUERY)).thenReturn(preparedStatement);
+        when(cityMySQLDao.getIdByName("mdp")).thenReturn(1);
+        when(cityMySQLDao.getIdByName("bs as")).thenReturn(2);
+        doNothing().when(preparedStatement).setInt(1,1);
+        doNothing().when(preparedStatement).setInt(2,2);
+
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true).thenReturn(false);
+
+        when(resultSet.getFloat("price_per_min")).thenReturn(10f);
+        when(resultSet.getFloat("cost_per_min")).thenReturn(8f);
+        when(resultSet.getInt("id_city_from_fk")).thenReturn(1);
+        when(cityMySQLDao.getCityName(1)).thenReturn("mdp");
+        when(resultSet.getInt("id_city_to_fk")).thenReturn(2);
+        when(cityMySQLDao.getCityName(2)).thenReturn("bsas");
+
+        doNothing().when(resultSet).close();
+        doNothing().when(preparedStatement).close();
+
+        GetRateCityDto dto = new GetRateCityDto("mdp","bs as");
+        List<RateDto> list = rateMySQLDao.getRateByCity(dto);
+
+        assertEquals("mdp", list.get(0).getCityFrom());
+        assertEquals("bsas", list.get(0).getCityTo());
+
+        verify(resultSet,times(2)).getFloat(anyString());
+        verify(resultSet,times(2)).getInt(anyString());
+        verify(con,times(1)).prepareStatement(GET_RATE_BY_CITY_QUERY);
+        verify(preparedStatement,times(1)).executeQuery();
+    }
+    @Test
+    public void testGetRateByCityNoContent() throws SQLException {
+        when(con.prepareStatement(GET_RATE_BY_CITY_QUERY)).thenReturn(preparedStatement);
+        when(cityMySQLDao.getIdByName("mdp")).thenReturn(1);
+        when(cityMySQLDao.getIdByName("bs as")).thenReturn(2);
+        doNothing().when(preparedStatement).setInt(1,1);
+        doNothing().when(preparedStatement).setInt(2,2);
+
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(false);
+
+        doNothing().when(resultSet).close();
+        doNothing().when(preparedStatement).close();
+
+        GetRateCityDto dto = new GetRateCityDto("mdp","bs as");
+        List<RateDto> list = rateMySQLDao.getRateByCity(dto);
+
+        assertEquals(0, list.size());
+
+        verify(con,times(1)).prepareStatement(GET_RATE_BY_CITY_QUERY);
+        verify(preparedStatement,times(1)).executeQuery();
+    }
+    @Test(expected = RuntimeException.class)
+    public void testGetRateByCitySQLException() throws SQLException {
+        when(con.prepareStatement(GET_RATE_BY_CITY_QUERY)).thenThrow(new SQLException());
+        GetRateCityDto dto = new GetRateCityDto("mdp","bs as");
+        rateMySQLDao.getRateByCity(dto);
+    }
+
+
+
 
 }
