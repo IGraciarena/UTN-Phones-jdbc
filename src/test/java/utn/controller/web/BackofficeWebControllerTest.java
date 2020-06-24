@@ -12,7 +12,7 @@ import utn.model.City;
 import utn.model.Invoice;
 import utn.model.PhoneCall;
 import utn.model.UserLine;
-import utn.session.SessionManager;
+//import utn.session.SessionManager;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,8 +25,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class BackofficeWebControllerTest {
 
     BackofficeWebController backofficeWebController;
-    @Mock
-    SessionManager sessionManager;
+   // @Mock
+    //SessionManager sessionManager;
     @Mock
     UserController userController;
     @Mock
@@ -42,7 +42,7 @@ public class BackofficeWebControllerTest {
     @Before
     public void setUp() {
         initMocks(this);
-        backofficeWebController = new BackofficeWebController(sessionManager, userController, phoneCallController, invoiceController, rateController, userLineController);
+        backofficeWebController = new BackofficeWebController(/*sessionManager,*/ userController, phoneCallController, invoiceController, rateController, userLineController);
     }
 
     //******************************************************getByIdEmployee************************************************************************************

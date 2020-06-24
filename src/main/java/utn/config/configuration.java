@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
-import utn.session.BackOfficeSessionFilter;
-import utn.session.ClientPortalSessionFilter;
+//import utn.session.BackOfficeSessionFilter;
+//import utn.session.ClientPortalSessionFilter;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,10 +16,10 @@ import java.sql.SQLException;
 @PropertySource("app.properties")
 public class configuration {
 
-    @Autowired
+    /*@Autowired
     ClientPortalSessionFilter clientPortalSessionFilter;
     @Autowired
-    BackOfficeSessionFilter backOfficeSessionFilter;
+    BackOfficeSessionFilter backOfficeSessionFilter;*/
     @Value("${db.driver}")
     String driver;
     @Value("${db.name}")
@@ -40,7 +40,7 @@ public class configuration {
         return con;
     }
 
-    @Bean
+    /*@Bean
     public FilterRegistrationBean myFilter() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(clientPortalSessionFilter);
@@ -62,5 +62,5 @@ public class configuration {
         registration.setFilter(backOfficeSessionFilter);
         registration.addUrlPatterns("/antenna/*");
         return registration;
-    }
+    }*/
 }

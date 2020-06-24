@@ -8,19 +8,19 @@ import utn.dto.PhoneCallDto;
 import utn.exceptions.NoExistsException;
 import utn.exceptions.UserNotExistsException;
 import utn.exceptions.ValidationException;
-import utn.session.SessionManager;
+//import utn.session.SessionManager;
 
 @RestController
 @RequestMapping("/antenna")
 public class AntennaWebController {
 
     PhoneCallController phoneCallController;
-    SessionManager sessionManager;
+    //SessionManager sessionManager;
 
     @Autowired
-    AntennaWebController(PhoneCallController phoneCallController, SessionManager sessionManager) {
+    AntennaWebController(PhoneCallController phoneCallController/*, SessionManager sessionManager*/) {
         this.phoneCallController = phoneCallController;
-        this.sessionManager = sessionManager;
+       // this.sessionManager = sessionManager;
     }
 
     @PostMapping("/phonecall/")

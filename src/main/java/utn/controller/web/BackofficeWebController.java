@@ -16,7 +16,7 @@ import utn.model.PhoneCall;
 import utn.model.Rate;
 import utn.model.User;
 import utn.model.UserLine;
-import utn.session.SessionManager;
+//import utn.session.SessionManager;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import java.util.List;
 @RequestMapping("/backoffice")
 public class BackofficeWebController {
 
-    SessionManager sessionManager;
+    //SessionManager sessionManager;
     UserController userController;
     PhoneCallController phoneCallController;
     InvoiceController invoiceController;
@@ -32,14 +32,21 @@ public class BackofficeWebController {
     UserLineController userLineController;
 
     @Autowired
-    BackofficeWebController(SessionManager sessionManager, UserController userController, PhoneCallController phoneCallController, InvoiceController invoiceController, RateController rateController, UserLineController userLineController) {
-        this.sessionManager = sessionManager;
+    BackofficeWebController(/*SessionManager sessionManager,*/ UserController userController, PhoneCallController phoneCallController, InvoiceController invoiceController, RateController rateController, UserLineController userLineController) {
+        //this.sessionManager = sessionManager;
         this.userController = userController;
         this.phoneCallController = phoneCallController;
         this.invoiceController = invoiceController;
         this.rateController = rateController;
         this.userLineController = userLineController;
     }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7
+    @GetMapping("/string")
+    public ResponseEntity getString() {
+        String st = "hola";
+        return ResponseEntity.status(HttpStatus.OK).body(st);
+    }
+
 
 //****************************************************USERS***********************************************************
 

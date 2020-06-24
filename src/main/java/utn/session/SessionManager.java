@@ -1,5 +1,5 @@
 package utn.session;
-
+/*
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import utn.model.User;
@@ -48,4 +48,4 @@ public class SessionManager {
     public User getCurrentUser(String token) {
         return getSession(token).getLoggedUser();
     }
-}
+}*/

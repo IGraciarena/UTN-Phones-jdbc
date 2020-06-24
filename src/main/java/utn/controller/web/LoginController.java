@@ -10,7 +10,7 @@ import utn.exceptions.InvalidLoginException;
 import utn.exceptions.UserNotExistsException;
 import utn.exceptions.ValidationException;
 import utn.model.User;
-import utn.session.SessionManager;
+/*import utn.session.SessionManager;
 
 @RestController
 @RequestMapping("/")
@@ -54,4 +54,4 @@ public class LoginController {
         return responseHeaders;
     }
 
-}
+}*/
