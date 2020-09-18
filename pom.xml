@@ -29,14 +29,6 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.5</version>
                 <configuration>
-                    <excludes>
-                        <exclude>**/model/**</exclude>
-                        <exclude>**/session/**</exclude>
-                        <exclude>**/dto/**</exclude>
-                        <exclude>**/config/**</exclude>
-                        <exclude>**/controller/web/ControllerAdvice/**</exclude>
-                        <exclude>**/controller/web/RestUtils/**</exclude>
-                    </excludes>
                     <destFile>target/jacoco.exec</destFile>
                 </configuration>
                 <executions>
@@ -59,7 +51,7 @@
                                         <limit>
                                             <counter>LINE</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>0.30</minimum>
+                                            <minimum>0.70</minimum>
                                         </limit>
                                     </limits>
                                 </rule>

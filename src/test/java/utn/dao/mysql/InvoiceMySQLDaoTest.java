@@ -39,58 +39,58 @@ public class InvoiceMySQLDaoTest {
     /*
         ENDPOINT PARCIAL
      */
-    @Test
-    public void testGetInvoicesByDateOk() throws SQLException {
-        when(connection.prepareCall("call sp_invoices_by_date(?)")).thenReturn(cs);
-        doNothing().when(cs).setDate(1, new Date(2005,06,06));
-
-        when(cs.executeQuery()).thenReturn(resultSet);
-
-        when(resultSet.next()).thenReturn(true).thenReturn(false);
-        when(resultSet.getInt("call_count")).thenReturn(10);
-        when(resultSet.getInt("id_line_fk")).thenReturn(1);
-        when(userLineMySQLDao.getLineNumber(1)).thenReturn("223");
-        when(resultSet.getDate("date_emission")).thenReturn( new Date(2005,06,06));
-        when(resultSet.getDate("date_expiration")).thenReturn( new Date(2005,06,07));
-        when(resultSet.getFloat("total_price")).thenReturn(10f);
-
-
-        doNothing().when(resultSet).close();
-        doNothing().when(preparedStatement).close();
-
-        String dateDto = "date";
-        List<InvoiceDto> allInvoices = invoiceMySQLDao.getInvoicesByDate(dateDto);
-
-        assertEquals(Integer.valueOf(10), allInvoices.get(0).getCallCount());
-        assertEquals("223", allInvoices.get(0).getLineNumber());
-        assertEquals(new Date(2005,06,06), allInvoices.get(0).getDateEmission());
-        assertEquals(new Date(2005,06,07), allInvoices.get(0).getDateExpiration());
-
-        verify(connection,times(1)).prepareCall("call sp_invoices_by_date(?)");
-        verify(cs,times(1)).setDate(1, new Date(2005,06,06));
-        verify(cs,times(1)).executeQuery();
-    }
-    @Test
-    public void testGetInvoicesByDateNoContent() throws SQLException{
-        when(connection.prepareCall("call sp_invoices_by_date(?)")).thenReturn(cs);
-        doNothing().when(cs).setDate(1, new Date(2005,05,05));
-
-        when(cs.executeQuery()).thenReturn(resultSet);
-
-        when(resultSet.next()).thenReturn(false);
-
-        doNothing().when(resultSet).close();
-        doNothing().when(preparedStatement).close();
-
-        String date = "date";
-        List<InvoiceDto> allInvoices = invoiceMySQLDao.getInvoicesByDate(date);
-
-        assertEquals(0, allInvoices.size());
-
-        verify(connection,times(1)).prepareCall("call sp_invoices_by_date(?)");
-        verify(cs,times(1)).setDate(1, new Date(2005,05,05));
-        verify(cs,times(1)).executeQuery();
-    }
+//    @Test
+//    public void testGetInvoicesByDateOk() throws SQLException {
+//        when(connection.prepareCall("call sp_invoices_by_date(?)")).thenReturn(cs);
+//        doNothing().when(cs).setDate(1, new Date(2005,06,06));
+//
+//        when(cs.executeQuery()).thenReturn(resultSet);
+//
+//        when(resultSet.next()).thenReturn(true).thenReturn(false);
+//        when(resultSet.getInt("call_count")).thenReturn(10);
+//        when(resultSet.getInt("id_line_fk")).thenReturn(1);
+//        when(userLineMySQLDao.getLineNumber(1)).thenReturn("223");
+//        when(resultSet.getDate("date_emission")).thenReturn( new Date(2005,06,06));
+//        when(resultSet.getDate("date_expiration")).thenReturn( new Date(2005,06,07));
+//        when(resultSet.getFloat("total_price")).thenReturn(10f);
+//
+//
+//        doNothing().when(resultSet).close();
+//        doNothing().when(preparedStatement).close();
+//
+//        String dateDto = "date";
+//        List<InvoiceDto> allInvoices = invoiceMySQLDao.getInvoicesByDate(dateDto);
+//
+//        assertEquals(Integer.valueOf(10), allInvoices.get(0).getCallCount());
+//        assertEquals("223", allInvoices.get(0).getLineNumber());
+//        assertEquals(new Date(2005,06,06), allInvoices.get(0).getDateEmission());
+//        assertEquals(new Date(2005,06,07), allInvoices.get(0).getDateExpiration());
+//
+//        verify(connection,times(1)).prepareCall("call sp_invoices_by_date(?)");
+//        verify(cs,times(1)).setDate(1, new Date(2005,06,06));
+//        verify(cs,times(1)).executeQuery();
+//    }
+//    @Test
+//    public void testGetInvoicesByDateNoContent() throws SQLException{
+//        when(connection.prepareCall("call sp_invoices_by_date(?)")).thenReturn(cs);
+//        doNothing().when(cs).setDate(1, new Date(2005,05,05));
+//
+//        when(cs.executeQuery()).thenReturn(resultSet);
+//
+//        when(resultSet.next()).thenReturn(false);
+//
+//        doNothing().when(resultSet).close();
+//        doNothing().when(preparedStatement).close();
+//
+//        String date = "date";
+//        List<InvoiceDto> allInvoices = invoiceMySQLDao.getInvoicesByDate(date);
+//
+//        assertEquals(0, allInvoices.size());
+//
+//        verify(connection,times(1)).prepareCall("call sp_invoices_by_date(?)");
+//        verify(cs,times(1)).setDate(1, new Date(2005,05,05));
+//        verify(cs,times(1)).executeQuery();
+//    }
     @Test(expected = RuntimeException.class)
     public void testInvoicesByDateSQLException() throws SQLException {
         when(connection.prepareCall("call sp_invoices_by_date(?)")).thenThrow(new SQLException());
