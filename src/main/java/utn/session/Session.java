@@ -1,5 +1,5 @@
 package utn.session;
-/*
+
 import utn.model.User;
 
 import java.util.Date;
@@ -31,4 +31,4 @@ public class Session {
     public void setLastAction(Date lastAction) {
         this.lastAction = lastAction;
     }
-}*/
+}

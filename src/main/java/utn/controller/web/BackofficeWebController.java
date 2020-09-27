@@ -17,7 +17,7 @@ import utn.model.Rate;
 import utn.model.User;
 import utn.model.UserLine;
 import utn.model.enumerated.UserType;
-//import utn.session.SessionManager;
+import utn.session.SessionManager;
 
 import javax.websocket.server.PathParam;
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.List;
 @RequestMapping("/backoffice")
 public class BackofficeWebController {
 
-    //SessionManager sessionManager;
+    SessionManager sessionManager;
     UserController userController;
     PhoneCallController phoneCallController;
     InvoiceController invoiceController;
@@ -34,8 +34,8 @@ public class BackofficeWebController {
     UserLineController userLineController;
 
     @Autowired
-    BackofficeWebController(/*SessionManager sessionManager,*/ UserController userController, PhoneCallController phoneCallController, InvoiceController invoiceController, RateController rateController, UserLineController userLineController) {
-        //this.sessionManager = sessionManager;
+    BackofficeWebController(SessionManager sessionManager, UserController userController, PhoneCallController phoneCallController, InvoiceController invoiceController, RateController rateController, UserLineController userLineController) {
+        this.sessionManager = sessionManager;
         this.userController = userController;
         this.phoneCallController = phoneCallController;
         this.invoiceController = invoiceController;
@@ -186,10 +186,10 @@ public class BackofficeWebController {
 
 //****************************************************INVOICES***********************************************************
 
-    /*@GetMapping("/invoices/{invoiceId}")
+    @GetMapping("/invoices/{invoiceId}")
     public ResponseEntity getInvoiceById(@RequestHeader("Authorization") String token, @PathVariable Integer invoiceId) throws NoExistsException {
         return ResponseEntity.status(HttpStatus.OK).body(invoiceController.getById(invoiceId));
-    }*/
+    }
 
     @GetMapping("/invoices/client/{invoiceId}")
     public ResponseEntity getInvoiceByIdClient(@RequestHeader("Authorization") String token, @PathVariable Integer invoiceId) throws NoExistsException, ValidationException {

@@ -1,5 +1,5 @@
 package utn.session;
-/*
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -19,4 +19,4 @@ public class SessionScheduler {
         sessionManager.expireSessions();
     }
 
-}*/
+}

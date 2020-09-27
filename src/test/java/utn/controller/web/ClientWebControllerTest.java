@@ -1,5 +1,5 @@
 package utn.controller.web;
-/*
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -219,4 +219,4 @@ public class ClientWebControllerTest {
         when(phoneCallController.getPhoneCallsFromUserIdBetweenDates(phoneCallDto, 1)).thenThrow(new NoExistsException());
         clientWebController.getPhoneCallsFromUserIdBetweenDates("123", phoneCallDto);
     }
-}*/
+}
